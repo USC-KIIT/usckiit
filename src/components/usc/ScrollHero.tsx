@@ -201,6 +201,23 @@ export function ScrollHero({ onExploreInitiatives }: ScrollHeroProps) {
               </p>
             </motion.div>
           </div>
+
+          {/* Bottom-Right: Any Query? -> CONTACT US Box */}
+          <div className="pointer-events-auto mt-auto flex flex-col items-end self-end">
+            <span className="mb-1.5 font-mono text-[10px] tracking-[0.2em] text-cream/65">
+              Any Query?
+            </span>
+            <Link
+              to="/contactus"
+              style={{
+                clipPath: "polygon(7% 0%, 100% 0%, 93% 100%, 0% 100%)",
+              }}
+              className="group inline-flex items-center gap-2.5 border border-flame bg-flame px-7 py-3 font-mono text-xs font-bold tracking-[0.18em] text-cream shadow-[0_0_28px_-6px_rgba(250,70,22,0.65)] transition-all duration-200 hover:scale-[1.04] hover:border-cream/35 hover:bg-transparent hover:shadow-none"
+            >
+              CONTACT US
+              <ArrowDownRight className="h-4 w-4 text-cream transition-colors group-hover:text-flame" />
+            </Link>
+          </div>
         </motion.div>
 
         {/* ACT 2 FLOATING DOMAIN TOTEM PILLS + DUAL CTAS (z-30) */}
