@@ -7,7 +7,10 @@ interface RecruitmentSectionProps {
 
 export function RecruitmentSection(_props: RecruitmentSectionProps) {
   return (
-    <section id="recruitment" className="relative bg-obsidian px-4 py-16 sm:px-10 sm:py-24 lg:py-32">
+    <section
+      id="recruitment"
+      className="relative bg-obsidian px-4 py-16 sm:px-10 sm:py-24 lg:py-32"
+    >
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>

@@ -46,8 +46,7 @@ export function HackabotRegistrationModal({
       setForm((prev) => ({
         ...prev,
         track: initialTrack ?? prev.track,
-        selectedSdgs:
-          initialSdgs && initialSdgs.length > 0 ? [...initialSdgs] : prev.selectedSdgs,
+        selectedSdgs: initialSdgs && initialSdgs.length > 0 ? [...initialSdgs] : prev.selectedSdgs,
       }));
     }
   }, [open, initialTrack, initialSdgs]);
@@ -161,7 +160,10 @@ export function HackabotRegistrationModal({
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="font-hud text-[11px] text-flame">USC KIIT FLAGSHIP COMPETITION</p>
-                <h2 id="hackabot-reg-title" className="font-display-usc mt-1 text-3xl text-cream sm:text-4xl">
+                <h2
+                  id="hackabot-reg-title"
+                  className="font-display-usc mt-1 text-3xl text-cream sm:text-4xl"
+                >
                   HACK-A-BOT 3.0 REGISTRATION
                 </h2>
               </div>
@@ -176,9 +178,8 @@ export function HackabotRegistrationModal({
             </div>
 
             <div className="mt-4 rounded-xl border border-emerald/35 bg-emerald/10 px-4 py-2.5 font-mono text-[11px] text-cream/90">
-              Entry Fee: <strong className="text-emerald">Free for All (₹0)</strong> •
-              Registration: 2 Dec – 11 Dec • Offline at Campus 6 Auditorium &amp; Campus 10 Central
-              Library
+              Entry Fee: <strong className="text-emerald">Free for All (₹0)</strong> • Registration:
+              2 Dec – 11 Dec • Offline at Campus 6 Auditorium &amp; Campus 10 Central Library
             </div>
 
             {submitted ? (

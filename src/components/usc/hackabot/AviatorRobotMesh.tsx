@@ -62,84 +62,78 @@ export function AviatorRobotMesh({
   rightArmRef,
 }: AviatorRobotMeshProps) {
   const uscForeheadTexture = useMemo(() => createUscForeheadTexture(), []);
-  const {
-    leftArmGeo,
-    rightArmGeo,
-    yellowLoopGeo,
-    redStrapGeo,
-    starBadgeGeo,
-    earFlapGeo,
-  } = useMemo(() => {
-    const leftCurve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-0.96, -0.1, 0.04),
-      new THREE.Vector3(-1.28, -0.36, 0.24),
-      new THREE.Vector3(-1.08, -0.62, 0.56),
-    ]);
-    const rightCurve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(0.96, -0.04, 0.04),
-      new THREE.Vector3(1.3, 0.06, 0.22),
-      new THREE.Vector3(1.36, 0.34, 0.4),
-    ]);
-    const loopCurve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-0.36, 0.44, -0.82),
-      new THREE.Vector3(-1.26, 0.58, -0.56),
-      new THREE.Vector3(-1.46, 0.08, -0.36),
-      new THREE.Vector3(-1.14, -0.38, -0.52),
-      new THREE.Vector3(-0.46, -0.4, -0.8),
-    ]);
-    const strapCurve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-0.7, 0.14, 0.72),
-      new THREE.Vector3(-1.06, 0.16, 0.18),
-      new THREE.Vector3(-0.9, 0.18, -0.62),
-      new THREE.Vector3(0, 0.2, -1.07),
-      new THREE.Vector3(0.9, 0.18, -0.62),
-      new THREE.Vector3(1.06, 0.16, 0.18),
-      new THREE.Vector3(0.7, 0.14, 0.72),
-    ]);
+  const { leftArmGeo, rightArmGeo, yellowLoopGeo, redStrapGeo, starBadgeGeo, earFlapGeo } =
+    useMemo(() => {
+      const leftCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(-0.96, -0.1, 0.04),
+        new THREE.Vector3(-1.28, -0.36, 0.24),
+        new THREE.Vector3(-1.08, -0.62, 0.56),
+      ]);
+      const rightCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(0.96, -0.04, 0.04),
+        new THREE.Vector3(1.3, 0.06, 0.22),
+        new THREE.Vector3(1.36, 0.34, 0.4),
+      ]);
+      const loopCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(-0.36, 0.44, -0.82),
+        new THREE.Vector3(-1.26, 0.58, -0.56),
+        new THREE.Vector3(-1.46, 0.08, -0.36),
+        new THREE.Vector3(-1.14, -0.38, -0.52),
+        new THREE.Vector3(-0.46, -0.4, -0.8),
+      ]);
+      const strapCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(-0.7, 0.14, 0.72),
+        new THREE.Vector3(-1.06, 0.16, 0.18),
+        new THREE.Vector3(-0.9, 0.18, -0.62),
+        new THREE.Vector3(0, 0.2, -1.07),
+        new THREE.Vector3(0.9, 0.18, -0.62),
+        new THREE.Vector3(1.06, 0.16, 0.18),
+        new THREE.Vector3(0.7, 0.14, 0.72),
+      ]);
 
-    // 4-point aviator star badge shape
-    const starShape = new THREE.Shape();
-    const outerR = 0.14;
-    const innerR = 0.045;
-    for (let i = 0; i < 8; i++) {
-      const r = i % 2 === 0 ? outerR : innerR;
-      const angle = (i * Math.PI) / 4;
-      const x = Math.cos(angle) * r;
-      const y = Math.sin(angle) * r;
-      if (i === 0) starShape.moveTo(x, y);
-      else starShape.lineTo(x, y);
-    }
-    starShape.closePath();
+      // 4-point aviator star badge shape
+      const starShape = new THREE.Shape();
+      const outerR = 0.14;
+      const innerR = 0.045;
+      for (let i = 0; i < 8; i++) {
+        const r = i % 2 === 0 ? outerR : innerR;
+        const angle = (i * Math.PI) / 4;
+        const x = Math.cos(angle) * r;
+        const y = Math.sin(angle) * r;
+        if (i === 0) starShape.moveTo(x, y);
+        else starShape.lineTo(x, y);
+      }
+      starShape.closePath();
 
-    // Tapered leather ear-flap silhouette
-    const flapShape = new THREE.Shape();
-    flapShape.moveTo(-0.26, 0.24);
-    flapShape.quadraticCurveTo(0.0, 0.3, 0.26, 0.24);
-    flapShape.lineTo(0.18, -0.62);
-    flapShape.quadraticCurveTo(0.0, -0.76, -0.18, -0.62);
-    flapShape.closePath();
+      // Tapered leather ear-flap silhouette
+      const flapShape = new THREE.Shape();
+      flapShape.moveTo(-0.26, 0.24);
+      flapShape.quadraticCurveTo(0.0, 0.3, 0.26, 0.24);
+      flapShape.lineTo(0.18, -0.62);
+      flapShape.quadraticCurveTo(0.0, -0.76, -0.18, -0.62);
+      flapShape.closePath();
 
-    return {
-      leftArmGeo: new THREE.TubeGeometry(leftCurve, 22, 0.095, 14, false),
-      rightArmGeo: new THREE.TubeGeometry(rightCurve, 22, 0.095, 14, false),
-      yellowLoopGeo: new THREE.TubeGeometry(loopCurve, 32, 0.055, 14, false),
-      redStrapGeo: new THREE.TubeGeometry(strapCurve, 44, 0.068, 10, false),
-      starBadgeGeo: new THREE.ExtrudeGeometry(starShape, {
-        depth: 0.025,
-        bevelEnabled: true,
-        bevelThickness: 0.008,
-        bevelSize: 0.008,
-        bevelSegments: 2,
-      }),
-      earFlapGeo: new THREE.ExtrudeGeometry(flapShape, {
-        depth: 0.06,
-        bevelEnabled: true,
-        bevelThickness: 0.02,
-        bevelSize: 0.02,
-        bevelSegments: 3,
-      }),
-    };
-  }, []);
+      return {
+        leftArmGeo: new THREE.TubeGeometry(leftCurve, 22, 0.095, 14, false),
+        rightArmGeo: new THREE.TubeGeometry(rightCurve, 22, 0.095, 14, false),
+        yellowLoopGeo: new THREE.TubeGeometry(loopCurve, 32, 0.055, 14, false),
+        redStrapGeo: new THREE.TubeGeometry(strapCurve, 44, 0.068, 10, false),
+        starBadgeGeo: new THREE.ExtrudeGeometry(starShape, {
+          depth: 0.025,
+          bevelEnabled: true,
+          bevelThickness: 0.008,
+          bevelSize: 0.008,
+          bevelSegments: 2,
+        }),
+        earFlapGeo: new THREE.ExtrudeGeometry(flapShape, {
+          depth: 0.06,
+          bevelEnabled: true,
+          bevelThickness: 0.02,
+          bevelSize: 0.02,
+          bevelSegments: 3,
+        }),
+      };
+    }, []);
 
   useEffect(() => {
     return () => {
@@ -151,7 +145,15 @@ export function AviatorRobotMesh({
       earFlapGeo.dispose();
       uscForeheadTexture.dispose();
     };
-  }, [leftArmGeo, rightArmGeo, yellowLoopGeo, redStrapGeo, starBadgeGeo, earFlapGeo, uscForeheadTexture]);
+  }, [
+    leftArmGeo,
+    rightArmGeo,
+    yellowLoopGeo,
+    redStrapGeo,
+    starBadgeGeo,
+    earFlapGeo,
+    uscForeheadTexture,
+  ]);
 
   return (
     <group>
@@ -187,12 +189,7 @@ export function AviatorRobotMesh({
       </group>
 
       {/* Gold 4-Point Aviator Star Emblem on Upper Cap Crown */}
-      <mesh
-        geometry={starBadgeGeo}
-        position={[0, 0.87, 0.6]}
-        rotation={[-0.92, 0, 0]}
-        scale={0.78}
-      >
+      <mesh geometry={starBadgeGeo} position={[0, 0.87, 0.6]} rotation={[-0.92, 0, 0]} scale={0.78}>
         <meshPhysicalMaterial
           color="#FACC15"
           emissive="#D97706"
@@ -298,12 +295,7 @@ export function AviatorRobotMesh({
           </mesh>
           <mesh position={[0, 0, 0.055]} scale={[1.1, 0.95, 1.28]}>
             <torusGeometry args={[0.235, 0.04, 18, 44]} />
-            <meshPhysicalMaterial
-              color="#F59E0B"
-              metalness={0.96}
-              roughness={0.12}
-              clearcoat={1}
-            />
+            <meshPhysicalMaterial color="#F59E0B" metalness={0.96} roughness={0.12} clearcoat={1} />
           </mesh>
           <mesh position={[0, 0, 0.068]} scale={[1.05, 0.9, 1]}>
             <circleGeometry args={[0.215, 32]} />
@@ -331,12 +323,7 @@ export function AviatorRobotMesh({
           </mesh>
           <mesh position={[0, 0, 0.055]} scale={[1.1, 0.95, 1.28]}>
             <torusGeometry args={[0.235, 0.04, 18, 44]} />
-            <meshPhysicalMaterial
-              color="#F59E0B"
-              metalness={0.96}
-              roughness={0.12}
-              clearcoat={1}
-            />
+            <meshPhysicalMaterial color="#F59E0B" metalness={0.96} roughness={0.12} clearcoat={1} />
           </mesh>
           <mesh position={[0, 0, 0.068]} scale={[1.05, 0.9, 1]}>
             <circleGeometry args={[0.215, 32]} />

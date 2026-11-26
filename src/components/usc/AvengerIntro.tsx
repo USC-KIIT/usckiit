@@ -35,10 +35,10 @@ type Cell = {
 
 function pickFlashColor(idx: number): string {
   const colors = [
-    "rgba(250, 70, 22, 0.25)",  // flame
-    "rgba(0, 103, 223, 0.22)",  // cobalt
-    "rgba(61, 153, 96, 0.22)",  // emerald
-    "rgba(250, 70, 22, 0.18)",  // flame dim
+    "rgba(250, 70, 22, 0.25)", // flame
+    "rgba(0, 103, 223, 0.22)", // cobalt
+    "rgba(61, 153, 96, 0.22)", // emerald
+    "rgba(250, 70, 22, 0.18)", // flame dim
   ];
   return colors[idx % colors.length]!;
 }
@@ -66,9 +66,7 @@ export function AvengerIntro({ onComplete }: AvengerIntroProps) {
   const [ready, setReady] = useState(false);
   const [frameIdx, setFrameIdx] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [panelCells, setPanelCells] = useState<Cell[]>(() =>
-    buildPanelGroup(INTRO_IMAGES, 0),
-  );
+  const [panelCells, setPanelCells] = useState<Cell[]>(() => buildPanelGroup(INTRO_IMAGES, 0));
   const [exiting, setExiting] = useState(false);
   const startTimeRef = useRef<number | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -226,9 +224,11 @@ export function AvengerIntro({ onComplete }: AvengerIntroProps) {
           />
 
           {/* ── Bottom HUD: wordmark + progress bar + skip — overlaid on image ── */}
-          <div className="absolute inset-x-0 bottom-0 z-40 flex flex-col items-center gap-2 px-6 pb-7 pt-10"
+          <div
+            className="absolute inset-x-0 bottom-0 z-40 flex flex-col items-center gap-2 px-6 pb-7 pt-10"
             style={{
-              background: "linear-gradient(to top, rgba(9,10,15,0.85) 0%, rgba(9,10,15,0.5) 60%, transparent 100%)",
+              background:
+                "linear-gradient(to top, rgba(9,10,15,0.85) 0%, rgba(9,10,15,0.5) 60%, transparent 100%)",
             }}
           >
             {/* Compact static wordmark — no heartbeat */}
@@ -271,8 +271,7 @@ export function AvengerIntro({ onComplete }: AvengerIntroProps) {
                   className="absolute left-0 top-0 h-full rounded-full"
                   style={{
                     width: `${progress * 100}%`,
-                    background:
-                      "linear-gradient(to right, #FA4616, #FF6B00, #FA4616)",
+                    background: "linear-gradient(to right, #FA4616, #FF6B00, #FA4616)",
                     boxShadow: "0 0 10px rgba(250,70,22,0.9)",
                   }}
                 />

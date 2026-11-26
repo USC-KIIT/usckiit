@@ -21,12 +21,7 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
-import {
-  NON_TECH_DOMAINS,
-  TECH_DOMAINS,
-  type DomainId,
-  type DomainInfo,
-} from "@/data/domainsData";
+import { NON_TECH_DOMAINS, TECH_DOMAINS, type DomainId, type DomainInfo } from "@/data/domainsData";
 
 interface DomainsShowcaseProps {
   onApplyDomain: (domainId: DomainId) => void;
@@ -364,7 +359,11 @@ function OrbitingWingStage({
           onClick={() => setPaused((p) => !p)}
           className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-cream/15 bg-carbon px-4 py-2 font-mono text-[10px] tracking-[0.16em] text-cream/75 transition-colors hover:border-flame hover:text-cream"
         >
-          {paused ? <Play className="h-3 w-3 text-flame" /> : <Pause className="h-3 w-3 text-flame" />}
+          {paused ? (
+            <Play className="h-3 w-3 text-flame" />
+          ) : (
+            <Pause className="h-3 w-3 text-flame" />
+          )}
           {paused ? "RESUME ORBIT" : "PAUSE ORBIT"}
         </button>
         <button

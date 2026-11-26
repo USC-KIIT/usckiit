@@ -157,28 +157,28 @@ export const DIAGNOSTIC_QUESTIONS: readonly DiagnosticQuestion[] = [
     options: [
       {
         key: "A",
-        label: "\"Your bot just saved us 12 hours!\"",
+        label: '"Your bot just saved us 12 hours!"',
         detail: "Seeing real people freed from repetitive work by your automation.",
         stackBadge: "ZERO FRICTION",
         weights: { "rpa-ai": 3, "cloud-automation": 2, "data-analytics": 1 },
       },
       {
         key: "B",
-        label: "\"This platform & model feels next-gen!\"",
+        label: '"This platform & model feels next-gen!"',
         detail: "When smooth interaction, data insights, or smart AI stop people mid-scroll.",
         stackBadge: "CRAFT OBSESSED",
         weights: { "web-dev": 2, "core-ml": 2, "graphic-design": 2, rnd: 2 },
       },
       {
         key: "C",
-        label: "\"That reel / campaign got me hooked!\"",
+        label: '"That reel / campaign got me hooked!"',
         detail: "Sparking curiosity in hundreds of students through story and reach.",
         stackBadge: "AUDIENCE PULSE",
         weights: { "media-production": 2, "content-writing": 2, "media-strategy": 3 },
       },
       {
         key: "D",
-        label: "\"Smoothest event & partners KIIT has seen!\"",
+        label: '"Smoothest event & partners KIIT has seen!"',
         detail: "Pulling off an ambitious campus summit where every detail clicks.",
         stackBadge: "EXECUTION PRO",
         weights: { speo: 3, "corporate-relations": 3 },

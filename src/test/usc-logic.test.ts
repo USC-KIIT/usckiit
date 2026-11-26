@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  computeDiagnosticResult,
-  validateApplication,
-  validateKiitEmail,
-} from "@/lib/diagnostic";
+import { computeDiagnosticResult, validateApplication, validateKiitEmail } from "@/lib/diagnostic";
 import {
   getHackabotPhase,
   REG_CLOSE_MS,
