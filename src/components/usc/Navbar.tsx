@@ -52,12 +52,12 @@ export function Navbar({ onOpenHackabot }: NavbarProps) {
           <a
             href="#home"
             aria-label="USC KIIT Home"
-            className="group inline-flex h-10 w-32 items-center justify-center overflow-hidden rounded-full border border-cream/15 bg-white px-1.5 transition-all hover:border-flame/60 hover:shadow-[0_0_16px_rgba(250,70,22,0.35)]"
+            className="group inline-flex items-center transition-opacity hover:opacity-90"
           >
             <img
-              src="/USC%20KIIT%20Public%20Images/navbar_usc_logo.jpg"
+              src="/USC%20KIIT%20Public%20Images/logo_svg.svg"
               alt="USC KIIT — UiPath Student Community"
-              className="h-full w-full object-cover object-center"
+              className="h-9 w-auto object-contain sm:h-10"
             />
           </a>
 
