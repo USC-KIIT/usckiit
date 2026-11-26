@@ -2,7 +2,12 @@ import { useState, type MouseEvent } from "react";
 import { ArrowUp, Github, Instagram, Linkedin, MapPin } from "lucide-react";
 
 const SOCIALS = [
-  { label: "Instagram", handle: "@usc_kiit", href: "https://instagram.com/usc_kiit", icon: Instagram },
+  {
+    label: "Instagram",
+    handle: "@usc_kiit",
+    href: "https://instagram.com/usc_kiit",
+    icon: Instagram,
+  },
   { label: "LinkedIn", handle: "USC KIIT", href: "https://linkedin.com", icon: Linkedin },
   { label: "GitHub", handle: "usc-kiit", href: "https://github.com", icon: Github },
 ] as const;

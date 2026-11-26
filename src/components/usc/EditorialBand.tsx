@@ -64,13 +64,16 @@ export function EditorialBand() {
     setLogs([BOT_PIPELINE_NODES[0]?.log ?? ""]);
 
     BOT_PIPELINE_NODES.slice(1).forEach((node, idx) => {
-      const id = window.setTimeout(() => {
-        setActiveNode(idx + 1);
-        setLogs((prev) => [...prev, node.log]);
-        if (idx + 1 === BOT_PIPELINE_NODES.length - 1) {
-          setRunning(false);
-        }
-      }, (idx + 1) * 620);
+      const id = window.setTimeout(
+        () => {
+          setActiveNode(idx + 1);
+          setLogs((prev) => [...prev, node.log]);
+          if (idx + 1 === BOT_PIPELINE_NODES.length - 1) {
+            setRunning(false);
+          }
+        },
+        (idx + 1) * 620,
+      );
       timersRef.current.push(id);
     });
   };
@@ -123,9 +126,7 @@ export function EditorialBand() {
                 </span>
                 <h3 className="font-display-usc mt-4 text-4xl text-charcoal">{event.title}</h3>
                 <p className="mt-1 text-sm font-semibold text-cobalt">{event.subtitle}</p>
-                <p className="mt-3 text-sm leading-relaxed text-charcoal/75">
-                  {event.description}
-                </p>
+                <p className="mt-3 text-sm leading-relaxed text-charcoal/75">{event.description}</p>
               </div>
               <p className="mt-6 border-t border-charcoal/10 pt-4 font-mono text-[11px] font-semibold tracking-[0.16em] text-emerald">
                 {event.stat}
@@ -202,10 +203,7 @@ export function EditorialBand() {
                   </div>
 
                   {idx < BOT_PIPELINE_NODES.length - 1 && (
-                    <div
-                      aria-hidden
-                      className="hidden items-center justify-center md:flex"
-                    >
+                    <div aria-hidden className="hidden items-center justify-center md:flex">
                       <svg width="42" height="16" viewBox="0 0 42 16" fill="none">
                         <line
                           x1="0"

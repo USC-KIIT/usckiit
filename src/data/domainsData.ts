@@ -42,7 +42,13 @@ export const DOMAINS_DATA: readonly DomainInfo[] = [
     description:
       "Architect autonomous digital workers, multi-agent UiPath Maestro pipelines, and end-to-end campus automations that eliminate repetitive manual effort.",
     chips: ["UiPath Studio", "Agentic AI", "Process Automation"],
-    tools: ["UiPath Studio", "UiPath Maestro", "Document Understanding", "Agentic Workflows", "APIs"],
+    tools: [
+      "UiPath Studio",
+      "UiPath Maestro",
+      "Document Understanding",
+      "Agentic Workflows",
+      "APIs",
+    ],
     whatYouWorkOn: [
       "Autonomous software robots for KIIT student clubs, registrations, and hackathons",
       "Multi-agent UiPath Maestro workflows connecting LLMs, databases, and web apps",

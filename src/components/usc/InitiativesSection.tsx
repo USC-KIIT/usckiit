@@ -76,9 +76,7 @@ function InitiativeCard({ item }: { item: InitiativeItem }) {
           <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-cream/15 bg-obsidian/80 text-flame backdrop-blur-sm transition-colors group-hover:border-flame/50">
             <Icon className="h-5 w-5" />
           </span>
-          <span className="font-mono text-[10px] tracking-[0.18em] text-cream/60">
-            {item.tag}
-          </span>
+          <span className="font-mono text-[10px] tracking-[0.18em] text-cream/60">{item.tag}</span>
         </div>
         <div className="mt-5 sm:mt-6">
           <h3 className="font-display-usc text-2xl text-cream drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] sm:text-3xl">
@@ -95,7 +93,10 @@ function InitiativeCard({ item }: { item: InitiativeItem }) {
 
 export function InitiativesSection() {
   return (
-    <section id="initiatives" className="relative bg-obsidian px-4 py-16 sm:px-10 sm:py-24 lg:py-32">
+    <section
+      id="initiatives"
+      className="relative bg-obsidian px-4 py-16 sm:px-10 sm:py-24 lg:py-32"
+    >
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>

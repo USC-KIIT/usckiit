@@ -35,7 +35,8 @@ export function EventsSection() {
           <div className="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-3xl">
               <p className="font-hud text-[10px] leading-relaxed text-flame sm:text-[11px]">
-                UPCOMING FLAGSHIP COMPETITION • USC KIIT UNDER DEPARTMENT OF TRAINING &amp; PLACEMENT
+                UPCOMING FLAGSHIP COMPETITION • USC KIIT UNDER DEPARTMENT OF TRAINING &amp;
+                PLACEMENT
               </p>
               <h2 className="font-display-usc text-gradient-flame mt-2 text-5xl sm:text-7xl lg:text-8xl">
                 HACK-A-BOT 3.0

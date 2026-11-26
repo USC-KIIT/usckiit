@@ -1,10 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle2, Sparkles, X } from "lucide-react";
-import {
-  validateApplication,
-  type ApplicationPayload,
-} from "@/lib/diagnostic";
+import { validateApplication, type ApplicationPayload } from "@/lib/diagnostic";
 import { USC_DOMAINS, type DomainId } from "@/lib/usc-data";
 
 interface ApplicationModalProps {
@@ -91,7 +88,10 @@ export function ApplicationModal({ open, initialDomain, onClose }: ApplicationMo
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="font-hud text-[11px] text-flame">USC KIIT RECRUITMENT</p>
-                <h2 id="usc-apply-title" className="font-display-usc mt-1 text-3xl text-cream sm:text-4xl">
+                <h2
+                  id="usc-apply-title"
+                  className="font-display-usc mt-1 text-3xl text-cream sm:text-4xl"
+                >
                   JOIN THE COMMUNITY
                 </h2>
               </div>

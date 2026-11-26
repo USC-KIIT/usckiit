@@ -1,15 +1,6 @@
 import { useMemo, useState, type FormEvent, type MouseEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  CheckCircle2,
-  Copy,
-  Cpu,
-  Download,
-  Plus,
-  RotateCcw,
-  Sparkles,
-  Trash2,
-} from "lucide-react";
+import { CheckCircle2, Copy, Cpu, Download, Plus, RotateCcw, Sparkles, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   HACKABOT_MAX_MEMBERS,
@@ -155,14 +146,10 @@ export function HackabotRegister({
   const [cardTilt, setCardTilt] = useState({ rx: 0, ry: 0, active: false });
 
   const totalMembers = 1 + members.length;
-  const trackInfo =
-    HACKABOT_TRACKS.find((t) => t.id === selectedTrack) ?? HACKABOT_TRACKS[0]!;
+  const trackInfo = HACKABOT_TRACKS.find((t) => t.id === selectedTrack) ?? HACKABOT_TRACKS[0]!;
   const isFlameTrack = trackInfo.accent === "flame";
 
-  const passId = useMemo(
-    () => computePassCode(teamName, leaderEmail),
-    [teamName, leaderEmail],
-  );
+  const passId = useMemo(() => computePassCode(teamName, leaderEmail), [teamName, leaderEmail]);
 
   const selectedSdgObjects = useMemo(
     () => UN_SDGS.filter((s) => selectedSdgs.includes(s.id)),
@@ -175,9 +162,7 @@ export function HackabotRegister({
   };
 
   const updateMember = (idx: number, field: keyof HackabotMember, value: string) => {
-    setMembers((prev) =>
-      prev.map((m, i) => (i === idx ? { ...m, [field]: value } : m)),
-    );
+    setMembers((prev) => prev.map((m, i) => (i === idx ? { ...m, [field]: value } : m)));
   };
 
   const removeMember = (idx: number) => {
@@ -258,10 +243,7 @@ export function HackabotRegister({
   };
 
   return (
-    <section
-      id="register"
-      className="relative bg-obsidian px-4 py-16 sm:px-10 sm:py-24 lg:py-28"
-    >
+    <section id="register" className="relative bg-obsidian px-4 py-16 sm:px-10 sm:py-24 lg:py-28">
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
@@ -271,16 +253,16 @@ export function HackabotRegister({
             </h2>
           </div>
           <p className="max-w-md text-sm leading-relaxed text-cream/65">
-            Register your squad below and watch your metallic HACK-A-BOT 3.0 Squad Pass update
-            live in real time.
+            Register your squad below and watch your metallic HACK-A-BOT 3.0 Squad Pass update live
+            in real time.
           </p>
         </div>
 
         {/* Status Banner */}
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-emerald/35 bg-emerald/10 px-4 py-3 font-mono text-[11px] text-cream/90 sm:px-5">
           <span>
-            REGISTRATION WINDOW: <strong className="text-cream">2 DEC – 11 DEC</strong> • ENTRY
-            FEE: <strong className="text-emerald">FREE FOR ALL (₹0)</strong>
+            REGISTRATION WINDOW: <strong className="text-cream">2 DEC – 11 DEC</strong> • ENTRY FEE:{" "}
+            <strong className="text-emerald">FREE FOR ALL (₹0)</strong>
           </span>
           {phaseState?.phase === "pre-reg" && (
             <span className="rounded-full border border-flame/40 bg-flame/15 px-3 py-0.5 text-[10px] font-semibold tracking-[0.14em] text-flame">
@@ -440,9 +422,7 @@ export function HackabotRegister({
                       className="w-full rounded-xl border border-cream/15 bg-obsidian px-3.5 py-2.5 text-sm text-cream outline-none focus:border-flame disabled:opacity-60"
                     />
                     {errors["leaderRollOrInstitute"] && (
-                      <p className="mt-1 text-xs text-crimson">
-                        {errors["leaderRollOrInstitute"]}
-                      </p>
+                      <p className="mt-1 text-xs text-crimson">{errors["leaderRollOrInstitute"]}</p>
                     )}
                   </div>
                   <div>
@@ -591,7 +571,9 @@ export function HackabotRegister({
               onMouseLeave={() => setCardTilt({ rx: 0, ry: 0, active: false })}
               style={{
                 transform: `perspective(1000px) rotateX(${cardTilt.rx}deg) rotateY(${cardTilt.ry}deg)`,
-                transition: cardTilt.active ? "transform 0.08s ease-out" : "transform 0.4s ease-out",
+                transition: cardTilt.active
+                  ? "transform 0.08s ease-out"
+                  : "transform 0.4s ease-out",
               }}
               className={`hud-brackets relative overflow-hidden rounded-3xl border bg-gradient-to-br from-carbon via-obsidian to-carbon p-6 shadow-2xl sm:p-7 ${
                 submitted
@@ -650,7 +632,9 @@ export function HackabotRegister({
 
                 {/* Live Team Name */}
                 <div className="mt-5">
-                  <p className="font-mono text-[9px] tracking-[0.18em] text-cream/45">SQUAD CALLSIGN</p>
+                  <p className="font-mono text-[9px] tracking-[0.18em] text-cream/45">
+                    SQUAD CALLSIGN
+                  </p>
                   <h3 className="font-display-usc mt-1 truncate text-3xl text-cream sm:text-4xl">
                     {teamName.trim() || "UNASSIGNED SQUAD"}
                   </h3>

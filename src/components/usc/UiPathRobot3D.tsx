@@ -323,12 +323,7 @@ function ProceduralUiPathMascot({
       {/* Articulated Cobalt Blue Tubular Arms + Hand Spheres */}
       <group ref={leftArmRef}>
         <mesh geometry={leftArmGeo}>
-          <meshPhysicalMaterial
-            color="#0067DF"
-            roughness={0.2}
-            metalness={0.35}
-            clearcoat={0.85}
-          />
+          <meshPhysicalMaterial color="#0067DF" roughness={0.2} metalness={0.35} clearcoat={0.85} />
         </mesh>
         <mesh position={[-1.48, -0.36, 0.34]}>
           <sphereGeometry args={[0.155, 22, 22]} />
@@ -338,12 +333,7 @@ function ProceduralUiPathMascot({
 
       <group ref={rightArmRef}>
         <mesh geometry={rightArmGeo}>
-          <meshPhysicalMaterial
-            color="#0067DF"
-            roughness={0.2}
-            metalness={0.35}
-            clearcoat={0.85}
-          />
+          <meshPhysicalMaterial color="#0067DF" roughness={0.2} metalness={0.35} clearcoat={0.85} />
         </mesh>
         <mesh position={[1.5, 0.39, 0.36]}>
           <sphereGeometry args={[0.155, 22, 22]} />
@@ -498,11 +488,7 @@ export function UiPathRobot3D({ motionRefs, modelUrl, mode = "home" }: UiPathRob
         targetX,
         lerpFactor,
       );
-      const nextScale = THREE.MathUtils.lerp(
-        robotBodyRef.current.scale.x,
-        targetScale,
-        lerpFactor,
-      );
+      const nextScale = THREE.MathUtils.lerp(robotBodyRef.current.scale.x, targetScale, lerpFactor);
       robotBodyRef.current.scale.setScalar(nextScale);
       robotBodyRef.current.rotation.y = THREE.MathUtils.lerp(
         robotBodyRef.current.rotation.y,
@@ -523,8 +509,16 @@ export function UiPathRobot3D({ motionRefs, modelUrl, mode = "home" }: UiPathRob
 
     // Cursor-tracking pupils + natural blink
     const eyeLerp = 1 - Math.exp(-EYE_DAMP * dt);
-    eyeOffsetRef.current.x = THREE.MathUtils.lerp(eyeOffsetRef.current.x, pointer.x * 0.048, eyeLerp);
-    eyeOffsetRef.current.y = THREE.MathUtils.lerp(eyeOffsetRef.current.y, pointer.y * 0.038, eyeLerp);
+    eyeOffsetRef.current.x = THREE.MathUtils.lerp(
+      eyeOffsetRef.current.x,
+      pointer.x * 0.048,
+      eyeLerp,
+    );
+    eyeOffsetRef.current.y = THREE.MathUtils.lerp(
+      eyeOffsetRef.current.y,
+      pointer.y * 0.038,
+      eyeLerp,
+    );
 
     if (leftPupilRef.current && rightPupilRef.current) {
       leftPupilRef.current.position.x = eyeOffsetRef.current.x;
@@ -585,7 +579,9 @@ export function UiPathRobot3D({ motionRefs, modelUrl, mode = "home" }: UiPathRob
 
     // Data/ember particles: rise smoothly in Hackabot command mode (warp downward on Act 3)
     if (particlesRef.current) {
-      const posAttr = particlesRef.current.geometry.getAttribute("position") as THREE.BufferAttribute;
+      const posAttr = particlesRef.current.geometry.getAttribute(
+        "position",
+      ) as THREE.BufferAttribute;
       const direction = isHackabot && act3 < 0.25 ? 1 : -1;
       const speed = (isHackabot ? 0.35 : 0.22) + act3 * 4.8;
       for (let i = 0; i < posAttr.count; i++) {
@@ -694,7 +690,13 @@ export function UiPathRobot3D({ motionRefs, modelUrl, mode = "home" }: UiPathRob
 
       {/* Ambient Orbiting Data / Ember Particles */}
       <points ref={particlesRef} geometry={particleGeometry}>
-        <pointsMaterial size={isHackabot ? 0.056 : 0.048} vertexColors transparent opacity={0.88} sizeAttenuation />
+        <pointsMaterial
+          size={isHackabot ? 0.056 : 0.048}
+          vertexColors
+          transparent
+          opacity={0.88}
+          sizeAttenuation
+        />
       </points>
     </group>
   );

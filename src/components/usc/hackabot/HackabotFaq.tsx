@@ -32,12 +32,10 @@ export function HackabotFaq() {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-5">
             <p className="font-hud text-xs text-flame">INTEL &amp; RULES</p>
-            <h2 className="font-display-usc mt-2 text-4xl text-cream sm:text-6xl">
-              TACTICAL FAQ
-            </h2>
+            <h2 className="font-display-usc mt-2 text-4xl text-cream sm:text-6xl">TACTICAL FAQ</h2>
             <p className="mt-4 text-sm leading-relaxed text-cream/65">
-              Everything squads need to know about fees, team limits, SDG eligibility, venues,
-              and beginner onboarding before Day 1 kicks off.
+              Everything squads need to know about fees, team limits, SDG eligibility, venues, and
+              beginner onboarding before Day 1 kicks off.
             </p>
           </div>
 
