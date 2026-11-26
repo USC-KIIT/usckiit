@@ -1,57 +1,31 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// ─── All 33 gallery images ───────────────────────────────────────────────────
-const GALLERY_IMAGES = [
-  "/USC KIIT Gallery/Auto_Gla_6.06db7352c7cdb323bbac.jpg",
-  "/USC KIIT Gallery/DSC_0254.JPG",
-  "/USC KIIT Gallery/DSC_0261.JPG",
-  "/USC KIIT Gallery/DSC_0264.JPG",
-  "/USC KIIT Gallery/DSC_0267.JPG",
-  "/USC KIIT Gallery/DSC_0284.JPG",
-  "/USC KIIT Gallery/DSC_0415.JPG",
-  "/USC KIIT Gallery/jnuvbbaqhtdu1nwqcmp0.jpg",
-  "/USC KIIT Gallery/kcg1ujavlfb3xbpu5xfw.jpg",
-  "/USC KIIT Gallery/photo_shoot_1.d4a9e1a128e99c22b007.jpg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 12.47.40 (1).jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 12.47.40 (2).jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 12.47.40.jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 12.47.41 (1).jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 12.47.41 (2).jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 12.47.41.jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 12.47.42 (1).jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 12.47.42.jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 20.32.26 (1).jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 20.32.26 (2).jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 20.32.26.jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 20.32.27 (1).jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 20.32.27 (2).jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 20.32.27.jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 20.32.28 (1).jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 20.32.28 (2).jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 20.32.28.jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 20.32.29 (1).jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 20.32.29 (2).jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 20.32.29.jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 20.32.30 (1).jpeg",
-  "/USC KIIT Gallery/WhatsApp Image 2026-11-26 at 20.32.30.jpeg",
-];
-
-// Skip the hackabot pass image (it's not a gallery photo)
-const INTRO_IMAGES = GALLERY_IMAGES.filter((src) => !src.includes("hackabot-3-pass"));
+// ─── 32 optimized WebP gallery frames (~2.79 MB total vs 38 MB raw) ─────────
+const INTRO_IMAGES = Array.from(
+  { length: 32 },
+  (_, i) => `/USC KIIT Gallery/intro/${String(i + 1).padStart(2, "0")}.webp`,
+);
 
 // ─── Timing constants ─────────────────────────────────────────────────────────
 const TOTAL_DURATION_MS = 7200; // 7.2s total intro
 const MS_PER_FRAME = TOTAL_DURATION_MS / INTRO_IMAGES.length; // ≈ 225ms/image
 
-// ─── Layout patterns for the Avengers multi-panel effect ─────────────────────
-const LAYOUTS: readonly string[] = [
-  "grid-cols-1",
-  "grid-cols-2",
-  "grid-cols-3",
-  "grid-cols-2",
-  "grid-cols-1",
-];
+function preloadImage(src: string): Promise<void> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.src = src;
+    const done = () => resolve();
+    img.onload = () => {
+      if (typeof img.decode === "function") {
+        img.decode().then(done).catch(done);
+      } else {
+        done();
+      }
+    };
+    img.onerror = done;
+  });
+}
 
 type Cell = {
   src: string;
@@ -89,6 +63,7 @@ interface AvengerIntroProps {
 }
 
 export function AvengerIntro({ onComplete }: AvengerIntroProps) {
+  const [ready, setReady] = useState(false);
   const [frameIdx, setFrameIdx] = useState(0);
   const [progress, setProgress] = useState(0);
   const [panelCells, setPanelCells] = useState<Cell[]>(() =>
@@ -101,6 +76,28 @@ export function AvengerIntro({ onComplete }: AvengerIntroProps) {
   const frameTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const frameIdxRef = useRef(0);
 
+  // Preload & decode first 6 frames before starting playback, and warm the rest in background
+  useEffect(() => {
+    let cancelled = false;
+    const head = INTRO_IMAGES.slice(0, 6);
+    const tail = INTRO_IMAGES.slice(6);
+
+    Promise.race([
+      Promise.all(head.map(preloadImage)),
+      new Promise<void>((resolve) => setTimeout(resolve, 650)),
+    ]).then(() => {
+      if (!cancelled) setReady(true);
+    });
+
+    tail.forEach((src) => {
+      void preloadImage(src);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const triggerExit = useCallback(() => {
     if (exiting) return;
     setExiting(true);
@@ -111,6 +108,7 @@ export function AvengerIntro({ onComplete }: AvengerIntroProps) {
 
   // RAF-based progress bar
   useEffect(() => {
+    if (!ready) return;
     const tick = (ts: number) => {
       if (!startTimeRef.current) startTimeRef.current = ts;
       const elapsed = ts - startTimeRef.current;
@@ -126,10 +124,11 @@ export function AvengerIntro({ onComplete }: AvengerIntroProps) {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [triggerExit]);
+  }, [ready, triggerExit]);
 
   // Frame flipper
   useEffect(() => {
+    if (!ready) return;
     const scheduleNext = (idx: number) => {
       frameTimerRef.current = setTimeout(() => {
         const next = idx + 1;
@@ -147,7 +146,7 @@ export function AvengerIntro({ onComplete }: AvengerIntroProps) {
     return () => {
       if (frameTimerRef.current) clearTimeout(frameTimerRef.current);
     };
-  }, []);
+  }, [ready]);
 
   return (
     <AnimatePresence>
