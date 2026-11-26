@@ -6,14 +6,12 @@ import { DomainsShowcase } from "@/components/usc/DomainsShowcase";
 import { EventsSection } from "@/components/usc/EventsSection";
 import { EventSpotlightRibbon } from "@/components/usc/EventSpotlightRibbon";
 import { Footer } from "@/components/usc/Footer";
-import { HackabotRegistrationModal } from "@/components/usc/HackabotRegistrationModal";
 import { InitiativesSection } from "@/components/usc/InitiativesSection";
 import { Navbar } from "@/components/usc/Navbar";
 import { RecruitmentSection } from "@/components/usc/RecruitmentSection";
 import { ScrollHero } from "@/components/usc/ScrollHero";
 import { SystemDiagnostic } from "@/components/usc/SystemDiagnostic";
 import { TeamSection } from "@/components/usc/TeamSection";
-import type { HackabotTrackId } from "@/lib/hackabot-data";
 import type { DomainId } from "@/lib/usc-data";
 
 export const Route = createFileRoute("/")({
@@ -42,22 +40,9 @@ function Index() {
   const [recruitModalOpen, setRecruitModalOpen] = useState(false);
   const [preferredDomain, setPreferredDomain] = useState<DomainId | undefined>(undefined);
 
-  const [hackabotModalOpen, setHackabotModalOpen] = useState(false);
-  const [hackabotTrack, setHackabotTrack] = useState<HackabotTrackId | undefined>(undefined);
-  const [hackabotSdgs, setHackabotSdgs] = useState<readonly string[]>([]);
-
   const openApplyModal = (domainId?: DomainId) => {
     setPreferredDomain(domainId);
     setRecruitModalOpen(true);
-  };
-
-  const openHackabotModal = (options?: {
-    track?: HackabotTrackId;
-    sdgs?: readonly string[];
-  }) => {
-    setHackabotTrack(options?.track);
-    setHackabotSdgs(options?.sdgs ?? []);
-    setHackabotModalOpen(true);
   };
 
   const scrollToSection = (id: string) => {
@@ -67,23 +52,17 @@ function Index() {
   return (
     <div className="relative min-h-screen bg-obsidian text-cream">
       <div className="film-grain-overlay" aria-hidden />
-      <Navbar onOpenHackabot={() => openHackabotModal()} />
+      <Navbar />
 
       <main>
-        <ScrollHero
-          onRegisterHackabot={() => scrollToSection("events")}
-          onExploreInitiatives={() => scrollToSection("initiatives")}
-        />
-        <EventSpotlightRibbon
-          onFullDetails={() => scrollToSection("events")}
-          onRegisterTeam={() => openHackabotModal()}
-        />
+        <ScrollHero onExploreInitiatives={() => scrollToSection("initiatives")} />
+        <EventSpotlightRibbon />
         <InitiativesSection />
         <AboutSection />
         <DomainsShowcase onApplyDomain={(domainId) => openApplyModal(domainId)} />
         <SystemDiagnostic onApplyDomain={(domainId) => openApplyModal(domainId)} />
         <TeamSection />
-        <EventsSection onRegisterHackabot={(opts) => openHackabotModal(opts)} />
+        <EventsSection />
         <RecruitmentSection onOpenApply={() => openApplyModal()} />
       </main>
 
@@ -93,13 +72,6 @@ function Index() {
         open={recruitModalOpen}
         {...(preferredDomain ? { initialDomain: preferredDomain } : {})}
         onClose={() => setRecruitModalOpen(false)}
-      />
-
-      <HackabotRegistrationModal
-        open={hackabotModalOpen}
-        {...(hackabotTrack ? { initialTrack: hackabotTrack } : {})}
-        {...(hackabotSdgs.length > 0 ? { initialSdgs: hackabotSdgs } : {})}
-        onClose={() => setHackabotModalOpen(false)}
       />
     </div>
   );

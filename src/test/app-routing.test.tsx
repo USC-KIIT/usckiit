@@ -14,4 +14,13 @@ describe("App routing", () => {
 
     expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
   });
+
+  it("matches /events/hackabot and /events/hack-a-bot fallback routes case-insensitively", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+
+    expect(router.matchRoutes("/events/hackabot").at(-1)?.routeId).toBe("/events/hackabot");
+    expect(router.matchRoutes("/events/HACKABOT").at(-1)?.routeId).toBe("/events/hackabot");
+    expect(router.matchRoutes("/events/hack-a-bot").at(-1)?.routeId).toBe("/events/hack-a-bot");
+    expect(router.matchRoutes("/events/Hack-A-Bot").at(-1)?.routeId).toBe("/events/hack-a-bot");
+  });
 });

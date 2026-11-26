@@ -1,12 +1,11 @@
 import { lazy, Suspense, useEffect, useRef } from "react";
-import { ClientOnly } from "@tanstack/react-router";
+import { ClientOnly, Link } from "@tanstack/react-router";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArrowDownRight, Cpu, Flame, Layers, Sparkles } from "lucide-react";
 
 const HeroStage3D = lazy(() => import("./HeroStage3D"));
 
 interface ScrollHeroProps {
-  onRegisterHackabot: () => void;
   onExploreInitiatives: () => void;
 }
 
@@ -17,7 +16,7 @@ const TOTEM_PILLS = [
   { label: "8 CORE DOMAINS", icon: Layers, pos: "right-8 bottom-[28%] lg:right-20" },
 ] as const;
 
-export function ScrollHero({ onRegisterHackabot, onExploreInitiatives }: ScrollHeroProps) {
+export function ScrollHero({ onExploreInitiatives }: ScrollHeroProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollProgressRef = useRef(0);
   const pointerRef = useRef({ x: 0, y: 0 });
@@ -235,14 +234,13 @@ export function ScrollHero({ onRegisterHackabot, onExploreInitiatives }: ScrollH
             style={{ y: act2CtaY }}
             className="pointer-events-auto mx-auto flex flex-wrap items-center justify-center gap-2.5 px-4 sm:gap-4 sm:px-6"
           >
-            <button
-              type="button"
-              onClick={onRegisterHackabot}
+            <Link
+              to="/events/hackabot"
               className="gradient-flame shadow-flame-glow inline-flex cursor-pointer items-center gap-2 rounded-full px-5 py-3 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-cream transition-transform hover:scale-[1.03] sm:px-7 sm:py-3.5 sm:text-xs sm:tracking-[0.16em]"
             >
               HACK-A-BOT 3.0 — REGISTER
               <ArrowDownRight className="h-4 w-4" />
-            </button>
+            </Link>
             <button
               type="button"
               onClick={onExploreInitiatives}
