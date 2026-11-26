@@ -146,13 +146,13 @@ export const RECRUITMENT_ROADMAP: readonly RoadmapStep[] = [
   },
   {
     step: "02",
-    title: "Domain Assessment / Task",
-    description: "Complete a practical 48-hour domain challenge designed to showcase how you think and ship.",
+    title: "Technical / Non-Technical Interview",
+    description: "Walk our domain leads through your skills, past work, and how you approach real-world problems.",
   },
   {
     step: "03",
-    title: "Technical & Culture Interview",
-    description: "Walk our domain leads through your work, ideas, and what you want to build at USC KIIT.",
+    title: "HR Interview (If Necessary)",
+    description: "A quick culture-fit and commitment conversation with the core leadership team when required.",
   },
   {
     step: "04",
