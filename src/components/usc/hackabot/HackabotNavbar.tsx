@@ -14,7 +14,7 @@ interface HackabotNavbarProps {
   onRegisterClick: () => void;
 }
 
-export function HackabotNavbar({ onRegisterClick }: HackabotNavbarProps) {
+export function HackabotNavbar({ onRegisterClick: _onRegisterClick }: HackabotNavbarProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleAnchorClick = (href: string) => {
@@ -58,41 +58,32 @@ export function HackabotNavbar({ onRegisterClick }: HackabotNavbarProps) {
             </div>
           </div>
 
-          {/* Center: Glowing HACK-A-BOT 3.0 Emblem Badge */}
-          <a
-            href="#briefing"
-            onClick={(e) => {
-              e.preventDefault();
-              handleAnchorClick("#briefing");
-            }}
-            className="inline-flex shrink-0 items-center gap-2 rounded-full border border-flame/40 bg-flame/10 px-3 py-1 shadow-[0_0_20px_-4px_oklch(0.648_0.224_34/45%)] transition-colors hover:border-flame sm:px-4"
-          >
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-flame shadow-[0_0_10px_var(--flame)]" />
-            <span className="font-display-usc text-sm tracking-wider text-cream sm:text-base">
-              HACK-A-BOT <span className="text-gradient-flame">3.0</span>
-            </span>
-          </a>
+          {/* Right: Glowing HACK-A-BOT 3.0 Emblem Badge */}
+          <div className="flex items-center gap-2">
+            <a
+              href="#briefing"
+              onClick={(e) => {
+                e.preventDefault();
+                handleAnchorClick("#briefing");
+              }}
+              className="inline-flex shrink-0 items-center gap-2 rounded-full border border-flame/40 bg-flame/10 px-3 py-1 shadow-[0_0_20px_-4px_oklch(0.648_0.224_34/45%)] transition-colors hover:border-flame sm:px-4"
+            >
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-flame shadow-[0_0_10px_var(--flame)]" />
+              <span className="font-display-usc text-sm tracking-wider text-cream sm:text-base">
+                HACK-A-BOT <span className="text-gradient-flame">3.0</span>
+              </span>
+            </a>
 
-          {/* Right: Pulsing Flame Orange CTA */}
-          <div className="hidden items-center lg:flex">
+            {/* Mobile Drawer Trigger */}
             <button
               type="button"
-              onClick={onRegisterClick}
-              className="gradient-flame shadow-flame-glow relative cursor-pointer rounded-full px-5 py-2 font-mono text-[11px] font-semibold tracking-[0.16em] text-cream transition-transform hover:scale-[1.04]"
+              aria-label={drawerOpen ? "Close navigation menu" : "Open navigation menu"}
+              onClick={() => setDrawerOpen((prev) => !prev)}
+              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-cream/15 text-cream lg:hidden"
             >
-              REGISTER TEAM
+              {drawerOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </button>
           </div>
-
-          {/* Mobile Drawer Trigger */}
-          <button
-            type="button"
-            aria-label={drawerOpen ? "Close navigation menu" : "Open navigation menu"}
-            onClick={() => setDrawerOpen((prev) => !prev)}
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-cream/15 text-cream lg:hidden"
-          >
-            {drawerOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-          </button>
         </nav>
       </div>
 

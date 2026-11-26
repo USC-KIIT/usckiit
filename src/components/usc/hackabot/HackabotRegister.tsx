@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState, type FormEvent, type MouseEvent } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import type { User } from "@supabase/supabase-js";
 import {
   CheckCircle2,
@@ -52,7 +51,7 @@ function computePassCode(teamName: string, email: string): string {
   return `HAB3-${code}`;
 }
 
-function downloadSquadPassPng(params: {
+function generateSquadPassPngDataUrl(params: {
   passId: string;
   teamName: string;
   trackTitle: string;
@@ -60,12 +59,12 @@ function downloadSquadPassPng(params: {
   sdgCodes: readonly string[];
   leaderName: string;
   totalMembers: number;
-}) {
+}): string | null {
   const canvas = document.createElement("canvas");
   canvas.width = 1200;
   canvas.height = 680;
   const ctx = canvas.getContext("2d");
-  if (!ctx) return false;
+  if (!ctx) return null;
 
   // Obsidian background
   ctx.fillStyle = "#090A0F";
@@ -131,6 +130,20 @@ function downloadSquadPassPng(params: {
   ctx.fillText("DEC 12–13, 2026 • CAMPUS 6 AUDITORIUM & CAMPUS 10 CENTRAL LIBRARY", 72, 558);
   ctx.fillText("UNDER THE DEPARTMENT OF TRAINING AND PLACEMENT, KIIT UNIVERSITY", 72, 596);
 
+  return canvas.toDataURL("image/png");
+}
+
+function downloadSquadPassPng(params: {
+  passId: string;
+  teamName: string;
+  trackTitle: string;
+  trackAccent: "flame" | "cobalt";
+  sdgCodes: readonly string[];
+  leaderName: string;
+  totalMembers: number;
+}) {
+  const dataUrl = generateSquadPassPngDataUrl(params);
+  if (!dataUrl) return false;
   const link = document.createElement("a");
   const slug = (params.teamName || "team")
     .trim()
@@ -138,14 +151,10 @@ function downloadSquadPassPng(params: {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
   link.download = `hackabot-3-pass-${slug || "squad"}.png`;
-  link.href = canvas.toDataURL("image/png");
+  link.href = dataUrl;
   link.click();
   return true;
 }
-
-const BARCODE_BARS = [
-  3, 1, 2, 4, 1, 2, 1, 3, 2, 1, 4, 2, 1, 3, 1, 2, 3, 1, 2, 4, 1, 2, 3, 1, 2, 1, 3, 2,
-] as const;
 
 export function HackabotRegister({
   selectedTrack,
@@ -280,7 +289,6 @@ export function HackabotRegister({
   const totalMembers = 1 + members.length;
   const trackInfo =
     HACKABOT_TRACKS.find((t) => t.id === selectedTrack) ?? HACKABOT_TRACKS[0]!;
-  const isFlameTrack = trackInfo.accent === "flame";
 
   const passId = useMemo(
     () => computePassCode(teamName, leaderEmail),
@@ -351,6 +359,35 @@ export function HackabotRegister({
         });
         return;
       }
+
+      const passPngBase64 = generateSquadPassPngDataUrl({
+        passId,
+        teamName,
+        trackTitle: trackInfo.title,
+        trackAccent: trackInfo.accent,
+        sdgCodes: selectedSdgObjects.map((s) => s.code),
+        leaderName,
+        totalMembers,
+      });
+
+      // Best-effort email dispatch via Supabase Edge Function
+      const { error: mailError } = await supabase.functions.invoke("send-hackabot-pass", {
+        body: {
+          passId,
+          teamName: teamName.trim(),
+          trackTitle: trackInfo.title,
+          sdgCodes: selectedSdgObjects.map((s) => s.code),
+          leaderName: leaderName.trim(),
+          leaderEmail: leaderEmail.trim().toLowerCase(),
+          totalMembers,
+          passPngBase64,
+        },
+      });
+      if (mailError) {
+        toast.info("Pass generated — email delivery pending", {
+          description: "Download your Squad Pass below while email service is being configured.",
+        });
+      }
     }
 
     setSubmitting(false);
@@ -398,17 +435,6 @@ export function HackabotRegister({
     }
   };
 
-  const handleCardMove = (e: MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const px = (e.clientX - rect.left) / rect.width;
-    const py = (e.clientY - rect.top) / rect.height;
-    setCardTilt({
-      rx: (0.5 - py) * 9,
-      ry: (px - 0.5) * 9,
-      active: true,
-    });
-  };
-
   return (
     <section
       id="register"
@@ -441,10 +467,9 @@ export function HackabotRegister({
           )}
         </div>
 
-        {/* 2-Column Split-Screen Terminal */}
-        <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-start">
-          {/* LEFT COLUMN (60%): KIIT Google Auth Gate -> Registration Form */}
-          <div className="glass-dark hud-brackets rounded-3xl p-5 sm:p-8 lg:col-span-7">
+        {/* Centered Registration Terminal */}
+        <div className="mx-auto mt-8 max-w-3xl">
+          <div className="glass-dark hud-brackets rounded-3xl p-5 sm:p-8">
             {authLoading ? (
               <div className="flex min-h-[340px] flex-col items-center justify-center gap-3 text-center">
                 <div className="h-8 w-8 animate-spin rounded-full border-2 border-flame/30 border-t-flame" />
@@ -789,21 +814,47 @@ export function HackabotRegister({
 
               {/* Submit / Reset Controls */}
               {submitted ? (
-                <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-emerald/45 bg-emerald/15 p-4">
-                  <div className="flex items-center gap-2.5 text-emerald">
-                    <CheckCircle2 className="h-5 w-5 shrink-0" />
-                    <span className="font-mono text-xs font-semibold">
-                      SQUAD REGISTERED • YOUR OFFICIAL PASS IS ACTIVE →
-                    </span>
+                <div className="space-y-4 rounded-2xl border border-emerald/45 bg-emerald/15 p-5">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-2.5 text-emerald">
+                      <CheckCircle2 className="h-5 w-5 shrink-0" />
+                      <div>
+                        <p className="font-mono text-xs font-semibold">
+                          SQUAD REGISTERED • PASS ID: {passId}
+                        </p>
+                        <p className="mt-0.5 font-mono text-[10px] text-cream/75">
+                          Confirmation &amp; downloadable pass sent to {leaderEmail}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setSubmitted(false)}
+                      className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-cream/20 bg-obsidian px-4 py-2 font-mono text-[10px] tracking-[0.14em] text-cream/85 hover:border-flame hover:text-flame"
+                    >
+                      <RotateCcw className="h-3 w-3" />
+                      EDIT / NEW ENTRY
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setSubmitted(false)}
-                    className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-cream/20 bg-obsidian px-4 py-2 font-mono text-[10px] tracking-[0.14em] text-cream/85 hover:border-flame hover:text-flame"
-                  >
-                    <RotateCcw className="h-3 w-3" />
-                    EDIT / NEW ENTRY
-                  </button>
+
+                  <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                    <button
+                      type="button"
+                      onClick={handleCopySummary}
+                      className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-full border border-cream/18 bg-obsidian/90 px-4 py-2.5 font-mono text-[10px] font-semibold tracking-[0.14em] text-cream transition-colors hover:border-flame hover:text-flame"
+                    >
+                      <Copy className="h-3.5 w-3.5" />
+                      COPY PASS SUMMARY
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleDownloadPass}
+                      className="gradient-flame shadow-flame-glow inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-full px-4 py-2.5 font-mono text-[10px] font-semibold tracking-[0.14em] text-cream transition-transform hover:scale-[1.02]"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                      DOWNLOAD PASS
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <button
@@ -816,185 +867,6 @@ export function HackabotRegister({
               )}
             </form>
             )}
-          </div>
-
-          {/* RIGHT COLUMN (40%, Sticky on Desktop): REAL-TIME HOLOGRAPHIC TEAM PASS */}
-          <div className="lg:sticky lg:top-24 lg:col-span-5">
-            <motion.div
-              animate={submitted ? { rotateY: [0, 8, 0], scale: [1, 1.02, 1] } : {}}
-              transition={{ duration: 0.55, ease: "easeOut" }}
-              onMouseMove={handleCardMove}
-              onMouseLeave={() => setCardTilt({ rx: 0, ry: 0, active: false })}
-              style={{
-                transform: `perspective(1000px) rotateX(${cardTilt.rx}deg) rotateY(${cardTilt.ry}deg)`,
-                transition: cardTilt.active ? "transform 0.08s ease-out" : "transform 0.4s ease-out",
-              }}
-              className={`hud-brackets relative overflow-hidden rounded-3xl border bg-gradient-to-br from-carbon via-obsidian to-carbon p-6 shadow-2xl sm:p-7 ${
-                submitted
-                  ? "border-emerald shadow-[0_0_40px_-8px_oklch(0.628_0.122_152/55%)]"
-                  : isFlameTrack
-                    ? "border-flame/50 shadow-flame-glow"
-                    : "border-cobalt/55 shadow-cobalt-glow"
-              }`}
-            >
-              {/* Subtle metallic sheen & celebratory burst */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 opacity-35"
-                style={{
-                  background: isFlameTrack
-                    ? "radial-gradient(circle at 85% 15%, oklch(0.648 0.224 34 / 32%), transparent 55%), linear-gradient(125deg, transparent 35%, oklch(0.973 0.013 84 / 8%) 50%, transparent 65%)"
-                    : "radial-gradient(circle at 85% 15%, oklch(0.548 0.215 256 / 34%), transparent 55%), linear-gradient(125deg, transparent 35%, oklch(0.973 0.013 84 / 8%) 50%, transparent 65%)",
-                }}
-              />
-
-              <AnimatePresence>
-                {submitted && (
-                  <motion.div
-                    initial={{ scale: 0.3, opacity: 0.9 }}
-                    animate={{ scale: 2.2, opacity: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.9, ease: "easeOut" }}
-                    aria-hidden
-                    className="pointer-events-none absolute left-1/2 top-1/2 h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-emerald"
-                  />
-                )}
-              </AnimatePresence>
-
-              <div className="relative z-10">
-                {/* Pass Header */}
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-hud text-[10px] text-cream/65">
-                    HACK-A-BOT 3.0 SQUAD PASS
-                  </span>
-                  {submitted ? (
-                    <motion.span
-                      initial={{ scale: 1.5, rotate: -10, opacity: 0 }}
-                      animate={{ scale: 1, rotate: 0, opacity: 1 }}
-                      transition={{ type: "spring", stiffness: 280, damping: 18 }}
-                      className="inline-flex items-center gap-1 rounded-full border border-emerald bg-emerald/20 px-3 py-1 font-mono text-[10px] font-bold tracking-[0.14em] text-emerald"
-                    >
-                      <CheckCircle2 className="h-3.5 w-3.5" />
-                      REGISTERED ✓
-                    </motion.span>
-                  ) : (
-                    <span className="rounded-full border border-cream/15 bg-obsidian/80 px-2.5 py-0.5 font-mono text-[9px] tracking-[0.14em] text-cream/60">
-                      LIVE PREVIEW
-                    </span>
-                  )}
-                </div>
-
-                {/* Live Team Name */}
-                <div className="mt-5">
-                  <p className="font-mono text-[9px] tracking-[0.18em] text-cream/45">SQUAD CALLSIGN</p>
-                  <h3 className="font-display-usc mt-1 truncate text-3xl text-cream sm:text-4xl">
-                    {teamName.trim() || "UNASSIGNED SQUAD"}
-                  </h3>
-                </div>
-
-                {/* Track & Roster Badges */}
-                <div className="mt-4 flex flex-wrap items-center gap-2">
-                  <span
-                    className={`rounded-full border px-3 py-1 font-mono text-[10px] font-semibold tracking-[0.12em] ${
-                      isFlameTrack
-                        ? "border-flame/50 bg-flame/15 text-flame"
-                        : "border-cobalt/55 bg-cobalt/20 text-cream"
-                    }`}
-                  >
-                    {trackInfo.code} • {trackInfo.title}
-                  </span>
-                  <span className="rounded-full border border-cream/15 bg-obsidian/80 px-3 py-1 font-mono text-[10px] text-cream/85">
-                    {totalMembers} / {HACKABOT_MAX_MEMBERS} MEMBERS
-                  </span>
-                </div>
-
-                {/* Live SDG Chips */}
-                <div className="mt-5 border-t border-cream/10 pt-4">
-                  <p className="font-mono text-[9px] tracking-[0.16em] text-cream/45">
-                    ALIGNED UN SDGs ({selectedSdgObjects.length}/2+ MIN)
-                  </p>
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {selectedSdgObjects.length > 0 ? (
-                      selectedSdgObjects.map((sdg) => (
-                        <span
-                          key={sdg.id}
-                          className="rounded-md border border-emerald/35 bg-emerald/10 px-2 py-0.5 font-mono text-[10px] text-emerald"
-                        >
-                          {sdg.code}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="font-mono text-[11px] text-cream/40">
-                        Select 2+ SDGs to lock alignment...
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Squad Roster Preview */}
-                <div className="mt-4 border-t border-cream/10 pt-4 font-mono text-[11px]">
-                  <div className="flex items-center justify-between text-cream/80">
-                    <span className="text-cream/45">LEADER</span>
-                    <span className="truncate pl-3 font-medium">
-                      {leaderName.trim() || "Awaiting Input"}
-                    </span>
-                  </div>
-                  <div className="mt-1.5 flex items-center justify-between text-cream/70">
-                    <span className="text-cream/45">DATES</span>
-                    <span>DEC 12–13 • ₹0 FREE</span>
-                  </div>
-                  <div className="mt-1.5 flex items-center justify-between text-cream/70">
-                    <span className="text-cream/45">VENUES</span>
-                    <span className="truncate pl-3 text-right">
-                      Campus 6 Aud. &amp; C10 Library
-                    </span>
-                  </div>
-                </div>
-
-                {/* Scanline Barcode + Pass ID */}
-                <div className="mt-5 flex items-center justify-between gap-4 rounded-xl border border-cream/10 bg-obsidian/90 px-4 py-3">
-                  <div>
-                    <p className="font-mono text-[9px] tracking-[0.16em] text-cream/45">PASS ID</p>
-                    <p className="font-mono text-sm font-bold tracking-[0.14em] text-flame">
-                      {passId}
-                    </p>
-                  </div>
-                  <div aria-hidden className="flex h-8 items-end gap-[2px] opacity-80">
-                    {BARCODE_BARS.map((w, idx) => (
-                      <span
-                        key={idx}
-                        className="block h-full rounded-[1px] bg-cream/75"
-                        style={{ width: `${w}px` }}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Action Buttons (Visible prominently once submitted, or handy copy/save) */}
-                <div className="mt-5 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-                  <button
-                    type="button"
-                    onClick={handleCopySummary}
-                    className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-full border border-cream/18 bg-obsidian/90 px-4 py-2.5 font-mono text-[10px] font-semibold tracking-[0.14em] text-cream transition-colors hover:border-flame hover:text-flame"
-                  >
-                    <Copy className="h-3.5 w-3.5" />
-                    COPY PASS SUMMARY
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleDownloadPass}
-                    className={`inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-full px-4 py-2.5 font-mono text-[10px] font-semibold tracking-[0.14em] text-cream transition-transform hover:scale-[1.02] ${
-                      submitted
-                        ? "gradient-flame shadow-flame-glow"
-                        : "border border-cream/18 bg-carbon hover:border-cobalt"
-                    }`}
-                  >
-                    <Download className="h-3.5 w-3.5" />
-                    DOWNLOAD PASS
-                  </button>
-                </div>
-              </div>
-            </motion.div>
           </div>
         </div>
       </div>
