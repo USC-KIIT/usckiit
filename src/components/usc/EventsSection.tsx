@@ -149,10 +149,10 @@ export function EventsSection({ onRegisterHackabot }: EventsSectionProps) {
   const sdgMandateMet = selectedSdgs.length >= HACKABOT_MIN_SDGS;
 
   return (
-    <section id="events" className="relative bg-obsidian px-6 py-24 sm:px-10 lg:py-32">
+    <section id="events" className="relative bg-obsidian px-4 py-16 sm:px-10 sm:py-24 lg:py-32">
       <div className="mx-auto max-w-6xl">
         {/* TIER 1: HACK-A-BOT 3.0 COMMAND CENTER */}
-        <div className="glass-dark hud-brackets relative overflow-hidden rounded-3xl p-6 sm:p-10">
+        <div className="glass-dark hud-brackets relative overflow-hidden rounded-3xl p-4 sm:p-10">
           <div
             aria-hidden
             className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-flame/15 blur-3xl"
@@ -165,13 +165,13 @@ export function EventsSection({ onRegisterHackabot }: EventsSectionProps) {
           {/* Header Block */}
           <div className="relative z-10 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-3xl">
-              <p className="font-hud text-[11px] text-flame">
+              <p className="font-hud text-[10px] leading-relaxed text-flame sm:text-[11px]">
                 ORGANIZED BY USC KIIT • UNDER THE DEPARTMENT OF TRAINING AND PLACEMENT
               </p>
-              <h2 className="font-display-usc text-gradient-flame mt-2 text-6xl sm:text-7xl lg:text-8xl">
+              <h2 className="font-display-usc text-gradient-flame mt-2 text-5xl sm:text-7xl lg:text-8xl">
                 HACK-A-BOT 3.0
               </h2>
-              <p className="mt-2 text-lg font-semibold text-cream sm:text-xl">
+              <p className="mt-2 text-base font-semibold text-cream sm:text-xl">
                 &ldquo;Innovate. Automate. Create Impact.&rdquo;
               </p>
               <p className="mt-3 text-sm leading-relaxed text-cream/75">
@@ -182,39 +182,39 @@ export function EventsSection({ onRegisterHackabot }: EventsSectionProps) {
             </div>
 
             <div className="flex flex-wrap gap-2.5">
-              <span className="inline-flex items-center gap-2 rounded-full border border-emerald/45 bg-emerald/15 px-4 py-1.5 font-mono text-[11px] font-semibold tracking-[0.16em] text-emerald">
+              <span className="inline-flex items-center gap-2 rounded-full border border-emerald/45 bg-emerald/15 px-3.5 py-1.5 font-mono text-[10px] font-semibold tracking-[0.14em] text-emerald sm:px-4 sm:text-[11px] sm:tracking-[0.16em]">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-emerald" />
                 FREE FOR ALL
               </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-cobalt/45 bg-cobalt/15 px-4 py-1.5 font-mono text-[11px] font-semibold tracking-[0.16em] text-cream">
+              <span className="inline-flex items-center gap-2 rounded-full border border-cobalt/45 bg-cobalt/15 px-3.5 py-1.5 font-mono text-[10px] font-semibold tracking-[0.14em] text-cream sm:px-4 sm:text-[11px] sm:tracking-[0.16em]">
                 OFFLINE EVENT
               </span>
             </div>
           </div>
 
           {/* Smart Live Countdown Bar */}
-          <div className="relative z-10 mt-8 flex flex-col gap-5 rounded-2xl border border-cream/10 bg-obsidian/85 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div className="relative z-10 mt-6 flex flex-col gap-4 rounded-2xl border border-cream/10 bg-obsidian/85 p-4 sm:mt-8 sm:flex-row sm:items-center sm:justify-between sm:gap-5 sm:p-6">
             <div>
               <p className="font-hud text-[10px] text-emerald">
                 {phaseState ? phaseState.label : "SYNCING EVENT CLOCK"}
               </p>
-              <div className="mt-2 flex flex-wrap items-center gap-2 font-mono">
+              <div className="mt-2 flex items-center gap-1 font-mono sm:gap-2">
                 {[
                   { val: countdown.days, label: "DAYS" },
                   { val: countdown.hours, label: "HRS" },
                   { val: countdown.minutes, label: "MIN" },
                   { val: countdown.seconds, label: "SEC" },
                 ].map((unit, idx) => (
-                  <div key={unit.label} className="flex items-center gap-2">
-                    <div className="min-w-[60px] rounded-xl border border-cream/10 bg-carbon px-3 py-2 text-center">
-                      <span className="block text-2xl font-bold leading-none text-cream">
+                  <div key={unit.label} className="flex items-center gap-1 sm:gap-2">
+                    <div className="min-w-[50px] rounded-xl border border-cream/10 bg-carbon px-2 py-1.5 text-center sm:min-w-[60px] sm:px-3 sm:py-2">
+                      <span className="block text-xl font-bold leading-none text-cream sm:text-2xl">
                         {unit.val}
                       </span>
-                      <span className="mt-1 block text-[9px] tracking-[0.18em] text-cream/45">
+                      <span className="mt-1 block text-[8px] tracking-[0.14em] text-cream/45 sm:text-[9px] sm:tracking-[0.18em]">
                         {unit.label}
                       </span>
                     </div>
-                    {idx < 3 && <span className="text-lg font-bold text-flame">:</span>}
+                    {idx < 3 && <span className="text-base font-bold text-flame sm:text-lg">:</span>}
                   </div>
                 ))}
               </div>
@@ -223,7 +223,7 @@ export function EventsSection({ onRegisterHackabot }: EventsSectionProps) {
             <button
               type="button"
               onClick={() => onRegisterHackabot()}
-              className="gradient-flame shadow-flame-glow inline-flex cursor-pointer items-center justify-center gap-2 rounded-full px-7 py-3.5 font-mono text-xs font-semibold tracking-[0.16em] text-cream transition-transform hover:scale-[1.03]"
+              className="gradient-flame shadow-flame-glow inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full px-6 py-3 font-mono text-xs font-semibold tracking-[0.16em] text-cream transition-transform hover:scale-[1.03] sm:w-auto sm:px-7 sm:py-3.5"
             >
               {phaseState?.ctaLabel ?? "REGISTER YOUR TEAM"}
               <ArrowRight className="h-4 w-4" />
@@ -286,14 +286,14 @@ export function EventsSection({ onRegisterHackabot }: EventsSectionProps) {
           </div>
 
           {/* Interactive 2+ SDG Alignment Mandate Widget */}
-          <div className="relative z-10 mt-10 rounded-2xl border border-cream/10 bg-obsidian/85 p-6">
+          <div className="relative z-10 mt-8 rounded-2xl border border-cream/10 bg-obsidian/85 p-4 sm:mt-10 sm:p-6">
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div>
-                <p className="font-hud inline-flex items-center gap-2 text-[11px] text-emerald">
-                  <Globe2 className="h-3.5 w-3.5" />
+                <p className="font-hud inline-flex items-center gap-2 text-[10px] text-emerald sm:text-[11px]">
+                  <Globe2 className="h-3.5 w-3.5 shrink-0" />
                   MANDATORY SUSTAINABILITY ALIGNMENT
                 </p>
-                <h3 className="font-display-usc mt-1.5 text-3xl text-cream sm:text-4xl">
+                <h3 className="font-display-usc mt-1.5 text-2xl text-cream sm:text-4xl">
                   2+ UN SDG ALIGNMENT MANDATE
                 </h3>
                 <p className="mt-2 max-w-2xl text-xs leading-relaxed text-cream/70 sm:text-sm">
@@ -328,7 +328,7 @@ export function EventsSection({ onRegisterHackabot }: EventsSectionProps) {
                     type="button"
                     onClick={() => toggleSdg(sdg.id)}
                     aria-pressed={picked}
-                    className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-left transition-all ${
+                    className={`flex cursor-pointer items-center justify-between rounded-xl border px-3.5 py-2.5 text-left transition-all sm:px-4 sm:py-3 ${
                       picked
                         ? "border-emerald bg-emerald/15 text-cream"
                         : "border-cream/10 bg-carbon/70 text-cream/75 hover:border-flame/50 hover:text-cream"
@@ -341,7 +341,7 @@ export function EventsSection({ onRegisterHackabot }: EventsSectionProps) {
                       <span className="text-sm font-medium">{sdg.title}</span>
                     </div>
                     <span
-                      className={`h-4 w-4 rounded-full border ${
+                      className={`h-4 w-4 shrink-0 rounded-full border ${
                         picked ? "border-emerald bg-emerald" : "border-cream/25"
                       }`}
                     />
@@ -354,7 +354,7 @@ export function EventsSection({ onRegisterHackabot }: EventsSectionProps) {
               <button
                 type="button"
                 onClick={() => onRegisterHackabot({ sdgs: selectedSdgs })}
-                className="gradient-flame shadow-flame-glow inline-flex cursor-pointer items-center gap-2 rounded-full px-6 py-2.5 font-mono text-xs font-semibold tracking-[0.16em] text-cream transition-transform hover:scale-[1.03]"
+                className="gradient-flame shadow-flame-glow inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full px-6 py-3 font-mono text-xs font-semibold tracking-[0.16em] text-cream transition-transform hover:scale-[1.03] sm:w-auto sm:py-2.5"
               >
                 LOCK SDGs &amp; REGISTER TEAM
                 <ArrowRight className="h-4 w-4" />

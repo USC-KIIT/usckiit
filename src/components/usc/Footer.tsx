@@ -24,7 +24,7 @@ export function Footer() {
   return (
     <footer
       id="contact"
-      className="relative overflow-hidden border-t border-cream/10 bg-obsidian px-6 pb-12 pt-20 sm:px-10"
+      className="relative overflow-hidden border-t border-cream/10 bg-obsidian px-4 pb-10 pt-16 sm:px-10 sm:pt-20"
     >
       {/* Huge Ghosted Background Wordmark */}
       <div
@@ -35,20 +35,20 @@ export function Footer() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-6xl">
-        <div className="flex flex-col justify-between gap-10 md:flex-row md:items-end">
+        <div className="flex flex-col justify-between gap-8 sm:gap-10 md:flex-row md:items-end">
           <div>
             <p className="font-hud text-xs text-flame">UIPATH STUDENT COMMUNITY</p>
-            <h2 className="font-display-usc mt-2 text-5xl text-cream sm:text-6xl">
+            <h2 className="font-display-usc mt-2 text-4xl text-cream sm:text-6xl">
               BUILDING THE FUTURE,
               <span className="block text-gradient-flame">ONE DOMAIN AT A TIME.</span>
             </h2>
             <p className="mt-4 inline-flex items-center gap-2 text-sm text-cream/65">
-              <MapPin className="h-4 w-4 text-emerald" />
+              <MapPin className="h-4 w-4 shrink-0 text-emerald" />
               KIIT University, Bhubaneswar, Odisha
             </p>
           </div>
 
-          <div className="flex flex-col items-start gap-6 md:items-end">
+          <div className="flex flex-col items-start gap-5 sm:gap-6 md:items-end">
             <button
               type="button"
               onClick={scrollToTop}
@@ -61,7 +61,7 @@ export function Footer() {
               <ArrowUp className="h-4 w-4" />
             </button>
 
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2.5 sm:gap-3">
               {SOCIALS.map((social) => {
                 const Icon = social.icon;
                 return (
@@ -70,7 +70,7 @@ export function Footer() {
                     href={social.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-cream/10 bg-carbon/80 px-4 py-2 font-mono text-[11px] tracking-[0.14em] text-cream/80 transition-colors hover:border-flame/60 hover:text-flame"
+                    className="inline-flex items-center gap-2 rounded-full border border-cream/10 bg-carbon/80 px-3.5 py-2 font-mono text-[11px] tracking-[0.14em] text-cream/80 transition-colors hover:border-flame/60 hover:text-flame sm:px-4"
                   >
                     <Icon className="h-3.5 w-3.5" />
                     {social.handle}
@@ -81,7 +81,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col items-center justify-between gap-3 border-t border-cream/10 pt-6 font-mono text-[11px] tracking-[0.14em] text-cream/45 sm:flex-row">
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-cream/10 pt-6 text-center font-mono text-[10px] tracking-[0.12em] text-cream/45 sm:mt-16 sm:flex-row sm:text-left sm:text-[11px] sm:tracking-[0.14em]">
           <span>© {new Date().getFullYear()} USC KIIT · UIPATH STUDENT COMMUNITY</span>
           <span className="inline-flex items-center gap-2 text-emerald">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald" />

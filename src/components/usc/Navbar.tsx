@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 interface NavbarProps {
   onOpenHackabot: () => void;
@@ -21,43 +21,22 @@ export function Navbar({ onOpenHackabot }: NavbarProps) {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 flex flex-col items-center">
-      {/* Slim Fixed Top Live Announcement Strip */}
-      <div className="w-full border-b border-cream/10 bg-obsidian/90 px-3 py-1.5 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center">
-          <span className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.16em] text-cream/85 sm:text-[11px]">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-emerald shadow-[0_0_8px_var(--emerald)]" />
-            UPCOMING FLAGSHIP: <strong className="text-cream">HACK-A-BOT 3.0</strong>
-            <span className="hidden text-cream/55 sm:inline">
-              • DEC 12–13 • FREE FOR ALL • REG OPENS 2 DEC
-            </span>
-          </span>
-          <button
-            type="button"
-            onClick={onOpenHackabot}
-            className="inline-flex cursor-pointer items-center gap-1 rounded-full bg-flame/15 px-2.5 py-0.5 font-mono text-[10px] font-semibold tracking-[0.16em] text-flame transition-colors hover:bg-flame hover:text-cream"
-          >
-            REGISTER NOW
-            <ArrowRight className="h-3 w-3" />
-          </button>
-        </div>
-      </div>
-
       {/* Floating Glassmorphic Pill Navbar */}
-      <div className="mt-3 flex w-full justify-center px-4">
+      <div className="mt-3 flex w-full justify-center px-3 sm:px-4">
         <nav
           aria-label="Primary navigation"
-          className="glass-dark flex w-full max-w-5xl items-center justify-between rounded-full px-4 py-2 shadow-2xl sm:px-6"
+          className="glass-dark flex w-full max-w-5xl items-center justify-between rounded-full px-3.5 py-2 shadow-2xl sm:px-6"
         >
           {/* Brand Emblem */}
           <a
             href="#home"
             aria-label="USC KIIT Home"
-            className="group inline-flex items-center transition-opacity hover:opacity-90"
+            className="group inline-flex shrink-0 items-center transition-opacity hover:opacity-90"
           >
             <img
               src="/USC%20KIIT%20Public%20Images/logo_svg.svg"
               alt="USC KIIT — UiPath Student Community"
-              className="h-9 w-auto object-contain sm:h-10"
+              className="h-8 w-auto object-contain sm:h-10"
             />
           </a>
 
@@ -94,7 +73,7 @@ export function Navbar({ onOpenHackabot }: NavbarProps) {
             type="button"
             aria-label={drawerOpen ? "Close menu" : "Open menu"}
             onClick={() => setDrawerOpen((prev) => !prev)}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-cream/15 text-cream lg:hidden"
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-cream/15 text-cream lg:hidden"
           >
             {drawerOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
@@ -109,7 +88,7 @@ export function Navbar({ onOpenHackabot }: NavbarProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -12, scale: 0.98 }}
             transition={{ duration: 0.22 }}
-            className="glass-dark fixed inset-x-4 top-28 z-50 rounded-2xl p-6 shadow-2xl lg:hidden"
+            className="glass-dark fixed inset-x-3 top-20 z-50 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-2xl p-5 shadow-2xl sm:inset-x-4 sm:p-6 lg:hidden"
           >
             <div className="flex flex-col gap-4">
               {NAV_LINKS.map((item) => (

@@ -90,7 +90,7 @@ function DomainCard({
           </span>
         </div>
 
-        <h3 className="font-display-usc mt-5 text-3xl text-cream">{domain.title}</h3>
+        <h3 className="font-display-usc mt-5 text-2xl text-cream sm:text-3xl">{domain.title}</h3>
         <p className="mt-2 text-sm leading-relaxed text-cream/65">{domain.description}</p>
       </div>
 
@@ -118,12 +118,12 @@ export function DomainsShowcase({ onApplyDomain }: DomainsShowcaseProps) {
       : USC_DOMAINS.filter((d) => d.category === activeFilter);
 
   return (
-    <section id="domains" className="relative bg-obsidian px-6 py-24 sm:px-10 lg:py-32">
+    <section id="domains" className="relative bg-obsidian px-4 py-16 sm:px-10 sm:py-24 lg:py-32">
       <div className="mx-auto max-w-6xl">
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between md:gap-6">
           <div>
             <p className="font-hud text-xs text-flame">EIGHT SPECIALIZED SQUADS</p>
-            <h2 className="font-display-usc mt-2 text-5xl text-cream sm:text-6xl">
+            <h2 className="font-display-usc mt-2 text-4xl text-cream sm:text-6xl">
               THE EIGHT DOMAINS
             </h2>
           </div>
@@ -136,7 +136,7 @@ export function DomainsShowcase({ onApplyDomain }: DomainsShowcaseProps) {
                   key={category}
                   type="button"
                   onClick={() => setActiveFilter(category)}
-                  className={`cursor-pointer rounded-full px-4 py-2 font-mono text-[11px] tracking-[0.16em] transition-colors ${
+                  className={`cursor-pointer rounded-full px-3 py-1.5 font-mono text-[10px] tracking-[0.14em] transition-colors sm:px-4 sm:py-2 sm:text-[11px] sm:tracking-[0.16em] ${
                     active
                       ? "gradient-flame text-cream shadow-flame-glow"
                       : "border border-cream/15 bg-carbon/60 text-cream/70 hover:border-flame/50 hover:text-cream"
@@ -149,7 +149,7 @@ export function DomainsShowcase({ onApplyDomain }: DomainsShowcaseProps) {
           </div>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:mt-12 sm:gap-5 md:grid-cols-3">
           {visibleDomains.map((domain) => (
             <DomainCard key={domain.id} domain={domain} onOpen={setSelectedDomain} />
           ))}
@@ -174,7 +174,7 @@ export function DomainsShowcase({ onApplyDomain }: DomainsShowcaseProps) {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 280, damping: 30 }}
-              className="relative z-10 flex h-full w-full max-w-lg flex-col justify-between overflow-y-auto border-l border-cream/10 bg-carbon p-7 shadow-2xl sm:p-9"
+              className="relative z-10 flex h-full w-full max-w-lg flex-col justify-between overflow-y-auto border-l border-cream/10 bg-carbon p-5 shadow-2xl sm:p-9"
             >
               <div>
                 <div className="flex items-center justify-between">
@@ -191,7 +191,7 @@ export function DomainsShowcase({ onApplyDomain }: DomainsShowcaseProps) {
                   </button>
                 </div>
 
-                <h3 className="font-display-usc mt-5 text-5xl text-cream">
+                <h3 className="font-display-usc mt-4 text-3xl text-cream sm:mt-5 sm:text-5xl">
                   {selectedDomain.title}
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-cream/75">

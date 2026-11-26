@@ -436,24 +436,31 @@ export function UiPathRobot3D({ motionRefs, modelUrl }: UiPathRobot3DProps) {
     const scroll = motionRefs.scrollProgress.current ?? 0;
     const pointer = motionRefs.pointer.current ?? { x: 0, y: 0 };
 
+    // Responsive framing for portrait/mobile screens so robot + rings fit cleanly
+    const aspect = state.size.width / Math.max(state.size.height, 1);
+    const isPortrait = aspect < 0.9;
+    const mobileScale = isPortrait ? THREE.MathUtils.clamp(aspect / 0.85, 0.56, 1) : 1;
+    const portraitCamZOffset = isPortrait ? (0.9 - aspect) * 2.4 : 0;
+
     // 3-Act scroll interpolation
     const act2 = THREE.MathUtils.clamp((scroll - 0.28) / 0.42, 0, 1);
     const act3 = THREE.MathUtils.clamp((scroll - 0.7) / 0.3, 0, 1);
 
-    const targetCamZ = 4.65 + act2 * 1.45 - act3 * 0.45;
-    const targetCamX = Math.sin(act2 * Math.PI) * 0.45 - act3 * 1.35;
+    const targetCamZ = 4.65 + portraitCamZOffset + act2 * 1.45 - act3 * 0.45;
+    const targetCamX = Math.sin(act2 * Math.PI) * 0.45 * mobileScale - act3 * 1.35 * mobileScale;
     const targetCamY = 0.15 + act2 * 0.22 - act3 * 0.5;
 
     const lerpFactor = 1 - Math.exp(-DAMP_SPEED * dt);
     state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, targetCamX, lerpFactor);
     state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, targetCamY, lerpFactor);
     state.camera.position.z = THREE.MathUtils.lerp(state.camera.position.z, targetCamZ, lerpFactor);
-    state.camera.lookAt(act3 * 0.9, act2 * 0.18 + act3 * 0.35, 0);
+    state.camera.lookAt(act3 * 0.9 * mobileScale, act2 * 0.18 + act3 * 0.35, 0);
 
     if (robotBodyRef.current) {
-      const hoverY = Math.sin(t * 1.9) * 0.11 + act2 * 0.28 + act3 * 1.15;
-      const targetX = act3 * 2.15;
-      const targetScale = 1 - act3 * 0.34;
+      const mobileOffsetY = aspect < 0.85 ? -0.14 : 0;
+      const hoverY = Math.sin(t * 1.9) * 0.11 + mobileOffsetY + act2 * 0.28 + act3 * 1.15;
+      const targetX = act3 * 2.15 * mobileScale;
+      const targetScale = mobileScale * (1 - act3 * 0.34);
       const targetRotY = act2 * Math.PI * 2 + pointer.x * 0.34;
       const targetRotX = -pointer.y * 0.18 + Math.sin(t * 1.1) * 0.04;
       const targetRotZ = -pointer.x * 0.09;

@@ -124,12 +124,12 @@ export function TeamSection() {
   });
 
   return (
-    <section id="team" className="relative bg-carbon/45 px-6 py-24 sm:px-10 lg:py-32">
+    <section id="team" className="relative bg-carbon/45 px-4 py-16 sm:px-10 sm:py-24 lg:py-32">
       <div className="mx-auto max-w-6xl">
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between md:gap-6">
           <div>
             <p className="font-hud text-xs text-flame">THE MINDS BEHIND USC KIIT</p>
-            <h2 className="font-display-usc mt-2 text-5xl text-cream sm:text-6xl">OUR TEAM</h2>
+            <h2 className="font-display-usc mt-2 text-4xl text-cream sm:text-6xl">OUR TEAM</h2>
           </div>
 
           <div className="flex flex-wrap gap-2">
@@ -140,7 +140,7 @@ export function TeamSection() {
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id)}
-                  className={`cursor-pointer rounded-full px-4 py-2 font-mono text-[11px] tracking-[0.16em] transition-colors ${
+                  className={`cursor-pointer rounded-full px-3 py-1.5 font-mono text-[10px] tracking-[0.14em] transition-colors sm:px-4 sm:py-2 sm:text-[11px] sm:tracking-[0.16em] ${
                     active
                       ? "gradient-flame text-cream shadow-flame-glow"
                       : "border border-cream/15 bg-obsidian/70 text-cream/70 hover:border-flame/50 hover:text-cream"
@@ -153,7 +153,7 @@ export function TeamSection() {
           </div>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
           {visibleMembers.map((member) => (
             <TeamCard key={member.id} member={member} />
           ))}
