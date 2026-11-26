@@ -158,6 +158,8 @@ export function HackabotRegister({
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(isSupabaseConfigured);
   const [authBusy, setAuthBusy] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const [teamName, setTeamName] = useState("");
   const [leaderName, setLeaderName] = useState("");
@@ -176,7 +178,7 @@ export function HackabotRegister({
       return;
     }
 
-    const applyVerifiedUser = async (user: User | null) => {
+    const applyVerifiedUser = async (user: User | null, scrollIntoView = false) => {
       if (!user) {
         setAuthUser(null);
         return;
@@ -184,23 +186,53 @@ export function HackabotRegister({
       if (!isKiitEmail(user.email)) {
         await supabase?.auth.signOut();
         setAuthUser(null);
+        setAuthError(
+          `Signed in as ${user.email ?? "unknown"} — please sign in with your official @kiit.ac.in Google account.`,
+        );
         toast.error("KIIT Gmail ID required", {
           description: "Please sign in with your official @kiit.ac.in Google account.",
         });
         return;
       }
+      setAuthError(null);
       setAuthUser(user);
       setLeaderName(getGoogleFullName(user) || (user.email?.split("@")[0] ?? ""));
       setLeaderRollOrInstitute(extractKiitRoll(user.email));
       setLeaderEmail(user.email ?? "");
+      if (scrollIntoView) {
+        window.setTimeout(() => {
+          document.getElementById("register")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 120);
+      }
     };
 
-    supabase.auth.getSession().then(({ data }) => {
-      void applyVerifiedUser(data.session?.user ?? null).finally(() => setAuthLoading(false));
-    });
+    const initAuth = async () => {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get("code");
+        const hadOAuthParams = Boolean(code || window.location.hash.includes("access_token"));
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      void applyVerifiedUser(session?.user ?? null);
+        if (code) {
+          const { data: sessionData } = await supabase!.auth.getSession();
+          if (!sessionData.session) {
+            await supabase!.auth.exchangeCodeForSession(code);
+          }
+          window.history.replaceState({}, "", "/events/hackabot#register");
+        }
+
+        const { data } = await supabase!.auth.getSession();
+        await applyVerifiedUser(data.session?.user ?? null, hadOAuthParams);
+      } catch (err) {
+        setAuthError(err instanceof Error ? err.message : "Authentication check failed.");
+      } finally {
+        setAuthLoading(false);
+      }
+    };
+
+    void initAuth();
+
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      void applyVerifiedUser(session?.user ?? null, event === "SIGNED_IN");
     });
 
     return () => {
@@ -267,7 +299,7 @@ export function HackabotRegister({
     setMembers((prev) => prev.filter((_, i) => i !== idx));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const nextErrors = validateHackabotRegistration({
       teamName,
@@ -285,6 +317,35 @@ export function HackabotRegister({
       return;
     }
     setErrors({});
+    setSubmitting(true);
+
+    if (supabase && authUser) {
+      const { error } = await supabase.from("hackabot_registrations").insert({
+        user_id: authUser.id,
+        pass_id: passId,
+        team_name: teamName.trim(),
+        track: selectedTrack,
+        sdgs: selectedSdgs,
+        leader_name: leaderName.trim(),
+        leader_roll: leaderRollOrInstitute.trim(),
+        leader_email: leaderEmail.trim().toLowerCase(),
+        leader_phone: leaderPhone.trim(),
+        members,
+      });
+
+      if (error) {
+        setSubmitting(false);
+        const isDuplicate = error.code === "23505";
+        toast.error(isDuplicate ? "Already registered" : "Could not save registration", {
+          description: isDuplicate
+            ? "A team has already been registered with this KIIT account."
+            : error.message,
+        });
+        return;
+      }
+    }
+
+    setSubmitting(false);
     setSubmitted(true);
     toast.success("Team Registered for HACK-A-BOT 3.0!", {
       description: `Squad Pass ${passId} issued (${trackInfo.title}).`,
@@ -426,6 +487,12 @@ export function HackabotRegister({
                   </svg>
                   {authBusy ? "REDIRECTING TO GOOGLE..." : "SIGN IN WITH GOOGLE"}
                 </button>
+
+                {authError && (
+                  <p className="mt-4 max-w-md rounded-xl border border-crimson/40 bg-crimson/15 px-4 py-2.5 font-mono text-[11px] text-cream">
+                    {authError}
+                  </p>
+                )}
 
                 {!isSupabaseConfigured && (
                   <p className="mt-4 rounded-xl border border-flame/30 bg-flame/10 px-4 py-2 font-mono text-[10px] tracking-[0.12em] text-flame">
@@ -741,9 +808,10 @@ export function HackabotRegister({
               ) : (
                 <button
                   type="submit"
-                  className="gradient-flame shadow-flame-glow w-full cursor-pointer rounded-full py-4 font-mono text-xs font-semibold tracking-[0.18em] text-cream transition-transform hover:scale-[1.01]"
+                  disabled={submitting}
+                  className="gradient-flame shadow-flame-glow w-full cursor-pointer rounded-full py-4 font-mono text-xs font-semibold tracking-[0.18em] text-cream transition-transform hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  COMPLETE TEAM REGISTRATION — ₹0
+                  {submitting ? "SAVING REGISTRATION..." : "COMPLETE TEAM REGISTRATION — ₹0"}
                 </button>
               )}
             </form>
