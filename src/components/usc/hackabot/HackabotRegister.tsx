@@ -202,7 +202,7 @@ export function HackabotRegister({
       if (scrollIntoView) {
         window.setTimeout(() => {
           document.getElementById("register")?.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 120);
+        }, 80);
       }
     };
 
@@ -210,13 +210,21 @@ export function HackabotRegister({
       try {
         const params = new URLSearchParams(window.location.search);
         const code = params.get("code");
-        const hadOAuthParams = Boolean(code || window.location.hash.includes("access_token"));
+        const oauthFlag = sessionStorage.getItem("hackabot-oauth-return") === "1";
+        const hadOAuthParams = Boolean(
+          oauthFlag || code || window.location.hash.includes("access_token"),
+        );
+        if (oauthFlag) {
+          sessionStorage.removeItem("hackabot-oauth-return");
+        }
 
         if (code) {
           const { data: sessionData } = await supabase!.auth.getSession();
           if (!sessionData.session) {
             await supabase!.auth.exchangeCodeForSession(code);
           }
+          window.history.replaceState({}, "", "/events/hackabot#register");
+        } else if (hadOAuthParams) {
           window.history.replaceState({}, "", "/events/hackabot#register");
         }
 
@@ -445,27 +453,19 @@ export function HackabotRegister({
                 </p>
               </div>
             ) : !authUser ? (
-              <div className="flex min-h-[360px] flex-col items-center justify-center px-2 py-8 text-center">
+              <div className="flex min-h-[340px] flex-col items-center justify-center px-2 py-8 text-center">
                 <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-flame/35 bg-flame/15 text-flame shadow-flame-glow">
                   <ShieldCheck className="h-7 w-7" />
                 </div>
-                <p className="font-hud mt-5 text-[10px] tracking-[0.22em] text-flame">
-                  STEP 01 • IDENTITY VERIFICATION
-                </p>
-                <h3 className="font-display-usc mt-2 text-3xl text-cream sm:text-4xl">
-                  VERIFY WITH KIIT GMAIL ID
+                <h3 className="font-display-usc mt-5 text-3xl text-cream sm:text-4xl">
+                  SIGN IN WITH KIIT GMAIL ID
                 </h3>
-                <p className="mt-3 max-w-md text-sm leading-relaxed text-cream/70">
-                  Sign in with your official <span className="font-mono text-cream">@kiit.ac.in</span>{" "}
-                  Google account to unlock Hack-a-Bot 3.0 team registration. Your Full Name, Roll
-                  Number, and Email will be auto-filled and locked.
-                </p>
 
                 <button
                   type="button"
                   disabled={authBusy}
                   onClick={handleGoogleSignIn}
-                  className="mt-7 inline-flex cursor-pointer items-center justify-center gap-3 rounded-full border border-cream/20 bg-cream px-7 py-3.5 font-mono text-xs font-bold tracking-[0.14em] text-obsidian shadow-xl transition-transform hover:scale-[1.03] disabled:opacity-60"
+                  className="mt-6 inline-flex cursor-pointer items-center justify-center gap-3 rounded-full border border-cream/20 bg-cream px-8 py-3.5 font-mono text-xs font-bold tracking-[0.16em] text-obsidian shadow-xl transition-transform hover:scale-[1.03] disabled:opacity-60"
                 >
                   <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" aria-hidden>
                     <path
@@ -485,7 +485,7 @@ export function HackabotRegister({
                       d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96Z"
                     />
                   </svg>
-                  {authBusy ? "REDIRECTING TO GOOGLE..." : "SIGN IN WITH GOOGLE"}
+                  {authBusy ? "REDIRECTING..." : "GOOGLE"}
                 </button>
 
                 {authError && (

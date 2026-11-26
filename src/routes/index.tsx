@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AboutSection } from "@/components/usc/AboutSection";
 import { ApplicationModal } from "@/components/usc/ApplicationModal";
 import { AvengerIntro } from "@/components/usc/AvengerIntro";
@@ -42,6 +42,17 @@ function Index() {
   );
   const [recruitModalOpen, setRecruitModalOpen] = useState(false);
   const [preferredDomain, setPreferredDomain] = useState<DomainId | undefined>(undefined);
+
+  useEffect(() => {
+    const isOAuthReturn =
+      sessionStorage.getItem("hackabot-oauth-return") === "1" ||
+      window.location.search.includes("code=") ||
+      window.location.hash.includes("access_token=");
+    if (isOAuthReturn) {
+      const target = `/events/hackabot${window.location.search}${window.location.hash || "#register"}`;
+      window.location.replace(target);
+    }
+  }, []);
 
   const openApplyModal = (domainId?: DomainId) => {
     setPreferredDomain(domainId);
