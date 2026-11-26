@@ -20,6 +20,11 @@ export const COMMUNITY_METRICS: readonly CommunityMetric[] = [
   { value: 100, suffix: "+", label: "Bots Built" },
 ];
 
+export interface EventSpeaker {
+  name: string;
+  role: string;
+}
+
 export interface FlagshipEvent {
   id: string;
   tag: string;
@@ -27,35 +32,103 @@ export interface FlagshipEvent {
   subtitle: string;
   description: string;
   stat: string;
+  date: string;
+  venue: string;
+  highlights: readonly string[];
+  speakers: readonly EventSpeaker[];
+  partners?: string;
 }
 
 export const FLAGSHIP_EVENTS: readonly FlagshipEvent[] = [
   {
+    id: "automatrix-3",
+    tag: "WORKSHOP · OCT 2026",
+    title: "AUTOMATRIX 3.0",
+    subtitle: "Where AI Meets Automation · Campus 17",
+    description:
+      "An intensive hands-on workshop exploring Agentic AI, UiPath Maestro, and intelligent automation — turning ideas into autonomous action.",
+    stat: "3 OCT 2026 · 2:30 PM · CAMPUS 17",
+    date: "October 3, 2026 · 2:30 PM onwards",
+    venue: "Campus 17 Auditorium",
+    highlights: [
+      "Keynote Session",
+      "Hands-on Agentic AI & Maestro",
+      "Maestro Workshop",
+      "Free Registration",
+    ],
+    speakers: [
+      {
+        name: "Darshan Sable",
+        role: "Automation Engineer @ Accelirate · UiPath MVP 2026 · 5× UiPath Certified",
+      },
+    ],
+    partners: "Sponsors: Chaska (Dessert) · King Rolls (Dining) · 69 Burger (Food)",
+  },
+  {
     id: "maestrova",
-    tag: "FLAGSHIP BOOTCAMP",
-    title: "MAESTROVA",
-    subtitle: "10-Day RPA, Agentic AI & Maestro Bootcamp",
+    tag: "10-DAY BOOTCAMP · SEP 2026",
+    title: "MAESTROVA BOOTCAMP",
+    subtitle: "Where Automation Meets Intelligence · Online",
     description:
-      "Hands-on daily sprints taking KIIT students from first Studio workflow to production-grade UiPath Maestro agents.",
-    stat: "10 DAYS · 350+ BUILDERS",
+      "A 10-day evening cohort exclusively for 1st, 2nd & 3rd year students — taking builders from RPA workflows to UiPath Apps and Maestro.",
+    stat: "21–30 SEP 2026 · 600 SEATS FCFS",
+    date: "21–30 September 2026 · 10:00 PM – 11:00 PM",
+    venue: "Online Mode",
+    highlights: [
+      "RPA & Workflow Automation",
+      "Agentic AI & AI Agents",
+      "UiPath Apps",
+      "UiPath Maestro & Process Orchestration",
+    ],
+    speakers: [],
+    partners: "600 Registrations (FCFS) · No Prior UiPath Experience Required",
   },
   {
-    id: "bot-a-thon",
-    tag: "ANNUAL HACKATHON",
-    title: "Bot-a-Thon KIIT",
-    subtitle: "24-Hour Campus Automation Showdown",
+    id: "coding-compass",
+    tag: "CAREER SERIES · JUN 2026",
+    title: "THE CODING COMPASS",
+    subtitle: "Navigating Your Coding Journey · Online",
     description:
-      "Cross-functional squads race to automate real campus and industry bottlenecks, judged live by UiPath engineers.",
-    stat: "24 HRS · 40+ BOTS SHIPPED",
+      "Mentorship sessions covering Competitive Programming, DSA & Problem Solving, Coding Interview Prep, and Internship & Placement blueprints.",
+    stat: "28 JUN 2026 · 7:00 PM · OPEN TO ALL",
+    date: "June 28, 2026 · 7:00 PM – 8:30 PM",
+    venue: "Online Session",
+    highlights: [
+      "Competitive Programming & DSA",
+      "Internships & Placements",
+      "Coding Interview Preparation",
+      "Building a Tech Career",
+    ],
+    speakers: [
+      {
+        name: "Samrat Bharadwaj",
+        role: "SDE II @ Atlassian · Ex @ Amazon · Codeforces Expert (1640)",
+      },
+      {
+        name: "Sanika Jain",
+        role: "SDE II @ Oracle · Ex-Google Intern · IIT (BHU) Alumna",
+      },
+    ],
+    partners: "Open to All Students",
   },
   {
-    id: "devfest",
-    tag: "COMMUNITY SUMMIT",
-    title: "UiPath DevFest Sessions",
-    subtitle: "Keynotes, Live Demos & MVP Panels",
+    id: "campus-unleashed",
+    tag: "CAMPUS ARENA · AUG 2026",
+    title: "CAMPUS UNLEASHED",
+    subtitle: "Monster Energy × USC KIIT · BGMI Watch Party",
     description:
-      "Direct mentorship with UiPath MVPs, career blueprints in Agentic Automation, and live architecture breakdowns.",
-    stat: "LIVE DEMOS · MVP MENTORS",
+      "High-voltage BGMI Tournament & Watch Party at Campus 25 — packed with clutch plays, live cheers, and unforgettable campus energy.",
+    stat: "AUGUST 2026 · CAMPUS 25",
+    date: "August 2026",
+    venue: "Campus 25, KIIT University",
+    highlights: [
+      "BGMI Tournament",
+      "Live Watch Party",
+      "Monster Energy Activation",
+      "Community & Esports",
+    ],
+    speakers: [],
+    partners: "In Collaboration with Monster Energy",
   },
 ];
 
