@@ -52,7 +52,7 @@ export function EventsSection() {
             <div className="flex flex-wrap gap-2.5">
               <span className="inline-flex items-center gap-2 rounded-full border border-emerald/45 bg-emerald/15 px-3.5 py-1.5 font-mono text-[10px] font-semibold tracking-[0.14em] text-emerald sm:px-4 sm:text-[11px]">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-emerald" />
-                FREE FOR ALL (₹0)
+                FREE FOR ALL
               </span>
               <span className="inline-flex items-center gap-2 rounded-full border border-cobalt/45 bg-cobalt/15 px-3.5 py-1.5 font-mono text-[10px] font-semibold tracking-[0.14em] text-cream sm:px-4 sm:text-[11px]">
                 OFFLINE • DEC 12–13

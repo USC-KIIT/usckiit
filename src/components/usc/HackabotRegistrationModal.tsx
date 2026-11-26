@@ -122,7 +122,7 @@ export function HackabotRegistrationModal({
       `Team Size: ${totalMembers} / ${HACKABOT_MAX_MEMBERS}`,
       `Leader: ${form.leaderName} (${form.leaderEmail})`,
       "Venue: Campus 6 Auditorium & Campus 10 Central Library, KIIT University",
-      "Dates: 12–13 Dec • Entry Fee: Free (₹0)",
+      "Dates: 12–13 Dec • Entry Fee: Free",
     ].join("\n");
     try {
       await navigator.clipboard.writeText(passText);
@@ -176,7 +176,7 @@ export function HackabotRegistrationModal({
             </div>
 
             <div className="mt-4 rounded-xl border border-emerald/35 bg-emerald/10 px-4 py-2.5 font-mono text-[11px] text-cream/90">
-              Entry Fee: <strong className="text-emerald">Free for All (₹0)</strong> •
+              Entry Fee: <strong className="text-emerald">Free for All</strong> •
               Registration: 2 Dec – 11 Dec • Offline at Campus 6 Auditorium &amp; Campus 10 Central
               Library
             </div>
@@ -194,7 +194,7 @@ export function HackabotRegistrationModal({
                   </span>
                   <span className="inline-flex items-center gap-1 rounded-full bg-flame/15 px-3 py-1 font-mono text-[10px] text-flame">
                     <Sparkles className="h-3 w-3" />
-                    FREE ENTRY (₹0)
+                    FREE ENTRY
                   </span>
                 </div>
 
