@@ -180,10 +180,10 @@ export function AvengerIntro({ onComplete }: AvengerIntroProps) {
             style={{ opacity: flashActive ? 1 : 0, background: "#090A0F" }}
           />
 
-          {/* ── Single full-screen photo ── */}
-          <div className="grid flex-1 grid-cols-1" style={{ minHeight: 0 }}>
+          {/* ── Single full-screen photo — fills entire viewport ── */}
+          <div className="absolute inset-0">
             {panelCells.slice(0, 1).map((cell, i) => (
-              <div key={`${frameIdx}-${i}`} className="relative overflow-hidden">
+              <div key={`${frameIdx}-${i}`} className="relative h-full w-full overflow-hidden">
                 <motion.img
                   key={`img-${frameIdx}`}
                   src={cell.src}
@@ -228,8 +228,12 @@ export function AvengerIntro({ onComplete }: AvengerIntroProps) {
             }}
           />
 
-          {/* ── Bottom HUD: wordmark + progress bar + skip ── */}
-          <div className="relative z-40 flex flex-col items-center gap-2 px-6 pb-7 pt-3">
+          {/* ── Bottom HUD: wordmark + progress bar + skip — overlaid on image ── */}
+          <div className="absolute inset-x-0 bottom-0 z-40 flex flex-col items-center gap-2 px-6 pb-7 pt-10"
+            style={{
+              background: "linear-gradient(to top, rgba(9,10,15,0.85) 0%, rgba(9,10,15,0.5) 60%, transparent 100%)",
+            }}
+          >
             {/* Compact static wordmark — no heartbeat */}
             <div className="mb-1 flex flex-col items-center gap-0.5 text-center">
               <span className="font-mono text-[9px] tracking-[0.35em] text-flame/70">
