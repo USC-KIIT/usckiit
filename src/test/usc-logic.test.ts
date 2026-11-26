@@ -23,10 +23,10 @@ describe("USC KIIT Diagnostic scoring", () => {
     expect(result.stackBadges).toHaveLength(6);
   });
 
-  it("matches Events & Operations when leadership and ops answers dominate", () => {
+  it("matches SPEO when leadership and ops answers dominate", () => {
     const result = computeDiagnosticResult(["D", "D", "D", "D", "D", "D"]);
-    expect(result.primary.id).toBe("events-ops");
-    expect(result.secondary.id).toBe("marketing-pr");
+    expect(result.primary.id).toBe("speo");
+    expect(result.secondary.id).toBe("corporate-relations");
   });
 });
 
@@ -43,8 +43,8 @@ describe("KIIT application validation", () => {
       rollNumber: "abc",
       email: "me@gmail.com",
       yearBranch: "",
-      primaryDomain: "web-app",
-      secondaryDomain: "web-app",
+      primaryDomain: "web-dev",
+      secondaryDomain: "web-dev",
       portfolioUrl: "not-a-url",
     });
 
@@ -63,7 +63,7 @@ describe("KIIT application validation", () => {
       email: "22051842@kiit.ac.in",
       yearBranch: "3rd Year, CSE",
       primaryDomain: "rpa-ai",
-      secondaryDomain: "web-app",
+      secondaryDomain: "web-dev",
       portfolioUrl: "https://github.com/debayan",
     });
     expect(Object.keys(errors)).toHaveLength(0);

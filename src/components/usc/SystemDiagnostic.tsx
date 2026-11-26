@@ -195,7 +195,7 @@ export function SystemDiagnostic({ onApplyDomain }: SystemDiagnosticProps) {
                   </div>
                   <p className="font-hud mt-5 text-sm text-flame">COMPILING AGENT PROFILE...</p>
                   <div className="mt-4 space-y-1.5 font-mono text-xs text-cream/60">
-                    <p>&gt; Evaluating 6 telemetry vectors across 8 USC KIIT domains</p>
+                    <p>&gt; Evaluating 6 telemetry vectors across 12 USC KIIT domains</p>
                     <p>&gt; Synthesizing primary &amp; secondary squad compatibility</p>
                     <p className="text-emerald">&gt; Generating codename assignment...</p>
                   </div>
@@ -221,7 +221,18 @@ export function SystemDiagnostic({ onApplyDomain }: SystemDiagnosticProps) {
 
                   <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
                     <div className="hud-brackets rounded-xl border border-flame/50 bg-carbon p-4 sm:p-5">
-                      <p className="font-hud text-[10px] text-flame">PRIMARY DOMAIN MATCH</p>
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="font-hud text-[10px] text-flame">PRIMARY DOMAIN MATCH</p>
+                        <span
+                          className={`rounded-full border px-2 py-0.5 font-mono text-[9px] tracking-[0.14em] ${
+                            result.primary.wing === "tech"
+                              ? "border-flame/40 bg-flame/15 text-flame"
+                              : "border-cobalt/40 bg-cobalt/15 text-cobalt"
+                          }`}
+                        >
+                          {result.primary.wing === "tech" ? "TECH WING" : "NON-TECH WING"}
+                        </span>
+                      </div>
                       <h3 className="font-display-usc mt-2 text-3xl text-cream sm:text-4xl">
                         {result.primary.title}
                       </h3>
@@ -235,7 +246,18 @@ export function SystemDiagnostic({ onApplyDomain }: SystemDiagnosticProps) {
                     </div>
 
                     <div className="rounded-xl border border-cream/10 bg-obsidian/70 p-4 sm:p-5">
-                      <p className="font-hud text-[10px] text-cobalt">SECONDARY MATCH</p>
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="font-hud text-[10px] text-cobalt">SECONDARY MATCH</p>
+                        <span
+                          className={`rounded-full border px-2 py-0.5 font-mono text-[9px] tracking-[0.14em] ${
+                            result.secondary.wing === "tech"
+                              ? "border-flame/35 bg-flame/10 text-flame"
+                              : "border-cobalt/35 bg-cobalt/10 text-cobalt"
+                          }`}
+                        >
+                          {result.secondary.wing === "tech" ? "TECH WING" : "NON-TECH WING"}
+                        </span>
+                      </div>
                       <h4 className="font-display-usc mt-2 text-2xl text-cream/90 sm:text-3xl">
                         {result.secondary.title}
                       </h4>
