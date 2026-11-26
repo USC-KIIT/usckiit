@@ -54,15 +54,11 @@ export function ScrollHero({ onRegisterHackabot, onExploreInitiatives }: ScrollH
   // Act 1 (0% - 35%): Hero Initialization overlays
   const act1Opacity = useTransform(smoothProgress, [0, 0.24, 0.34], [1, 1, 0]);
   const act1LeftX = useTransform(smoothProgress, [0, 0.34], [0, -70]);
-  const act1RightX = useTransform(smoothProgress, [0, 0.34], [0, 70]);
 
   // Act 2 (35% - 70%): Giant depth-occluded background headline + Domain Totems + Dual CTAs
   const act2Opacity = useTransform(smoothProgress, [0.3, 0.42, 0.66, 0.76], [0, 1, 1, 0]);
   const act2BgScale = useTransform(smoothProgress, [0.3, 0.55, 0.76], [0.88, 1.02, 1.12]);
   const act2CtaY = useTransform(smoothProgress, [0.34, 0.46, 0.72], [32, 0, -24]);
-
-  // Scroll ring stroke progress
-  const ringDashOffset = useTransform(smoothProgress, [0, 1], [113.1, 0]);
 
   // Act 3 warp tint
   const warpOpacity = useTransform(smoothProgress, [0.7, 0.92, 1], [0, 0.65, 1]);
@@ -96,6 +92,67 @@ export function ScrollHero({ onRegisterHackabot, onExploreInitiatives }: ScrollH
           </h2>
         </motion.div>
 
+        {/* ACT 1 RIGHT-SIDE DEPTH TEXT — behind robot at z-10 */}
+        <motion.div
+          style={{ opacity: act1Opacity }}
+          className="pointer-events-none absolute inset-0 z-10 flex items-center justify-end pr-6 sm:pr-12 lg:pr-20"
+        >
+          <div className="flex flex-col items-end gap-0 leading-none select-none">
+            {/* Thin eyebrow line */}
+            <span className="mb-3 inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.28em] text-flame/70 sm:text-[11px]">
+              <span className="h-px w-8 bg-flame/40" />
+              USC KIIT CORE VALUES
+            </span>
+
+            {/* "CONNECT" — large, cream, slightly transparent */}
+            <span
+              className="font-display-usc text-right text-[13vw] leading-[0.82] text-cream/15 sm:text-[10vw] lg:text-[9vw]"
+            >
+              CONNECT
+            </span>
+
+            {/* Flame divider rule */}
+            <span className="my-2 ml-auto block h-[2px] w-[55%] bg-gradient-to-l from-flame/60 via-flame/20 to-transparent" />
+
+            {/* "LEARN &" — medium, gradient */}
+            <span
+              className="font-display-usc text-right text-[9vw] leading-[0.88] sm:text-[7.5vw] lg:text-[6.5vw]"
+              style={{
+                background: "linear-gradient(135deg, oklch(0.85 0.03 84 / 0.55) 0%, oklch(0.648 0.224 34 / 0.45) 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              LEARN &amp;
+            </span>
+
+            {/* "COLLABORATE" — slightly smaller, emerald accent */}
+            <span
+              className="font-display-usc text-right text-[7vw] leading-[0.92] sm:text-[6vw] lg:text-[5.2vw]"
+              style={{
+                background: "linear-gradient(135deg, oklch(0.76 0.17 162 / 0.55) 0%, oklch(0.85 0.03 84 / 0.35) 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              COLLABORATE
+            </span>
+
+            {/* Subtle bottom dots */}
+            <span className="mt-4 flex gap-1.5">
+              {[0, 1, 2].map((i) => (
+                <span
+                  key={i}
+                  className="h-1 w-1 rounded-full"
+                  style={{
+                    background: i === 0 ? "oklch(0.648 0.224 34 / 0.7)" : i === 1 ? "oklch(0.76 0.17 162 / 0.5)" : "oklch(0.85 0.03 84 / 0.3)",
+                  }}
+                />
+              ))}
+            </span>
+          </div>
+        </motion.div>
+
         {/* TRANSPARENT WEBGL 3D CANVAS (z-20, robot floats IN FRONT of Act 2 giant text) */}
         <div className="absolute inset-0 z-20">
           <ClientOnly
@@ -124,10 +181,6 @@ export function ScrollHero({ onRegisterHackabot, onExploreInitiatives }: ScrollH
           <div className="flex flex-1 flex-col justify-between gap-8 md:flex-row md:items-center">
             {/* Left Headline Block */}
             <motion.div style={{ x: act1LeftX }} className="max-w-lg">
-              <p className="font-hud mb-3 inline-flex items-center gap-2 text-[11px] text-flame">
-                <span className="inline-block h-2 w-2 rounded-full bg-emerald" />
-                USC KIIT PRESENTS
-              </p>
               <h1 className="font-display-usc text-6xl text-cream sm:text-7xl lg:text-[5.75rem]">
                 AUTOMATE
                 <span className="block text-gradient-future">THE FUTURE</span>
@@ -137,56 +190,6 @@ export function ScrollHero({ onRegisterHackabot, onExploreInitiatives }: ScrollH
                 Student Community.
               </p>
             </motion.div>
-
-            {/* Right Architectural Telemetry */}
-            <motion.div
-              style={{ x: act1RightX }}
-              className="hidden max-w-xs text-right md:block"
-            >
-              <p className="font-hud text-[11px] leading-relaxed text-cream/75">
-                EIGHT DOMAINS.
-                <br />
-                ONE INTELLIGENT CORE.
-                <br />
-                <span className="text-flame">SCROLL TO INITIALIZE.</span>
-              </p>
-              <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-cream/10 bg-carbon/60 px-3 py-1 font-mono text-[10px] tracking-widest text-cream/65">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald" />
-                BHUBANESWAR · KIIT_NODE
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Bottom Center Scroll Ring Indicator */}
-          <div className="flex flex-col items-center gap-2">
-            <div className="relative flex h-11 w-11 items-center justify-center">
-              <svg className="h-11 w-11 -rotate-90" viewBox="0 0 40 40">
-                <circle
-                  cx="20"
-                  cy="20"
-                  r="18"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  className="text-cream/15"
-                />
-                <motion.circle
-                  cx="20"
-                  cy="20"
-                  r="18"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeDasharray="113.1"
-                  style={{ strokeDashoffset: ringDashOffset }}
-                  className="text-flame"
-                />
-              </svg>
-              <span className="absolute h-1.5 w-1.5 animate-bounce rounded-full bg-flame" />
-            </div>
-            <span className="font-hud animate-pulse text-[10px] text-cream/65">
-              SCROLL DOWN WITH 2 FINGERS TO EXPLORE
-            </span>
           </div>
         </motion.div>
 

@@ -11,7 +11,6 @@ import { InitiativesSection } from "@/components/usc/InitiativesSection";
 import { Navbar } from "@/components/usc/Navbar";
 import { RecruitmentSection } from "@/components/usc/RecruitmentSection";
 import { ScrollHero } from "@/components/usc/ScrollHero";
-import { ScrollRail } from "@/components/usc/ScrollRail";
 import { SystemDiagnostic } from "@/components/usc/SystemDiagnostic";
 import { TeamSection } from "@/components/usc/TeamSection";
 import type { HackabotTrackId } from "@/lib/hackabot-data";
@@ -69,7 +68,6 @@ function Index() {
     <div className="relative min-h-screen bg-obsidian text-cream">
       <div className="film-grain-overlay" aria-hidden />
       <Navbar onOpenHackabot={() => openHackabotModal()} />
-      <ScrollRail />
 
       <main>
         <ScrollHero

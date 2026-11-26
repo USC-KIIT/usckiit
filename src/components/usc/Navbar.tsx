@@ -51,15 +51,14 @@ export function Navbar({ onOpenHackabot }: NavbarProps) {
           {/* Brand Emblem */}
           <a
             href="#home"
-            className="group inline-flex items-center gap-2.5 rounded-full border border-cream/10 bg-obsidian/70 px-3.5 py-1.5 transition-colors hover:border-flame/50"
+            aria-label="USC KIIT Home"
+            className="group inline-flex h-10 w-32 items-center justify-center overflow-hidden rounded-full border border-cream/15 bg-white px-1.5 transition-all hover:border-flame/60 hover:shadow-[0_0_16px_rgba(250,70,22,0.35)]"
           >
-            <span className="relative flex h-6 w-6 items-center justify-center">
-              <span className="h-3.5 w-3.5 rotate-45 rounded-[3px] border-2 border-flame bg-flame/20 shadow-[0_0_12px_var(--flame)]" />
-              <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border border-obsidian bg-emerald shadow-[0_0_8px_var(--emerald)]" />
-            </span>
-            <span className="font-display-usc text-lg tracking-wide text-cream">
-              USC <span className="text-flame">KIIT</span>
-            </span>
+            <img
+              src="/USC%20KIIT%20Public%20Images/navbar_usc_logo.jpg"
+              alt="USC KIIT — UiPath Student Community"
+              className="h-full w-full object-cover object-center"
+            />
           </a>
 
           {/* Center Navigation Links in Exact Order */}
