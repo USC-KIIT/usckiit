@@ -600,15 +600,6 @@ export function UiPathRobot3D({ motionRefs, modelUrl, mode = "home" }: UiPathRob
   });
 
   const proceduralMesh = isHackabot ? (
-    <AviatorRobotMesh
-      leftPupilRef={leftPupilRef}
-      rightPupilRef={rightPupilRef}
-      leftEyeGroupRef={leftEyeGroupRef}
-      rightEyeGroupRef={rightEyeGroupRef}
-      leftArmRef={leftArmRef}
-      rightArmRef={rightArmRef}
-    />
-  ) : (
     <ProceduralUiPathMascot
       leftPupilRef={leftPupilRef}
       rightPupilRef={rightPupilRef}
@@ -617,6 +608,15 @@ export function UiPathRobot3D({ motionRefs, modelUrl, mode = "home" }: UiPathRob
       leftArmRef={leftArmRef}
       rightArmRef={rightArmRef}
       signalRingRefs={signalRingRefs}
+    />
+  ) : (
+    <AviatorRobotMesh
+      leftPupilRef={leftPupilRef}
+      rightPupilRef={rightPupilRef}
+      leftEyeGroupRef={leftEyeGroupRef}
+      rightEyeGroupRef={rightEyeGroupRef}
+      leftArmRef={leftArmRef}
+      rightArmRef={rightArmRef}
     />
   );
 

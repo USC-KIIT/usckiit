@@ -16,6 +16,43 @@ interface AviatorRobotMeshProps {
  * ear flaps, gold-rimmed tan leather goggles with red strap, yellow rear loop,
  * friendly smile, and orange gesturing arms.
  */
+function createUscForeheadTexture(): THREE.CanvasTexture {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1280;
+  canvas.height = 300;
+  const ctx = canvas.getContext("2d");
+  if (ctx) {
+    ctx.clearRect(0, 0, 1280, 300);
+
+    // Subtle translucent fill + crisp white border box around USC KIIT
+    ctx.fillStyle = "rgba(255, 255, 255, 0.12)";
+    ctx.strokeStyle = "rgba(250, 246, 238, 0.94)";
+    ctx.lineWidth = 8;
+    ctx.beginPath();
+    ctx.roundRect(370, 16, 540, 148, 30);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.shadowColor = "rgba(10, 14, 24, 0.5)";
+    ctx.shadowBlur = 10;
+    ctx.shadowOffsetY = 3;
+    ctx.fillStyle = "#FAF6EE";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    ctx.font = "800 92px 'Space Grotesk', sans-serif";
+    ctx.fillText("USC KIIT", 640, 92);
+
+    // Subtitle below the box without any border box
+    ctx.font = "700 54px 'Space Grotesk', sans-serif";
+    ctx.fillText("Under Department of Training & Placement", 640, 228, 1200);
+  }
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.needsUpdate = true;
+  return texture;
+}
+
 export function AviatorRobotMesh({
   leftPupilRef,
   rightPupilRef,
@@ -24,6 +61,7 @@ export function AviatorRobotMesh({
   leftArmRef,
   rightArmRef,
 }: AviatorRobotMeshProps) {
+  const uscForeheadTexture = useMemo(() => createUscForeheadTexture(), []);
   const {
     leftArmGeo,
     rightArmGeo,
@@ -111,8 +149,9 @@ export function AviatorRobotMesh({
       redStrapGeo.dispose();
       starBadgeGeo.dispose();
       earFlapGeo.dispose();
+      uscForeheadTexture.dispose();
     };
-  }, [leftArmGeo, rightArmGeo, yellowLoopGeo, redStrapGeo, starBadgeGeo, earFlapGeo]);
+  }, [leftArmGeo, rightArmGeo, yellowLoopGeo, redStrapGeo, starBadgeGeo, earFlapGeo, uscForeheadTexture]);
 
   return (
     <group>
@@ -147,11 +186,12 @@ export function AviatorRobotMesh({
         </mesh>
       </group>
 
-      {/* Gold 4-Point Aviator Star Emblem on Cap Forehead */}
+      {/* Gold 4-Point Aviator Star Emblem on Upper Cap Crown */}
       <mesh
         geometry={starBadgeGeo}
-        position={[0, 0.67, 0.83]}
-        rotation={[-0.64, 0, 0]}
+        position={[0, 0.87, 0.6]}
+        rotation={[-0.92, 0, 0]}
+        scale={0.78}
       >
         <meshPhysicalMaterial
           color="#FACC15"
@@ -160,6 +200,17 @@ export function AviatorRobotMesh({
           metalness={0.92}
           roughness={0.16}
           clearcoat={1}
+        />
+      </mesh>
+
+      {/* USC KIIT (white box) + Under Department of Training & Placement below the star */}
+      <mesh position={[0, 0.63, 0.86]} rotation={[-0.58, 0, 0]}>
+        <planeGeometry args={[0.98, 0.23]} />
+        <meshStandardMaterial
+          map={uscForeheadTexture}
+          transparent
+          depthWrite={false}
+          roughness={0.4}
         />
       </mesh>
 
