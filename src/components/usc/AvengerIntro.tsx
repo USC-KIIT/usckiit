@@ -69,7 +69,6 @@ export function AvengerIntro({ onComplete }: AvengerIntroProps) {
   const [panelCells, setPanelCells] = useState<Cell[]>(() =>
     buildPanelGroup(INTRO_IMAGES, 0),
   );
-  const [flashActive, setFlashActive] = useState(false);
   const [exiting, setExiting] = useState(false);
   const startTimeRef = useRef<number | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -135,8 +134,6 @@ export function AvengerIntro({ onComplete }: AvengerIntroProps) {
         frameIdxRef.current = next;
         setFrameIdx(next);
         setPanelCells(buildPanelGroup(INTRO_IMAGES, next));
-        setFlashActive(true);
-        setTimeout(() => setFlashActive(false), 90);
         if (next < INTRO_IMAGES.length - 1) {
           scheduleNext(next);
         }
@@ -172,42 +169,43 @@ export function AvengerIntro({ onComplete }: AvengerIntroProps) {
             }}
           />
 
-          {/* ── Flash overlay on frame change ── */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 z-20 transition-opacity duration-75"
-            style={{ opacity: flashActive ? 1 : 0, background: "#090A0F" }}
-          />
-
-          {/* ── Single full-screen photo — fills entire viewport ── */}
+          {/* ── Smooth crossfading full-screen photos (zero black flash) ── */}
           <div className="absolute inset-0">
-            {panelCells.slice(0, 1).map((cell, i) => (
-              <div key={`${frameIdx}-${i}`} className="relative h-full w-full overflow-hidden">
-                <motion.img
-                  key={`img-${frameIdx}`}
-                  src={cell.src}
-                  alt=""
-                  aria-hidden
-                  className="h-full w-full object-cover"
-                  style={{ objectPosition: "center" }}
-                  initial={{ scale: 1.06, filter: "brightness(0.4) saturate(0.5)" }}
-                  animate={{ scale: 1.0, filter: "brightness(0.72) saturate(1.1)" }}
-                  transition={{ duration: 0.21, ease: "easeOut" }}
-                />
-                {/* Per-cell colored tint */}
-                <div
-                  aria-hidden
-                  className="absolute inset-0"
-                  style={{ background: cell.flashColor }}
-                />
-                {/* Low-opacity obsidian mirror */}
-                <div
-                  aria-hidden
-                  className="absolute inset-0"
-                  style={{ background: "rgba(9,10,15,0.38)" }}
-                />
-              </div>
-            ))}
+            <AnimatePresence initial={false} mode="sync">
+              {panelCells.slice(0, 1).map((cell) => (
+                <motion.div
+                  key={`frame-${frameIdx}`}
+                  className="absolute inset-0 overflow-hidden"
+                  initial={{ opacity: 0, scale: 1.05 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.99 }}
+                  transition={{ duration: 0.24, ease: "easeInOut" }}
+                >
+                  <img
+                    src={cell.src}
+                    alt=""
+                    aria-hidden
+                    className="h-full w-full object-cover"
+                    style={{
+                      objectPosition: "center",
+                      filter: "brightness(0.76) saturate(1.1)",
+                    }}
+                  />
+                  {/* Per-cell colored tint */}
+                  <div
+                    aria-hidden
+                    className="absolute inset-0"
+                    style={{ background: cell.flashColor }}
+                  />
+                  {/* Low-opacity obsidian mirror */}
+                  <div
+                    aria-hidden
+                    className="absolute inset-0"
+                    style={{ background: "rgba(9,10,15,0.34)" }}
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
 
           {/* ── Flame horizontal scan line ── */}
