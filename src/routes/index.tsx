@@ -11,7 +11,6 @@ import { InitiativesSection } from "@/components/usc/InitiativesSection";
 import { Navbar } from "@/components/usc/Navbar";
 import { RecruitmentSection } from "@/components/usc/RecruitmentSection";
 import { ScrollHero } from "@/components/usc/ScrollHero";
-import { SystemDiagnostic } from "@/components/usc/SystemDiagnostic";
 import { TeamSection } from "@/components/usc/TeamSection";
 import type { DomainId } from "@/lib/usc-data";
 
@@ -73,7 +72,6 @@ function Index() {
         <InitiativesSection />
         <AboutSection />
         <DomainsShowcase onApplyDomain={(domainId) => openApplyModal(domainId)} />
-        <SystemDiagnostic onApplyDomain={(domainId) => openApplyModal(domainId)} />
         <TeamSection />
         <EventsSection />
         <RecruitmentSection onOpenApply={() => openApplyModal()} />
