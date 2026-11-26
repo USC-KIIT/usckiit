@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EventsSplatRouteImport } from './routes/events/$'
+import { Route as EventsHackABotRouteImport } from './routes/events/hack-a-bot'
+import { Route as EventsHackabotRouteImport } from './routes/events/hackabot'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EventsSplatRoute = EventsSplatRouteImport.update({
+  id: '/events/$',
+  path: '/events/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventsHackABotRoute = EventsHackABotRouteImport.update({
+  id: '/events/hack-a-bot',
+  path: '/events/hack-a-bot',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventsHackabotRoute = EventsHackabotRouteImport.update({
+  id: '/events/hackabot',
+  path: '/events/hackabot',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/events/$': typeof EventsSplatRoute
+  '/events/hack-a-bot': typeof EventsHackABotRoute
+  '/events/hackabot': typeof EventsHackabotRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/events/$': typeof EventsSplatRoute
+  '/events/hack-a-bot': typeof EventsHackABotRoute
+  '/events/hackabot': typeof EventsHackabotRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/events/$': typeof EventsSplatRoute
+  '/events/hack-a-bot': typeof EventsHackABotRoute
+  '/events/hackabot': typeof EventsHackabotRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/events/$' | '/events/hack-a-bot' | '/events/hackabot'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/events/$' | '/events/hack-a-bot' | '/events/hackabot'
+  id: '__root__' | '/' | '/events/$' | '/events/hack-a-bot' | '/events/hackabot'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EventsSplatRoute: typeof EventsSplatRoute
+  EventsHackABotRoute: typeof EventsHackABotRoute
+  EventsHackabotRoute: typeof EventsHackabotRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/events/$': {
+      id: '/events/$'
+      path: '/events/$'
+      fullPath: '/events/$'
+      preLoaderRoute: typeof EventsSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events/hack-a-bot': {
+      id: '/events/hack-a-bot'
+      path: '/events/hack-a-bot'
+      fullPath: '/events/hack-a-bot'
+      preLoaderRoute: typeof EventsHackABotRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events/hackabot': {
+      id: '/events/hackabot'
+      path: '/events/hackabot'
+      fullPath: '/events/hackabot'
+      preLoaderRoute: typeof EventsHackabotRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EventsSplatRoute: EventsSplatRoute,
+  EventsHackABotRoute: EventsHackABotRoute,
+  EventsHackabotRoute: EventsHackabotRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

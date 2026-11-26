@@ -1,10 +1,7 @@
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-
-interface NavbarProps {
-  onOpenHackabot: () => void;
-}
 
 const NAV_LINKS = [
   { label: "INITIATIVES", href: "#initiatives", hasFlameDot: false },
@@ -14,7 +11,7 @@ const NAV_LINKS = [
   { label: "EVENTS", href: "#events", hasFlameDot: true },
 ] as const;
 
-export function Navbar({ onOpenHackabot }: NavbarProps) {
+export function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleNavClick = () => setDrawerOpen(false);
@@ -59,13 +56,12 @@ export function Navbar({ onOpenHackabot }: NavbarProps) {
 
           {/* Right CTA */}
           <div className="hidden items-center lg:flex">
-            <button
-              type="button"
-              onClick={onOpenHackabot}
+            <Link
+              to="/events/hackabot"
               className="gradient-flame shadow-flame-glow cursor-pointer rounded-full px-5 py-2 font-mono text-[11px] font-semibold tracking-[0.16em] text-cream transition-transform hover:scale-[1.04]"
             >
               HACK-A-BOT 3.0
-            </button>
+            </Link>
           </div>
 
           {/* Mobile Menu Trigger */}
@@ -104,16 +100,13 @@ export function Navbar({ onOpenHackabot }: NavbarProps) {
                   {item.label}
                 </a>
               ))}
-              <button
-                type="button"
-                onClick={() => {
-                  setDrawerOpen(false);
-                  onOpenHackabot();
-                }}
-                className="gradient-flame shadow-flame-glow mt-2 w-full rounded-full py-3 font-mono text-xs font-semibold tracking-[0.18em] text-cream"
+              <Link
+                to="/events/hackabot"
+                onClick={handleNavClick}
+                className="gradient-flame shadow-flame-glow mt-2 block w-full rounded-full py-3 text-center font-mono text-xs font-semibold tracking-[0.18em] text-cream"
               >
                 HACK-A-BOT 3.0
-              </button>
+              </Link>
             </div>
           </motion.div>
         )}

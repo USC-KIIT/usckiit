@@ -1,29 +1,9 @@
-import { useEffect, useState } from "react";
-import { ArrowDown, ArrowRight, Calendar, MapPin } from "lucide-react";
-import { getHackabotPhase, splitCountdown } from "@/lib/hackabot-data";
+import { Link } from "@tanstack/react-router";
+import { ArrowRight, Calendar, MapPin } from "lucide-react";
+import { useHackabotCountdown } from "@/lib/use-hackabot-countdown";
 
-interface EventSpotlightRibbonProps {
-  onFullDetails: () => void;
-  onRegisterTeam: () => void;
-}
-
-export function EventSpotlightRibbon({
-  onFullDetails,
-  onRegisterTeam,
-}: EventSpotlightRibbonProps) {
-  const [nowMs, setNowMs] = useState<number | null>(null);
-
-  useEffect(() => {
-    setNowMs(Date.now());
-    const id = window.setInterval(() => setNowMs(Date.now()), 1000);
-    return () => window.clearInterval(id);
-  }, []);
-
-  const phaseState = nowMs !== null ? getHackabotPhase(nowMs) : null;
-  const parts =
-    nowMs !== null && phaseState
-      ? splitCountdown(phaseState.targetMs - nowMs)
-      : { days: "--", hours: "--", minutes: "--", seconds: "--" };
+export function EventSpotlightRibbon() {
+  const { phaseState, countdown } = useHackabotCountdown();
 
   return (
     <section
@@ -67,10 +47,10 @@ export function EventSpotlightRibbon({
           </span>
           <div className="mt-1.5 flex items-center gap-1 font-mono sm:gap-1.5">
             {[
-              { val: parts.days, unit: "DD" },
-              { val: parts.hours, unit: "HH" },
-              { val: parts.minutes, unit: "MM" },
-              { val: parts.seconds, unit: "SS" },
+              { val: countdown.days, unit: "DD" },
+              { val: countdown.hours, unit: "HH" },
+              { val: countdown.minutes, unit: "MM" },
+              { val: countdown.seconds, unit: "SS" },
             ].map((item, idx) => (
               <div key={item.unit} className="flex items-center gap-1 sm:gap-1.5">
                 <div className="flex flex-col items-center rounded-lg border border-cream/10 bg-obsidian/90 px-2 py-1 sm:px-2.5 sm:py-1.5">
@@ -89,22 +69,21 @@ export function EventSpotlightRibbon({
 
         {/* Right: Actions */}
         <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
-          <button
-            type="button"
-            onClick={onFullDetails}
-            className="inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-cream/15 bg-obsidian/80 px-4 py-2.5 font-mono text-[11px] tracking-[0.14em] text-cream/85 transition-colors hover:border-flame/60 hover:text-flame sm:flex-initial sm:tracking-[0.16em]"
+          <Link
+            to="/events/hackabot"
+            className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full border border-cream/15 bg-obsidian/80 px-4 py-2.5 font-mono text-[11px] tracking-[0.14em] text-cream/85 transition-colors hover:border-flame/60 hover:text-flame sm:flex-initial sm:tracking-[0.16em]"
           >
             FULL DETAILS
-            <ArrowDown className="h-3.5 w-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={onRegisterTeam}
-            className="gradient-flame shadow-flame-glow inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full px-5 py-2.5 font-mono text-[11px] font-semibold tracking-[0.14em] text-cream transition-transform hover:scale-[1.03] sm:flex-initial sm:tracking-[0.16em]"
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+          <Link
+            to="/events/hackabot"
+            hash="register"
+            className="gradient-flame shadow-flame-glow inline-flex flex-1 items-center justify-center gap-1.5 rounded-full px-5 py-2.5 font-mono text-[11px] font-semibold tracking-[0.14em] text-cream transition-transform hover:scale-[1.03] sm:flex-initial sm:tracking-[0.16em]"
           >
             REGISTER TEAM
             <ArrowRight className="h-3.5 w-3.5" />
-          </button>
+          </Link>
         </div>
       </div>
     </section>

@@ -11,6 +11,7 @@ import {
   splitCountdown,
   validateHackabotRegistration,
 } from "@/lib/hackabot-data";
+import { getImpactSparkIdea } from "@/lib/hackabot-schedule";
 
 describe("USC KIIT Diagnostic scoring", () => {
   it("matches RPA & Agentic AI when automation-focused answers dominate", () => {
@@ -118,5 +119,17 @@ describe("HACK-A-BOT 3.0 countdown & registration rules", () => {
       ],
     });
     expect(Object.keys(errors)).toHaveLength(0);
+  });
+
+  it("generates track-specific Impact Spark ideas once 2+ SDGs are selected", () => {
+    expect(getImpactSparkIdea(["sdg-4"], "rpa-ai")).toBeNull();
+
+    const rpaSpark = getImpactSparkIdea(["sdg-4", "sdg-9"], "rpa-ai");
+    expect(rpaSpark?.title).toContain("Accessibility");
+    expect(rpaSpark?.summary).toContain("UiPath");
+
+    const innovationSpark = getImpactSparkIdea(["sdg-3", "sdg-16"], "innovation");
+    expect(innovationSpark).not.toBeNull();
+    expect(innovationSpark?.sdgSummary).toContain("SDG-16");
   });
 });

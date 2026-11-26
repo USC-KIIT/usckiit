@@ -11,6 +11,7 @@ export interface RobotMotionRefs {
 interface UiPathRobot3DProps {
   motionRefs: RobotMotionRefs;
   modelUrl?: string;
+  mode?: "home" | "hackabot";
 }
 
 const BLINK_INTERVAL_BASE = 3.4;
@@ -370,7 +371,8 @@ function ProceduralUiPathMascot({
   );
 }
 
-export function UiPathRobot3D({ motionRefs, modelUrl }: UiPathRobot3DProps) {
+export function UiPathRobot3D({ motionRefs, modelUrl, mode = "home" }: UiPathRobot3DProps) {
+  const isHackabot = mode === "hackabot";
   const rootRef = useRef<THREE.Group>(null);
   const robotBodyRef = useRef<THREE.Group>(null);
   const ringOuterRef = useRef<THREE.Mesh>(null);
@@ -390,13 +392,14 @@ export function UiPathRobot3D({ motionRefs, modelUrl }: UiPathRobot3DProps) {
   const blinkProgressRef = useRef(0);
   const eyeOffsetRef = useRef({ x: 0, y: 0 });
 
-  // Deterministic particle starfield / warp trails (no Math.random at module scope)
+  // Deterministic particle starfield / ember trails (no Math.random at module scope)
   const particleGeometry = useMemo(() => {
     const count = 160;
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
     const flame = new THREE.Color("#FA4616");
     const cobalt = new THREE.Color("#0067DF");
+    const emerald = new THREE.Color("#3D9960");
     const cream = new THREE.Color("#FAF6EE");
 
     for (let i = 0; i < count; i++) {
@@ -407,7 +410,19 @@ export function UiPathRobot3D({ motionRefs, modelUrl }: UiPathRobot3DProps) {
       positions[i * 3 + 1] = y;
       positions[i * 3 + 2] = Math.sin(angle) * radius - 0.8;
 
-      const col = i % 3 === 0 ? flame : i % 3 === 1 ? cobalt : cream;
+      const col = isHackabot
+        ? i % 4 === 0
+          ? flame
+          : i % 4 === 1
+            ? cobalt
+            : i % 4 === 2
+              ? emerald
+              : cream
+        : i % 3 === 0
+          ? flame
+          : i % 3 === 1
+            ? cobalt
+            : cream;
       colors[i * 3] = col.r;
       colors[i * 3 + 1] = col.g;
       colors[i * 3 + 2] = col.b;
@@ -417,7 +432,7 @@ export function UiPathRobot3D({ motionRefs, modelUrl }: UiPathRobot3DProps) {
     geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
     return geo;
-  }, []);
+  }, [isHackabot]);
 
   useEffect(() => () => particleGeometry.dispose(), [particleGeometry]);
 
@@ -429,7 +444,9 @@ export function UiPathRobot3D({ motionRefs, modelUrl }: UiPathRobot3DProps) {
     [0.1, 2.0, -1.2],
   ];
 
-  // Single unified useFrame stepper: drives robot, eyes, blink, rings, cubes, particles, and camera
+  const shardColors = ["#FA4616", "#0067DF", "#3D9960", "#FF6B00", "#38BDF8"] as const;
+
+  // Single unified useFrame stepper: drives robot, eyes, blink, rings, shards/cubes, particles, and camera
   useFrame((state, rawDelta) => {
     const dt = Math.min(rawDelta, 0.05);
     const t = state.clock.elapsedTime;
@@ -442,13 +459,17 @@ export function UiPathRobot3D({ motionRefs, modelUrl }: UiPathRobot3DProps) {
     const mobileScale = isPortrait ? THREE.MathUtils.clamp(aspect / 0.85, 0.56, 1) : 1;
     const portraitCamZOffset = isPortrait ? (0.9 - aspect) * 2.4 : 0;
 
-    // 3-Act scroll interpolation
-    const act2 = THREE.MathUtils.clamp((scroll - 0.28) / 0.42, 0, 1);
-    const act3 = THREE.MathUtils.clamp((scroll - 0.7) / 0.3, 0, 1);
+    // 3-Act scroll interpolation (Act 1: 0-45%, Act 2: 45-85%, Act 3: 85-100% for hackabot)
+    const act2 = isHackabot
+      ? THREE.MathUtils.clamp((scroll - 0.36) / 0.4, 0, 1)
+      : THREE.MathUtils.clamp((scroll - 0.28) / 0.42, 0, 1);
+    const act3 = isHackabot
+      ? THREE.MathUtils.clamp((scroll - 0.82) / 0.18, 0, 1)
+      : THREE.MathUtils.clamp((scroll - 0.7) / 0.3, 0, 1);
 
-    const targetCamZ = 4.65 + portraitCamZOffset + act2 * 1.45 - act3 * 0.45;
+    const targetCamZ = 4.65 + portraitCamZOffset + act2 * (isHackabot ? 1.65 : 1.45) - act3 * 0.45;
     const targetCamX = Math.sin(act2 * Math.PI) * 0.45 * mobileScale - act3 * 1.35 * mobileScale;
-    const targetCamY = 0.15 + act2 * 0.22 - act3 * 0.5;
+    const targetCamY = 0.15 + act2 * 0.24 - act3 * 0.5;
 
     const lerpFactor = 1 - Math.exp(-DAMP_SPEED * dt);
     state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, targetCamX, lerpFactor);
@@ -458,7 +479,8 @@ export function UiPathRobot3D({ motionRefs, modelUrl }: UiPathRobot3DProps) {
 
     if (robotBodyRef.current) {
       const mobileOffsetY = aspect < 0.85 ? -0.14 : 0;
-      const hoverY = Math.sin(t * 1.9) * 0.11 + mobileOffsetY + act2 * 0.28 + act3 * 1.15;
+      const hoverY =
+        Math.sin(t * 1.9) * 0.11 + mobileOffsetY + act2 * (isHackabot ? 0.34 : 0.28) + act3 * 1.15;
       const targetX = act3 * 2.15 * mobileScale;
       const targetScale = mobileScale * (1 - act3 * 0.34);
       const targetRotY = act2 * Math.PI * 2 + pointer.x * 0.34;
@@ -538,35 +560,37 @@ export function UiPathRobot3D({ motionRefs, modelUrl }: UiPathRobot3DProps) {
     });
 
     // Expanding holographic HUD rings in Act 2
-    const ringScale = 0.95 + act2 * 0.65;
+    const ringScale = (isHackabot ? 1.02 : 0.95) + act2 * (isHackabot ? 0.78 : 0.65);
     if (ringOuterRef.current) {
-      ringOuterRef.current.rotation.z = t * 0.32;
-      ringOuterRef.current.rotation.x = Math.PI * 0.45 + act2 * 0.16;
+      ringOuterRef.current.rotation.z = t * (isHackabot ? 0.42 : 0.32);
+      ringOuterRef.current.rotation.x = Math.PI * 0.45 + act2 * 0.18;
       ringOuterRef.current.scale.setScalar(ringScale);
     }
     if (ringInnerRef.current) {
-      ringInnerRef.current.rotation.z = -t * 0.45;
-      ringInnerRef.current.rotation.x = Math.PI * 0.56 - act2 * 0.14;
+      ringInnerRef.current.rotation.z = -t * (isHackabot ? 0.55 : 0.45);
+      ringInnerRef.current.rotation.x = Math.PI * 0.56 - act2 * 0.16;
       ringInnerRef.current.rotation.y = 0.22;
-      ringInnerRef.current.scale.setScalar(0.9 + act2 * 0.55);
+      ringInnerRef.current.scale.setScalar((isHackabot ? 0.96 : 0.9) + act2 * 0.62);
     }
 
-    // Orbiting dark-glass automation cubes
+    // Orbiting dark-glass automation cubes or glowing UN SDG shards
     if (cubesGroupRef.current) {
-      cubesGroupRef.current.rotation.y = t * 0.18 + act2 * 1.2;
+      cubesGroupRef.current.rotation.y = t * (isHackabot ? 0.24 : 0.18) + act2 * 1.25;
       cubesGroupRef.current.children.forEach((child, idx) => {
-        child.rotation.x = t * 0.5 + idx;
-        child.rotation.y = t * 0.35 + idx * 0.6;
+        child.rotation.x = t * 0.55 + idx;
+        child.rotation.y = t * 0.4 + idx * 0.6;
       });
     }
 
-    // Data particles accelerate downward during Act 3 warp
+    // Data/ember particles: rise smoothly in Hackabot command mode (warp downward on Act 3)
     if (particlesRef.current) {
       const posAttr = particlesRef.current.geometry.getAttribute("position") as THREE.BufferAttribute;
-      const speed = 0.22 + act3 * 4.8;
+      const direction = isHackabot && act3 < 0.25 ? 1 : -1;
+      const speed = (isHackabot ? 0.35 : 0.22) + act3 * 4.8;
       for (let i = 0; i < posAttr.count; i++) {
-        let y = posAttr.getY(i) - speed * dt;
+        let y = posAttr.getY(i) + direction * speed * dt;
         if (y < -4.2) y = 4.2;
+        if (y > 4.2) y = -4.2;
         posAttr.setY(i, y);
       }
       posAttr.needsUpdate = true;
@@ -601,47 +625,66 @@ export function UiPathRobot3D({ motionRefs, modelUrl }: UiPathRobot3DProps) {
 
         {/* Holographic Workflow Orbital HUD Rings */}
         <mesh ref={ringOuterRef} rotation={[Math.PI * 0.45, 0, 0]}>
-          <torusGeometry args={[2.15, 0.014, 12, 96]} />
+          <torusGeometry args={[2.15, isHackabot ? 0.018 : 0.014, 12, 96]} />
           <meshStandardMaterial
             color="#FA4616"
             emissive="#FA4616"
-            emissiveIntensity={2.1}
+            emissiveIntensity={isHackabot ? 2.6 : 2.1}
+            toneMapped={false}
             transparent
-            opacity={0.78}
+            opacity={isHackabot ? 0.88 : 0.78}
           />
         </mesh>
         <mesh ref={ringInnerRef} rotation={[Math.PI * 0.56, 0.22, 0]}>
-          <torusGeometry args={[1.85, 0.011, 12, 84]} />
+          <torusGeometry args={[1.85, isHackabot ? 0.015 : 0.011, 12, 84]} />
           <meshStandardMaterial
             color="#0067DF"
             emissive="#0067DF"
-            emissiveIntensity={2.2}
+            emissiveIntensity={isHackabot ? 2.6 : 2.2}
+            toneMapped={false}
             transparent
-            opacity={0.7}
+            opacity={isHackabot ? 0.85 : 0.7}
           />
         </mesh>
       </group>
 
-      {/* Floating Dark-Glass Automation Cubes */}
+      {/* Orbiting Automation Cubes (home) or Translucent UN SDG Geometric Shards (hackabot) */}
       <group ref={cubesGroupRef}>
-        {cubePositions.map((pos, idx) => (
-          <mesh key={idx} position={pos}>
-            <boxGeometry args={[0.24, 0.24, 0.24]} />
-            <meshPhysicalMaterial
-              color="#12141D"
-              roughness={0.14}
-              metalness={0.4}
-              clearcoat={0.9}
-              emissive={idx % 2 === 0 ? "#FA4616" : "#0067DF"}
-              emissiveIntensity={0.35}
-            />
-          </mesh>
-        ))}
+        {cubePositions.map((pos, idx) => {
+          const shardColor = shardColors[idx % shardColors.length] ?? "#FA4616";
+          return isHackabot ? (
+            <mesh key={idx} position={pos}>
+              <octahedronGeometry args={[0.21, 0]} />
+              <meshPhysicalMaterial
+                color={shardColor}
+                roughness={0.08}
+                metalness={0.15}
+                clearcoat={1}
+                transparent
+                opacity={0.78}
+                emissive={shardColor}
+                emissiveIntensity={0.65}
+              />
+            </mesh>
+          ) : (
+            <mesh key={idx} position={pos}>
+              <boxGeometry args={[0.24, 0.24, 0.24]} />
+              <meshPhysicalMaterial
+                color="#12141D"
+                roughness={0.14}
+                metalness={0.4}
+                clearcoat={0.9}
+                emissive={idx % 2 === 0 ? "#FA4616" : "#0067DF"}
+                emissiveIntensity={0.35}
+              />
+            </mesh>
+          );
+        })}
       </group>
 
-      {/* Ambient Orbiting Data Particles */}
+      {/* Ambient Orbiting Data / Ember Particles */}
       <points ref={particlesRef} geometry={particleGeometry}>
-        <pointsMaterial size={0.048} vertexColors transparent opacity={0.85} sizeAttenuation />
+        <pointsMaterial size={isHackabot ? 0.056 : 0.048} vertexColors transparent opacity={0.88} sizeAttenuation />
       </points>
     </group>
   );

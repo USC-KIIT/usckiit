@@ -6,6 +6,7 @@ import { UiPathRobot3D, type RobotMotionRefs } from "./UiPathRobot3D";
 interface HeroStage3DProps {
   motionRefs: RobotMotionRefs;
   modelUrl?: string;
+  mode?: "home" | "hackabot";
   onReady?: () => void;
 }
 
@@ -60,7 +61,12 @@ function StaticRobotFallback() {
   );
 }
 
-export default function HeroStage3D({ motionRefs, modelUrl, onReady }: HeroStage3DProps) {
+export default function HeroStage3D({
+  motionRefs,
+  modelUrl,
+  mode = "home",
+  onReady,
+}: HeroStage3DProps) {
   const [webglReady, setWebglReady] = useState<boolean | null>(null);
   const [sceneDrawn, setSceneDrawn] = useState(false);
 
@@ -127,7 +133,7 @@ export default function HeroStage3D({ motionRefs, modelUrl, onReady }: HeroStage
           />
         </Environment>
 
-        <UiPathRobot3D motionRefs={motionRefs} {...(modelUrl ? { modelUrl } : {})} />
+        <UiPathRobot3D motionRefs={motionRefs} mode={mode} {...(modelUrl ? { modelUrl } : {})} />
         <ContactShadows
           position={[0, -1.45, 0]}
           opacity={0.45}
