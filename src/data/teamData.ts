@@ -64,6 +64,16 @@ export const TEAM_MEMBERS: readonly TeamMember[] = [
   },
   {
     id: "domain-web",
+    name: "Jagadish Mohanty",
+    role: "Domain Lead",
+    domain: "Web & App Development",
+    category: "Domain Leads",
+    photoUrl: "",
+    linkedinUrl: "https://linkedin.com/in/JagTheFriend",
+    email: "JagTheFriend12@gmail.com",
+  },
+  {
+    id: "domain-web",
     name: "Debayan Samal",
     role: "Domain Lead",
     domain: "Web & App Development",
