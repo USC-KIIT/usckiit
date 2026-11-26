@@ -110,7 +110,7 @@ export const HACKABOT_FAQS: readonly HackabotFaqItem[] = [
     id: "fee",
     question: "Is there any registration fee?",
     answer:
-      "No — HACK-A-BOT 3.0 is 100% Free for All (₹0 entry fee) across both competition tracks, workshops, and guest sessions.",
+      "No — HACK-A-BOT 3.0 is 100% Free for All across both competition tracks, workshops, and guest sessions.",
   },
   {
     id: "team-size",

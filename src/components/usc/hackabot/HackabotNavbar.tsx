@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, Menu, X } from "lucide-react";
@@ -16,15 +16,29 @@ interface HackabotNavbarProps {
 
 export function HackabotNavbar({ onRegisterClick: _onRegisterClick }: HackabotNavbarProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 40);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const handleAnchorClick = (href: string) => {
     setDrawerOpen(false);
     const id = href.replace(/^#/, "");
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 flex flex-col items-center">
+    <header
+      className={`fixed inset-x-0 top-0 z-50 flex flex-col items-center transition-all duration-300 ${
+        scrolled ? "pointer-events-none -translate-y-4 opacity-0" : "translate-y-0 opacity-100"
+      }`}
+    >
       <div className="mt-3 flex w-full justify-center px-3 sm:px-4">
         <nav
           aria-label="HACK-A-BOT 3.0 navigation"

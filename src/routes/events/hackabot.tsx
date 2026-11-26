@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { HackabotTrackId } from "@/lib/hackabot-data";
 import { HackabotFaq } from "@/components/usc/hackabot/HackabotFaq";
 import { HackabotNavbar } from "@/components/usc/hackabot/HackabotNavbar";
@@ -39,8 +39,20 @@ export function HackabotPage() {
   };
 
   const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const el = document.getElementById(id);
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top, behavior: "smooth" });
   };
+
+  useEffect(() => {
+    if (window.location.hash === "#register") {
+      const timer = window.setTimeout(() => {
+        scrollToSection("register");
+      }, 180);
+      return () => window.clearTimeout(timer);
+    }
+  }, []);
 
   return (
     <div className="relative min-h-screen bg-obsidian text-cream">

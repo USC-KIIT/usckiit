@@ -111,7 +111,7 @@ function generateSquadPassPngDataUrl(params: {
   ctx.font = "500 22px 'Space Grotesk', sans-serif";
   ctx.fillText(`TEAM LEADER: ${params.leaderName || "TBD"}`, 72, 330);
   ctx.fillText(
-    `SQUAD ROSTER: ${params.totalMembers} / ${HACKABOT_MAX_MEMBERS} MEMBERS  •  ENTRY FEE: ₹0 (FREE)`,
+    `SQUAD ROSTER: ${params.totalMembers} / ${HACKABOT_MAX_MEMBERS} MEMBERS  •  FREE ENTRY`,
     72,
     376,
   );
@@ -210,8 +210,12 @@ export function HackabotRegister({
       setLeaderEmail(user.email ?? "");
       if (scrollIntoView) {
         window.setTimeout(() => {
-          document.getElementById("register")?.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 80);
+          const el = document.getElementById("register");
+          if (el) {
+            const top = el.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({ top, behavior: "smooth" });
+          }
+        }, 160);
       }
     };
 
@@ -407,7 +411,7 @@ export function HackabotRegister({
       `SDGs (${selectedSdgObjects.length}): ${sdgList || "None selected"}`,
       `Squad Size: ${totalMembers} / ${HACKABOT_MAX_MEMBERS}`,
       `Leader: ${leaderName || "TBD"} (${leaderEmail || "TBD"})`,
-      "Dates: 12–13 Dec 2026 • Entry Fee: Free for All (₹0)",
+      "Dates: 12–13 Dec 2026 • Entry Fee: Free for All",
       "Venues: Campus 6 Auditorium & Campus 10 Central Library, KIIT University",
     ].join("\n");
     try {
@@ -438,38 +442,32 @@ export function HackabotRegister({
   return (
     <section
       id="register"
-      className="relative bg-obsidian px-4 py-16 sm:px-10 sm:py-24 lg:py-28"
+      className="relative flex min-h-screen flex-col justify-center bg-obsidian px-4 py-8 sm:px-8 sm:py-10"
     >
-      <div className="mx-auto max-w-6xl">
-        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <div className="mx-auto w-full max-w-6xl">
+        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="font-hud text-xs text-flame">SQUAD COMMAND TERMINAL</p>
-            <h2 className="font-display-usc mt-2 text-4xl text-cream sm:text-6xl">
+            <h2 className="font-display-usc mt-1 text-3xl text-cream sm:text-5xl">
               TEAM REGISTRATION
             </h2>
           </div>
-          <p className="max-w-md text-sm leading-relaxed text-cream/65">
-            Register your squad below and watch your metallic HACK-A-BOT 3.0 Squad Pass update
-            live in real time.
-          </p>
-        </div>
-
-        {/* Status Banner */}
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-emerald/35 bg-emerald/10 px-4 py-3 font-mono text-[11px] text-cream/90 sm:px-5">
-          <span>
-            REGISTRATION WINDOW: <strong className="text-cream">2 DEC – 11 DEC</strong> • ENTRY
-            FEE: <strong className="text-emerald">FREE FOR ALL (₹0)</strong>
-          </span>
-          {phaseState?.phase === "pre-reg" && (
-            <span className="rounded-full border border-flame/40 bg-flame/15 px-3 py-0.5 text-[10px] font-semibold tracking-[0.14em] text-flame">
-              EARLY PRE-REGISTRATION / LIVE DEMO MODE
+          <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-emerald/35 bg-emerald/10 px-4 py-2 font-mono text-[10px] text-cream/90">
+            <span>
+              WINDOW: <strong className="text-cream">2 DEC – 11 DEC</strong> •{" "}
+              <strong className="text-emerald">FREE FOR ALL</strong>
             </span>
-          )}
+            {phaseState?.phase === "pre-reg" && (
+              <span className="rounded-full border border-flame/40 bg-flame/15 px-2.5 py-0.5 text-[9px] font-semibold tracking-[0.12em] text-flame">
+                PRE-REG LIVE
+              </span>
+            )}
+          </div>
         </div>
 
-        {/* Centered Registration Terminal */}
-        <div className="mx-auto mt-8 max-w-3xl">
-          <div className="glass-dark hud-brackets rounded-3xl p-5 sm:p-8">
+        {/* Full-Width Registration Terminal */}
+        <div className="mt-4 w-full">
+          <div className="glass-dark hud-brackets rounded-3xl p-4 sm:p-6">
             {authLoading ? (
               <div className="flex min-h-[340px] flex-col items-center justify-center gap-3 text-center">
                 <div className="h-8 w-8 animate-spin rounded-full border-2 border-flame/30 border-t-flame" />
@@ -526,82 +524,160 @@ export function HackabotRegister({
                 )}
               </div>
             ) : (
-            <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
               {/* Verified KIIT Session Bar */}
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-emerald/35 bg-emerald/10 px-4 py-3">
-                <div className="flex items-center gap-2.5">
+              <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-emerald/35 bg-emerald/10 px-3.5 py-2">
+                <div className="flex items-center gap-2">
                   <ShieldCheck className="h-4 w-4 shrink-0 text-emerald" />
-                  <div className="text-left">
-                    <p className="font-mono text-[9px] tracking-[0.18em] text-emerald">
-                      VERIFIED KIIT GMAIL ID
-                    </p>
-                    <p className="font-mono text-xs text-cream">{authUser.email}</p>
-                  </div>
+                  <p className="font-mono text-[11px] text-cream">
+                    <span className="mr-2 text-[9px] tracking-[0.16em] text-emerald">
+                      VERIFIED KIIT ID:
+                    </span>
+                    {authUser.email}
+                  </p>
                 </div>
                 <button
                   type="button"
                   onClick={handleSignOut}
-                  className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-cream/15 bg-obsidian/70 px-3 py-1.5 font-mono text-[10px] tracking-[0.12em] text-cream/75 transition-colors hover:border-flame hover:text-cream"
+                  className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-cream/15 bg-obsidian/70 px-3 py-1 font-mono text-[10px] tracking-[0.12em] text-cream/75 transition-colors hover:border-flame hover:text-cream"
                 >
                   <LogOut className="h-3 w-3" />
                   SWITCH
                 </button>
               </div>
-              {/* Team Name */}
-              <div>
-                <label htmlFor="hab-team-name" className="font-hud block text-[10px] text-cream/75">
-                  TEAM NAME *
-                </label>
-                <input
-                  id="hab-team-name"
-                  type="text"
-                  value={teamName}
-                  disabled={submitted}
-                  onChange={(e) => setTeamName(e.target.value)}
-                  placeholder="Maestro Automators"
-                  className="mt-2 w-full rounded-xl border border-cream/15 bg-obsidian/85 px-4 py-3 text-sm text-cream outline-none transition-colors focus:border-flame disabled:opacity-60"
-                />
-                {errors["teamName"] && (
-                  <p className="mt-1.5 text-xs text-crimson">{errors["teamName"]}</p>
-                )}
+
+              {/* 1. Team Leader Details (Top Row) */}
+              <div className="rounded-2xl border border-cream/10 bg-obsidian/65 p-3.5 sm:p-4">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="font-hud text-[10px] text-flame">
+                    TEAM LEADER DETAILS (MEMBER 1 / {HACKABOT_MAX_MEMBERS})
+                  </p>
+                  <span className="inline-flex items-center gap-1 font-mono text-[9px] tracking-[0.14em] text-emerald">
+                    <Lock className="h-3 w-3" />
+                    LOCKED FROM GOOGLE AUTH
+                  </span>
+                </div>
+                <div className="mt-2.5 grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      aria-label="Team Leader Full Name"
+                      readOnly
+                      value={leaderName}
+                      placeholder="Full Name *"
+                      className="w-full cursor-not-allowed rounded-xl border border-emerald/30 bg-obsidian/55 py-2 pl-3 pr-8 text-xs text-cream/90 outline-none sm:text-sm"
+                    />
+                    <Lock className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-emerald/75" />
+                    {errors["leaderName"] && (
+                      <p className="mt-1 text-xs text-crimson">{errors["leaderName"]}</p>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      aria-label="KIIT Roll Number or Institute"
+                      readOnly
+                      value={leaderRollOrInstitute}
+                      placeholder="KIIT Roll No. *"
+                      className="w-full cursor-not-allowed rounded-xl border border-emerald/30 bg-obsidian/55 py-2 pl-3 pr-8 font-mono text-xs text-cream/90 outline-none sm:text-sm"
+                    />
+                    <Lock className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-emerald/75" />
+                    {errors["leaderRollOrInstitute"] && (
+                      <p className="mt-1 text-xs text-crimson">
+                        {errors["leaderRollOrInstitute"]}
+                      </p>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="email"
+                      aria-label="Team Leader Email"
+                      readOnly
+                      value={leaderEmail}
+                      placeholder="Email Address *"
+                      className="w-full cursor-not-allowed rounded-xl border border-emerald/30 bg-obsidian/55 py-2 pl-3 pr-8 text-xs text-cream/90 outline-none sm:text-sm"
+                    />
+                    <Lock className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-emerald/75" />
+                    {errors["leaderEmail"] && (
+                      <p className="mt-1 text-xs text-crimson">{errors["leaderEmail"]}</p>
+                    )}
+                  </div>
+                  <div>
+                    <input
+                      type="tel"
+                      aria-label="Team Leader Phone"
+                      disabled={submitted}
+                      value={leaderPhone}
+                      onChange={(e) => setLeaderPhone(e.target.value)}
+                      placeholder="Phone Number (10 digits) *"
+                      className="w-full rounded-xl border border-cream/15 bg-obsidian px-3 py-2 font-mono text-xs text-cream outline-none focus:border-flame disabled:opacity-60 sm:text-sm"
+                    />
+                    {errors["leaderPhone"] && (
+                      <p className="mt-1 text-xs text-crimson">{errors["leaderPhone"]}</p>
+                    )}
+                  </div>
+                </div>
               </div>
 
-              {/* Track Selector Cards */}
-              <div>
-                <span className="font-hud block text-[10px] text-cream/75">
-                  SELECT COMPETITION TRACK *
-                </span>
-                <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  {HACKABOT_TRACKS.map((track) => {
-                    const active = selectedTrack === track.id;
-                    const flame = track.accent === "flame";
-                    const Icon = flame ? Cpu : Sparkles;
-                    return (
-                      <button
-                        key={track.id}
-                        type="button"
-                        disabled={submitted}
-                        onClick={() => onChangeTrack(track.id)}
-                        aria-pressed={active}
-                        className={`flex cursor-pointer flex-col items-start rounded-2xl border p-4 text-left transition-all disabled:cursor-default disabled:opacity-75 ${
-                          active
-                            ? flame
-                              ? "border-flame bg-flame/15 shadow-flame-glow"
-                              : "border-cobalt bg-cobalt/15 shadow-cobalt-glow"
-                            : "border-cream/12 bg-obsidian/70 hover:border-cream/30"
-                        }`}
-                      >
-                        <div className="flex w-full items-center justify-between">
+              {/* 2. Team Name + Competition Track (Compact Row) */}
+              <div className="grid grid-cols-1 gap-3 lg:grid-cols-12 lg:items-end">
+                <div className="lg:col-span-4">
+                  <label htmlFor="hab-team-name" className="font-hud block text-[10px] text-cream/75">
+                    TEAM NAME *
+                  </label>
+                  <input
+                    id="hab-team-name"
+                    type="text"
+                    value={teamName}
+                    disabled={submitted}
+                    onChange={(e) => setTeamName(e.target.value)}
+                    placeholder="Maestro Automators"
+                    className="mt-1.5 w-full rounded-xl border border-cream/15 bg-obsidian/85 px-3.5 py-2.5 text-sm text-cream outline-none transition-colors focus:border-flame disabled:opacity-60"
+                  />
+                  {errors["teamName"] && (
+                    <p className="mt-1 text-xs text-crimson">{errors["teamName"]}</p>
+                  )}
+                </div>
+
+                <div className="lg:col-span-8">
+                  <span className="font-hud block text-[10px] text-cream/75">
+                    SELECT COMPETITION TRACK *
+                  </span>
+                  <div className="mt-1.5 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                    {HACKABOT_TRACKS.map((track) => {
+                      const active = selectedTrack === track.id;
+                      const flame = track.accent === "flame";
+                      const Icon = flame ? Cpu : Sparkles;
+                      return (
+                        <button
+                          key={track.id}
+                          type="button"
+                          disabled={submitted}
+                          onClick={() => onChangeTrack(track.id)}
+                          aria-pressed={active}
+                          className={`flex cursor-pointer items-center justify-between rounded-xl border px-3.5 py-2 text-left transition-all disabled:cursor-default disabled:opacity-75 ${
+                            active
+                              ? flame
+                                ? "border-flame bg-flame/15 shadow-flame-glow"
+                                : "border-cobalt bg-cobalt/15 shadow-cobalt-glow"
+                              : "border-cream/12 bg-obsidian/70 hover:border-cream/30"
+                          }`}
+                        >
+                          <div>
+                            <span
+                              className={`inline-flex items-center gap-1.5 font-mono text-[9px] font-semibold tracking-[0.14em] ${
+                                flame ? "text-flame" : "text-cobalt"
+                              }`}
+                            >
+                              <Icon className="h-3 w-3" />
+                              {track.code}
+                            </span>
+                            <span className="font-display-usc block text-lg leading-tight text-cream">
+                              {track.title}
+                            </span>
+                          </div>
                           <span
-                            className={`inline-flex items-center gap-1.5 font-mono text-[10px] font-semibold tracking-[0.14em] ${
-                              flame ? "text-flame" : "text-cobalt"
-                            }`}
-                          >
-                            <Icon className="h-3.5 w-3.5" />
-                            {track.code}
-                          </span>
-                          <span
-                            className={`h-3.5 w-3.5 rounded-full border ${
+                            className={`h-3.5 w-3.5 shrink-0 rounded-full border ${
                               active
                                 ? flame
                                   ? "border-flame bg-flame"
@@ -609,17 +685,14 @@ export function HackabotRegister({
                                 : "border-cream/30"
                             }`}
                           />
-                        </div>
-                        <span className="font-display-usc mt-2 text-2xl text-cream">
-                          {track.title}
-                        </span>
-                      </button>
-                    );
-                  })}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
 
-              {/* SDG Alignment Multi-Select (Min 2) */}
+              {/* 3. SDG Alignment Multi-Select (Compact Grid) */}
               <div>
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <span className="font-hud text-[10px] text-cream/75">
@@ -633,7 +706,7 @@ export function HackabotRegister({
                     {selectedSdgs.length}/{HACKABOT_MIN_SDGS}+ SELECTED
                   </span>
                 </div>
-                <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                <div className="mt-1.5 grid grid-cols-2 gap-1.5 sm:grid-cols-3 lg:grid-cols-5">
                   {UN_SDGS.map((sdg) => {
                     const picked = selectedSdgs.includes(sdg.id);
                     return (
@@ -643,7 +716,7 @@ export function HackabotRegister({
                         disabled={submitted}
                         onClick={() => onToggleSdg(sdg.id)}
                         aria-pressed={picked}
-                        className={`cursor-pointer rounded-xl border px-3 py-2 text-left text-xs transition-colors disabled:cursor-default disabled:opacity-75 ${
+                        className={`cursor-pointer truncate rounded-lg border px-2.5 py-1.5 text-left text-[11px] transition-colors disabled:cursor-default disabled:opacity-75 ${
                           picked
                             ? "border-emerald bg-emerald/15 text-cream"
                             : "border-cream/12 bg-obsidian/70 text-cream/70 hover:border-flame/50"
@@ -658,161 +731,71 @@ export function HackabotRegister({
                   })}
                 </div>
                 {errors["selectedSdgs"] && (
-                  <p className="mt-1.5 text-xs text-crimson">{errors["selectedSdgs"]}</p>
+                  <p className="mt-1 text-xs text-crimson">{errors["selectedSdgs"]}</p>
                 )}
               </div>
 
-              {/* Team Leader Details */}
-              <div className="rounded-2xl border border-cream/10 bg-obsidian/65 p-4 sm:p-5">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <p className="font-hud text-[10px] text-flame">
-                    TEAM LEADER DETAILS (MEMBER 1 / {HACKABOT_MAX_MEMBERS})
-                  </p>
-                  <span className="inline-flex items-center gap-1 font-mono text-[9px] tracking-[0.14em] text-emerald">
-                    <Lock className="h-3 w-3" />
-                    LOCKED FROM GOOGLE AUTH
-                  </span>
-                </div>
-                <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <div className="relative">
-                    <input
-                      type="text"
-                      aria-label="Team Leader Full Name"
-                      readOnly
-                      value={leaderName}
-                      placeholder="Full Name *"
-                      className="w-full cursor-not-allowed rounded-xl border border-emerald/30 bg-obsidian/55 py-2.5 pl-3.5 pr-9 text-sm text-cream/90 outline-none"
-                    />
-                    <Lock className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-emerald/75" />
-                    {errors["leaderName"] && (
-                      <p className="mt-1 text-xs text-crimson">{errors["leaderName"]}</p>
-                    )}
-                  </div>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      aria-label="KIIT Roll Number or Institute"
-                      readOnly
-                      value={leaderRollOrInstitute}
-                      placeholder="KIIT Roll No. *"
-                      className="w-full cursor-not-allowed rounded-xl border border-emerald/30 bg-obsidian/55 py-2.5 pl-3.5 pr-9 font-mono text-sm text-cream/90 outline-none"
-                    />
-                    <Lock className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-emerald/75" />
-                    {errors["leaderRollOrInstitute"] && (
-                      <p className="mt-1 text-xs text-crimson">
-                        {errors["leaderRollOrInstitute"]}
-                      </p>
-                    )}
-                  </div>
-                  <div className="relative">
-                    <input
-                      type="email"
-                      aria-label="Team Leader Email"
-                      readOnly
-                      value={leaderEmail}
-                      placeholder="Email Address *"
-                      className="w-full cursor-not-allowed rounded-xl border border-emerald/30 bg-obsidian/55 py-2.5 pl-3.5 pr-9 text-sm text-cream/90 outline-none"
-                    />
-                    <Lock className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-emerald/75" />
-                    {errors["leaderEmail"] && (
-                      <p className="mt-1 text-xs text-crimson">{errors["leaderEmail"]}</p>
-                    )}
-                  </div>
-                  <div>
-                    <input
-                      type="tel"
-                      aria-label="Team Leader Phone"
-                      disabled={submitted}
-                      value={leaderPhone}
-                      onChange={(e) => setLeaderPhone(e.target.value)}
-                      placeholder="Phone Number (10 digits) *"
-                      className="w-full rounded-xl border border-cream/15 bg-obsidian px-3.5 py-2.5 font-mono text-sm text-cream outline-none focus:border-flame disabled:opacity-60"
-                    />
-                    {errors["leaderPhone"] && (
-                      <p className="mt-1 text-xs text-crimson">{errors["leaderPhone"]}</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Dynamic Squad Builder (Max 5 total) */}
-              <div>
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="font-hud text-[10px] text-cream/75">
-                    TEAM SIZE: {totalMembers} / {HACKABOT_MAX_MEMBERS}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={addMember}
-                    disabled={submitted || totalMembers >= HACKABOT_MAX_MEMBERS}
-                    className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-flame/45 bg-flame/10 px-4 py-1.5 font-mono text-[10px] font-semibold tracking-[0.14em] text-flame transition-colors hover:bg-flame hover:text-cream disabled:cursor-not-allowed disabled:opacity-40"
-                  >
-                    <Plus className="h-3.5 w-3.5" />
-                    ADD TEAM MEMBER
-                  </button>
-                </div>
-
-                {members.length > 0 && (
-                  <div className="mt-3 space-y-3">
-                    {members.map((member, idx) => (
-                      <div
-                        key={idx}
-                        className="rounded-2xl border border-cream/10 bg-obsidian/55 p-4"
-                      >
-                        <div className="mb-2.5 flex items-center justify-between">
-                          <span className="font-mono text-[10px] font-semibold tracking-[0.14em] text-cobalt">
-                            MEMBER {idx + 2} / {HACKABOT_MAX_MEMBERS}
-                          </span>
-                          <button
-                            type="button"
-                            disabled={submitted}
-                            onClick={() => removeMember(idx)}
-                            className="inline-flex cursor-pointer items-center gap-1 font-mono text-[10px] text-cream/55 hover:text-crimson disabled:opacity-40"
-                          >
-                            <Trash2 className="h-3 w-3" />
-                            REMOVE
-                          </button>
-                        </div>
-                        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
-                          <input
-                            type="text"
-                            disabled={submitted}
-                            value={member.name}
-                            onChange={(e) => updateMember(idx, "name", e.target.value)}
-                            placeholder="Member Full Name *"
-                            className="rounded-xl border border-cream/15 bg-obsidian px-3 py-2 text-xs text-cream outline-none focus:border-flame disabled:opacity-60"
-                          />
-                          <input
-                            type="text"
-                            disabled={submitted}
-                            value={member.rollOrInstitute}
-                            onChange={(e) => updateMember(idx, "rollOrInstitute", e.target.value)}
-                            placeholder="Roll No. / Institute *"
-                            className="rounded-xl border border-cream/15 bg-obsidian px-3 py-2 text-xs text-cream outline-none focus:border-flame disabled:opacity-60"
-                          />
-                          <input
-                            type="email"
-                            disabled={submitted}
-                            value={member.email}
-                            onChange={(e) => updateMember(idx, "email", e.target.value)}
-                            placeholder="Email Address *"
-                            className="rounded-xl border border-cream/15 bg-obsidian px-3 py-2 text-xs text-cream outline-none focus:border-flame disabled:opacity-60"
-                          />
-                        </div>
-                        {(errors[`member-${idx}-name`] ||
-                          errors[`member-${idx}-roll`] ||
-                          errors[`member-${idx}-email`]) && (
-                          <p className="mt-1.5 text-xs text-crimson">
-                            Complete name, roll/institute, and valid email for Member {idx + 2}.
-                          </p>
-                        )}
+              {/* 4. Dynamic Squad Members (Expands only when added) */}
+              {members.length > 0 && (
+                <div className="space-y-2.5">
+                  {members.map((member, idx) => (
+                    <div
+                      key={idx}
+                      className="rounded-xl border border-cream/10 bg-obsidian/55 p-3"
+                    >
+                      <div className="mb-2 flex items-center justify-between">
+                        <span className="font-mono text-[10px] font-semibold tracking-[0.14em] text-cobalt">
+                          MEMBER {idx + 2} / {HACKABOT_MAX_MEMBERS}
+                        </span>
+                        <button
+                          type="button"
+                          disabled={submitted}
+                          onClick={() => removeMember(idx)}
+                          className="inline-flex cursor-pointer items-center gap-1 font-mono text-[10px] text-cream/55 hover:text-crimson disabled:opacity-40"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                          REMOVE
+                        </button>
                       </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                        <input
+                          type="text"
+                          disabled={submitted}
+                          value={member.name}
+                          onChange={(e) => updateMember(idx, "name", e.target.value)}
+                          placeholder="Member Full Name *"
+                          className="rounded-lg border border-cream/15 bg-obsidian px-3 py-1.5 text-xs text-cream outline-none focus:border-flame disabled:opacity-60"
+                        />
+                        <input
+                          type="text"
+                          disabled={submitted}
+                          value={member.rollOrInstitute}
+                          onChange={(e) => updateMember(idx, "rollOrInstitute", e.target.value)}
+                          placeholder="Roll No. / Institute *"
+                          className="rounded-lg border border-cream/15 bg-obsidian px-3 py-1.5 text-xs text-cream outline-none focus:border-flame disabled:opacity-60"
+                        />
+                        <input
+                          type="email"
+                          disabled={submitted}
+                          value={member.email}
+                          onChange={(e) => updateMember(idx, "email", e.target.value)}
+                          placeholder="Email Address *"
+                          className="rounded-lg border border-cream/15 bg-obsidian px-3 py-1.5 text-xs text-cream outline-none focus:border-flame disabled:opacity-60"
+                        />
+                      </div>
+                      {(errors[`member-${idx}-name`] ||
+                        errors[`member-${idx}-roll`] ||
+                        errors[`member-${idx}-email`]) && (
+                        <p className="mt-1 text-xs text-crimson">
+                          Complete name, roll/institute, and valid email for Member {idx + 2}.
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
 
-              {/* Submit / Reset Controls */}
+              {/* 5. Bottom Action Bar: Add Member + Submit / Squad Pass */}
               {submitted ? (
                 <div className="space-y-4 rounded-2xl border border-emerald/45 bg-emerald/15 p-5">
                   <div className="flex flex-wrap items-center justify-between gap-3">
@@ -857,13 +840,30 @@ export function HackabotRegister({
                   </div>
                 </div>
               ) : (
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="gradient-flame shadow-flame-glow w-full cursor-pointer rounded-full py-4 font-mono text-xs font-semibold tracking-[0.18em] text-cream transition-transform hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  {submitting ? "SAVING REGISTRATION..." : "COMPLETE TEAM REGISTRATION — ₹0"}
-                </button>
+                <div className="flex flex-col items-stretch justify-between gap-3 pt-1 sm:flex-row sm:items-center">
+                  <div className="flex items-center gap-3">
+                    <span className="font-hud text-[10px] text-cream/75">
+                      TEAM SIZE: {totalMembers} / {HACKABOT_MAX_MEMBERS}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={addMember}
+                      disabled={submitted || totalMembers >= HACKABOT_MAX_MEMBERS}
+                      className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-flame/45 bg-flame/10 px-4 py-2 font-mono text-[10px] font-semibold tracking-[0.14em] text-flame transition-colors hover:bg-flame hover:text-cream disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      <Plus className="h-3.5 w-3.5" />
+                      ADD TEAM MEMBER
+                    </button>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="gradient-flame shadow-flame-glow cursor-pointer rounded-full px-8 py-3.5 font-mono text-xs font-semibold tracking-[0.18em] text-cream transition-transform hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {submitting ? "SAVING REGISTRATION..." : "COMPLETE TEAM REGISTRATION"}
+                  </button>
+                </div>
               )}
             </form>
             )}

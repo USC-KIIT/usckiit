@@ -84,7 +84,7 @@ Deno.serve(async (req) => {
           <div><strong>Track:</strong> ${body.trackTitle}</div>
           <div><strong>Squad Size:</strong> ${body.totalMembers} / 5 Members</div>
           <div><strong>Aligned UN SDGs:</strong> ${body.sdgCodes.join(", ")}</div>
-          <div><strong>Dates:</strong> Dec 12–13, 2026 • Entry Fee: ₹0 (Free)</div>
+          <div><strong>Dates:</strong> Dec 12–13, 2026 • Free Entry</div>
           <div><strong>Venues:</strong> Campus 6 Auditorium & Campus 10 Central Library, KIIT</div>
         </div>
         <p style="margin:20px 0 0;font-size:12px;color:rgba(250,246,238,0.7);">
