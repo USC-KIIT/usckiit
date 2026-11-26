@@ -1,11 +1,11 @@
-import { ArrowRight } from "lucide-react";
+import { Lock } from "lucide-react";
 import { RECRUITMENT_ROADMAP } from "@/lib/usc-data";
 
 interface RecruitmentSectionProps {
-  onOpenApply: () => void;
+  onOpenApply?: () => void;
 }
 
-export function RecruitmentSection({ onOpenApply }: RecruitmentSectionProps) {
+export function RecruitmentSection(_props: RecruitmentSectionProps) {
   return (
     <section id="recruitment" className="relative bg-obsidian px-4 py-16 sm:px-10 sm:py-24 lg:py-32">
       <div className="mx-auto max-w-6xl">
@@ -18,11 +18,12 @@ export function RecruitmentSection({ onOpenApply }: RecruitmentSectionProps) {
           </div>
           <button
             type="button"
-            onClick={onOpenApply}
-            className="gradient-flame shadow-flame-glow inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full px-6 py-3 font-mono text-xs font-semibold tracking-[0.16em] text-cream transition-transform hover:scale-[1.03] sm:w-fit"
+            disabled
+            aria-disabled="true"
+            className="inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-full border border-cream/15 bg-carbon/80 px-6 py-3 font-mono text-xs font-semibold tracking-[0.16em] text-cream/55 sm:w-fit"
           >
-            START APPLICATION
-            <ArrowRight className="h-4 w-4" />
+            <Lock className="h-3.5 w-3.5 text-flame/75" />
+            APPLICATION CLOSED
           </button>
         </div>
 
