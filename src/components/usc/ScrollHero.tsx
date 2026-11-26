@@ -58,6 +58,8 @@ export function ScrollHero({ onExploreInitiatives }: ScrollHeroProps) {
   const act2Opacity = useTransform(smoothProgress, [0.3, 0.42, 0.66, 0.76], [0, 1, 1, 0]);
   const act2BgScale = useTransform(smoothProgress, [0.3, 0.55, 0.76], [0.88, 1.02, 1.12]);
   const act2CtaY = useTransform(smoothProgress, [0.34, 0.46, 0.72], [32, 0, -24]);
+  const act2TopX = useTransform(smoothProgress, [0.3, 0.48, 0.7], ["0vw", "-20vw", "-28vw"]);
+  const act2BottomX = useTransform(smoothProgress, [0.3, 0.48, 0.7], ["0vw", "20vw", "28vw"]);
 
   // Act 3 warp tint
   const warpOpacity = useTransform(smoothProgress, [0.7, 0.92, 1], [0, 0.65, 1]);
@@ -86,8 +88,12 @@ export function ScrollHero({ onExploreInitiatives }: ScrollHeroProps) {
           className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-4 text-center"
         >
           <h2 className="font-display-usc select-none text-[13.5vw] leading-[0.86] text-cream/90 sm:text-[12vw] lg:text-[10.5vw]">
-            INNOVATE
-            <span className="block text-gradient-flame">• AUTOMATE</span>
+            <motion.span style={{ x: act2TopX }} className="block">
+              INNOVATE
+            </motion.span>
+            <motion.span style={{ x: act2BottomX }} className="block text-gradient-flame">
+              • AUTOMATE
+            </motion.span>
           </h2>
         </motion.div>
 

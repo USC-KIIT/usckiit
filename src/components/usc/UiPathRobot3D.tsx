@@ -2,6 +2,7 @@ import { Component, Suspense, useEffect, useMemo, useRef, type ReactNode } from 
 import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
+import { AviatorRobotMesh } from "./hackabot/AviatorRobotMesh";
 
 export interface RobotMotionRefs {
   scrollProgress: React.RefObject<number>;
@@ -598,7 +599,7 @@ export function UiPathRobot3D({ motionRefs, modelUrl, mode = "home" }: UiPathRob
     }
   });
 
-  const proceduralMesh = (
+  const proceduralMesh = isHackabot ? (
     <ProceduralUiPathMascot
       leftPupilRef={leftPupilRef}
       rightPupilRef={rightPupilRef}
@@ -607,6 +608,15 @@ export function UiPathRobot3D({ motionRefs, modelUrl, mode = "home" }: UiPathRob
       leftArmRef={leftArmRef}
       rightArmRef={rightArmRef}
       signalRingRefs={signalRingRefs}
+    />
+  ) : (
+    <AviatorRobotMesh
+      leftPupilRef={leftPupilRef}
+      rightPupilRef={rightPupilRef}
+      leftEyeGroupRef={leftEyeGroupRef}
+      rightEyeGroupRef={rightEyeGroupRef}
+      leftArmRef={leftArmRef}
+      rightArmRef={rightArmRef}
     />
   );
 
