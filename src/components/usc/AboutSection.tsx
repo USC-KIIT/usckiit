@@ -1,11 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
-import { CheckCircle2, Cpu, Play, RotateCcw, Terminal } from "lucide-react";
-import {
-  BOT_PIPELINE_NODES,
-  COMMUNITY_METRICS,
-  type CommunityMetric,
-} from "@/lib/usc-data";
+import { useInView } from "framer-motion";
+import { COMMUNITY_METRICS, type CommunityMetric } from "@/lib/usc-data";
 
 function AnimatedMetricTile({ metric }: { metric: CommunityMetric }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -44,40 +39,6 @@ function AnimatedMetricTile({ metric }: { metric: CommunityMetric }) {
 }
 
 export function AboutSection() {
-  const [activeNode, setActiveNode] = useState<number>(-1);
-  const [running, setRunning] = useState(false);
-  const [logs, setLogs] = useState<string[]>([]);
-  const timersRef = useRef<number[]>([]);
-
-  useEffect(() => {
-    return () => timersRef.current.forEach((id) => window.clearTimeout(id));
-  }, []);
-
-  const runSimulation = () => {
-    timersRef.current.forEach((id) => window.clearTimeout(id));
-    timersRef.current = [];
-    setRunning(true);
-    setActiveNode(0);
-    setLogs([BOT_PIPELINE_NODES[0]?.log ?? ""]);
-
-    BOT_PIPELINE_NODES.slice(1).forEach((node, idx) => {
-      const id = window.setTimeout(() => {
-        setActiveNode(idx + 1);
-        setLogs((prev) => [...prev, node.log]);
-        if (idx + 1 === BOT_PIPELINE_NODES.length - 1) setRunning(false);
-      }, (idx + 1) * 580);
-      timersRef.current.push(id);
-    });
-  };
-
-  const resetSimulation = () => {
-    timersRef.current.forEach((id) => window.clearTimeout(id));
-    timersRef.current = [];
-    setRunning(false);
-    setActiveNode(-1);
-    setLogs([]);
-  };
-
   return (
     <section id="about" className="editorial-surface relative px-4 py-16 sm:px-10 sm:py-24 lg:py-32">
       <div className="mx-auto max-w-6xl">
@@ -94,7 +55,7 @@ export function AboutSection() {
               <strong>Department of Training and Placement, KIIT</strong>.
             </p>
             <p className="mt-4 text-sm leading-relaxed text-charcoal/75">
-              We unite curious engineers, designers, writers, and organizers across eight
+              We unite curious engineers, designers, writers, and organizers across twelve
               specialized domains — empowering students to master Robotic Process Automation (RPA),
               Agentic AI, full-stack software engineering, and high-craft creative storytelling.
             </p>
@@ -109,7 +70,7 @@ export function AboutSection() {
             </blockquote>
           </div>
 
-          {/* Right Column: 2x2 Metrics Grid + Interactive Simulate a USC Bot Playground */}
+          {/* Right Column: 2x2 Metrics Grid + USC KIIT Group Photo */}
           <div className="space-y-5 sm:space-y-6 lg:col-span-7">
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
               {COMMUNITY_METRICS.map((metric) => (
@@ -117,98 +78,12 @@ export function AboutSection() {
               ))}
             </div>
 
-            <div className="rounded-3xl bg-obsidian p-4 text-cream shadow-2xl sm:p-7">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <p className="font-hud inline-flex items-center gap-2 text-[10px] text-flame">
-                    <Cpu className="h-3.5 w-3.5" />
-                    WORKFLOW MINI-PLAYGROUND
-                  </p>
-                  <h3 className="font-display-usc mt-1 text-2xl text-cream sm:text-3xl">
-                    SIMULATE A USC BOT
-                  </h3>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={runSimulation}
-                    disabled={running}
-                    className="gradient-flame shadow-flame-glow inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 font-mono text-[10px] font-semibold tracking-[0.14em] text-cream transition-transform hover:scale-[1.03] disabled:opacity-60 sm:px-5 sm:text-[11px] sm:tracking-[0.16em]"
-                  >
-                    <Play className="h-3 w-3 fill-current" />
-                    {running ? "RUNNING..." : "SIMULATE WORKFLOW"}
-                  </button>
-                  {activeNode >= 0 && !running && (
-                    <button
-                      type="button"
-                      onClick={resetSimulation}
-                      aria-label="Reset simulation"
-                      className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-cream/15 text-cream/75 transition-colors hover:border-flame hover:text-cream"
-                    >
-                      <RotateCcw className="h-3.5 w-3.5" />
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              <div className="mt-5 grid grid-cols-2 gap-2.5 sm:mt-6 sm:grid-cols-4">
-                {BOT_PIPELINE_NODES.map((node, idx) => {
-                  const reached = activeNode >= idx;
-                  const current = activeNode === idx;
-                  return (
-                    <motion.div
-                      key={node.id}
-                      animate={{ scale: current && running ? 1.03 : 1 }}
-                      className={`hud-brackets rounded-xl border p-3 transition-colors duration-300 sm:p-3.5 ${
-                        reached
-                          ? "border-flame bg-carbon shadow-flame-glow"
-                          : "border-cream/10 bg-carbon/50"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-[9px] tracking-[0.16em] text-cream/50">
-                          0{idx + 1}
-                        </span>
-                        {reached && (
-                          <CheckCircle2
-                            className={`h-3.5 w-3.5 ${current && running ? "animate-pulse text-flame" : "text-emerald"}`}
-                          />
-                        )}
-                      </div>
-                      <p className="mt-1.5 text-xs font-semibold text-cream">{node.label}</p>
-                      <p className="mt-1 font-mono text-[10px] text-flame">
-                        {reached ? node.metric : "IDLE"}
-                      </p>
-                    </motion.div>
-                  );
-                })}
-              </div>
-
-              <div className="mt-4 rounded-xl border border-cream/10 bg-carbon/80 p-3.5 font-mono text-[11px]">
-                <div className="mb-1.5 flex items-center gap-2 text-[9px] tracking-[0.18em] text-cream/50">
-                  <Terminal className="h-3 w-3 text-flame" />
-                  ORCHESTRATOR LOG
-                </div>
-                {logs.length === 0 ? (
-                  <p className="break-words text-cream/45">
-                    &gt; Click &quot;SIMULATE WORKFLOW&quot; to run a live USC KIIT bot pipeline.
-                  </p>
-                ) : (
-                  <div className="space-y-1">
-                    {logs.map((line, i) => (
-                      <p
-                        key={line}
-                        className={`break-words ${
-                          i === BOT_PIPELINE_NODES.length - 1 ? "text-emerald" : "text-cream/80"
-                        }`}
-                      >
-                        &gt; {line}
-                      </p>
-                    ))}
-                  </div>
-                )}
-              </div>
+            <div className="overflow-hidden rounded-3xl border border-charcoal/12 bg-obsidian shadow-2xl">
+              <img
+                src="/groupphoto.jpeg"
+                alt="USC KIIT Community Group Photo"
+                className="aspect-[16/10] w-full object-cover object-center"
+              />
             </div>
           </div>
         </div>
