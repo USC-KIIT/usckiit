@@ -1,12 +1,16 @@
-import { useMemo, useState, type FormEvent, type MouseEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent, type MouseEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import type { User } from "@supabase/supabase-js";
 import {
   CheckCircle2,
   Copy,
   Cpu,
   Download,
+  Lock,
+  LogOut,
   Plus,
   RotateCcw,
+  ShieldCheck,
   Sparkles,
   Trash2,
 } from "lucide-react";
@@ -20,6 +24,14 @@ import {
   type HackabotMember,
   type HackabotTrackId,
 } from "@/lib/hackabot-data";
+import {
+  extractKiitRoll,
+  getGoogleFullName,
+  isKiitEmail,
+  isSupabaseConfigured,
+  signInWithKiitGoogle,
+  supabase,
+} from "@/lib/supabase";
 import { useHackabotCountdown } from "@/lib/use-hackabot-countdown";
 
 interface HackabotRegisterProps {
@@ -143,6 +155,10 @@ export function HackabotRegister({
 }: HackabotRegisterProps) {
   const { phaseState } = useHackabotCountdown();
 
+  const [authUser, setAuthUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(isSupabaseConfigured);
+  const [authBusy, setAuthBusy] = useState(false);
+
   const [teamName, setTeamName] = useState("");
   const [leaderName, setLeaderName] = useState("");
   const [leaderRollOrInstitute, setLeaderRollOrInstitute] = useState("");
@@ -153,6 +169,73 @@ export function HackabotRegister({
   const [submitted, setSubmitted] = useState(false);
 
   const [cardTilt, setCardTilt] = useState({ rx: 0, ry: 0, active: false });
+
+  useEffect(() => {
+    if (!supabase) {
+      setAuthLoading(false);
+      return;
+    }
+
+    const applyVerifiedUser = async (user: User | null) => {
+      if (!user) {
+        setAuthUser(null);
+        return;
+      }
+      if (!isKiitEmail(user.email)) {
+        await supabase?.auth.signOut();
+        setAuthUser(null);
+        toast.error("KIIT Gmail ID required", {
+          description: "Please sign in with your official @kiit.ac.in Google account.",
+        });
+        return;
+      }
+      setAuthUser(user);
+      setLeaderName(getGoogleFullName(user) || (user.email?.split("@")[0] ?? ""));
+      setLeaderRollOrInstitute(extractKiitRoll(user.email));
+      setLeaderEmail(user.email ?? "");
+    };
+
+    supabase.auth.getSession().then(({ data }) => {
+      void applyVerifiedUser(data.session?.user ?? null).finally(() => setAuthLoading(false));
+    });
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      void applyVerifiedUser(session?.user ?? null);
+    });
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
+
+  const handleGoogleSignIn = async () => {
+    if (!isSupabaseConfigured) {
+      toast.info("Supabase setup required", {
+        description: "Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env.local first.",
+      });
+      return;
+    }
+    try {
+      setAuthBusy(true);
+      const { error } = await signInWithKiitGoogle();
+      if (error) throw error;
+    } catch (err) {
+      setAuthBusy(false);
+      toast.error("Google Sign-In failed", {
+        description: err instanceof Error ? err.message : "Could not start Google authentication.",
+      });
+    }
+  };
+
+  const handleSignOut = async () => {
+    if (!supabase) return;
+    await supabase.auth.signOut();
+    setAuthUser(null);
+    setLeaderName("");
+    setLeaderRollOrInstitute("");
+    setLeaderEmail("");
+    setSubmitted(false);
+  };
 
   const totalMembers = 1 + members.length;
   const trackInfo =
@@ -291,9 +374,87 @@ export function HackabotRegister({
 
         {/* 2-Column Split-Screen Terminal */}
         <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-start">
-          {/* LEFT COLUMN (60%): Registration Form */}
+          {/* LEFT COLUMN (60%): KIIT Google Auth Gate -> Registration Form */}
           <div className="glass-dark hud-brackets rounded-3xl p-5 sm:p-8 lg:col-span-7">
+            {authLoading ? (
+              <div className="flex min-h-[340px] flex-col items-center justify-center gap-3 text-center">
+                <div className="h-8 w-8 animate-spin rounded-full border-2 border-flame/30 border-t-flame" />
+                <p className="font-mono text-xs tracking-[0.16em] text-cream/70">
+                  CHECKING KIIT SESSION...
+                </p>
+              </div>
+            ) : !authUser ? (
+              <div className="flex min-h-[360px] flex-col items-center justify-center px-2 py-8 text-center">
+                <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-flame/35 bg-flame/15 text-flame shadow-flame-glow">
+                  <ShieldCheck className="h-7 w-7" />
+                </div>
+                <p className="font-hud mt-5 text-[10px] tracking-[0.22em] text-flame">
+                  STEP 01 • IDENTITY VERIFICATION
+                </p>
+                <h3 className="font-display-usc mt-2 text-3xl text-cream sm:text-4xl">
+                  VERIFY WITH KIIT GMAIL ID
+                </h3>
+                <p className="mt-3 max-w-md text-sm leading-relaxed text-cream/70">
+                  Sign in with your official <span className="font-mono text-cream">@kiit.ac.in</span>{" "}
+                  Google account to unlock Hack-a-Bot 3.0 team registration. Your Full Name, Roll
+                  Number, and Email will be auto-filled and locked.
+                </p>
+
+                <button
+                  type="button"
+                  disabled={authBusy}
+                  onClick={handleGoogleSignIn}
+                  className="mt-7 inline-flex cursor-pointer items-center justify-center gap-3 rounded-full border border-cream/20 bg-cream px-7 py-3.5 font-mono text-xs font-bold tracking-[0.14em] text-obsidian shadow-xl transition-transform hover:scale-[1.03] disabled:opacity-60"
+                >
+                  <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" aria-hidden>
+                    <path
+                      fill="#4285F4"
+                      d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.14C3.26 21.3 7.31 24 12 24Z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M5.28 14.24c-.24-.72-.38-1.49-.38-2.24s.14-1.52.38-2.24V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.99-3.14Z"
+                    />
+                    <path
+                      fill="#EA4335"
+                      d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96Z"
+                    />
+                  </svg>
+                  {authBusy ? "REDIRECTING TO GOOGLE..." : "SIGN IN WITH GOOGLE"}
+                </button>
+
+                {!isSupabaseConfigured && (
+                  <p className="mt-4 rounded-xl border border-flame/30 bg-flame/10 px-4 py-2 font-mono text-[10px] tracking-[0.12em] text-flame">
+                    SUPABASE ENV NOT SET YET — ADD VITE_SUPABASE_URL &amp; VITE_SUPABASE_ANON_KEY
+                  </p>
+                )}
+              </div>
+            ) : (
             <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+              {/* Verified KIIT Session Bar */}
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-emerald/35 bg-emerald/10 px-4 py-3">
+                <div className="flex items-center gap-2.5">
+                  <ShieldCheck className="h-4 w-4 shrink-0 text-emerald" />
+                  <div className="text-left">
+                    <p className="font-mono text-[9px] tracking-[0.18em] text-emerald">
+                      VERIFIED KIIT GMAIL ID
+                    </p>
+                    <p className="font-mono text-xs text-cream">{authUser.email}</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleSignOut}
+                  className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-cream/15 bg-obsidian/70 px-3 py-1.5 font-mono text-[10px] tracking-[0.12em] text-cream/75 transition-colors hover:border-flame hover:text-cream"
+                >
+                  <LogOut className="h-3 w-3" />
+                  SWITCH
+                </button>
+              </div>
               {/* Team Name */}
               <div>
                 <label htmlFor="hab-team-name" className="font-hud block text-[10px] text-cream/75">
@@ -411,50 +572,56 @@ export function HackabotRegister({
 
               {/* Team Leader Details */}
               <div className="rounded-2xl border border-cream/10 bg-obsidian/65 p-4 sm:p-5">
-                <p className="font-hud text-[10px] text-flame">
-                  TEAM LEADER DETAILS (MEMBER 1 / {HACKABOT_MAX_MEMBERS})
-                </p>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="font-hud text-[10px] text-flame">
+                    TEAM LEADER DETAILS (MEMBER 1 / {HACKABOT_MAX_MEMBERS})
+                  </p>
+                  <span className="inline-flex items-center gap-1 font-mono text-[9px] tracking-[0.14em] text-emerald">
+                    <Lock className="h-3 w-3" />
+                    LOCKED FROM GOOGLE AUTH
+                  </span>
+                </div>
                 <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <div>
+                  <div className="relative">
                     <input
                       type="text"
                       aria-label="Team Leader Full Name"
-                      disabled={submitted}
+                      readOnly
                       value={leaderName}
-                      onChange={(e) => setLeaderName(e.target.value)}
                       placeholder="Full Name *"
-                      className="w-full rounded-xl border border-cream/15 bg-obsidian px-3.5 py-2.5 text-sm text-cream outline-none focus:border-flame disabled:opacity-60"
+                      className="w-full cursor-not-allowed rounded-xl border border-emerald/30 bg-obsidian/55 py-2.5 pl-3.5 pr-9 text-sm text-cream/90 outline-none"
                     />
+                    <Lock className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-emerald/75" />
                     {errors["leaderName"] && (
                       <p className="mt-1 text-xs text-crimson">{errors["leaderName"]}</p>
                     )}
                   </div>
-                  <div>
+                  <div className="relative">
                     <input
                       type="text"
                       aria-label="KIIT Roll Number or Institute"
-                      disabled={submitted}
+                      readOnly
                       value={leaderRollOrInstitute}
-                      onChange={(e) => setLeaderRollOrInstitute(e.target.value)}
-                      placeholder="KIIT Roll No. / Institute *"
-                      className="w-full rounded-xl border border-cream/15 bg-obsidian px-3.5 py-2.5 text-sm text-cream outline-none focus:border-flame disabled:opacity-60"
+                      placeholder="KIIT Roll No. *"
+                      className="w-full cursor-not-allowed rounded-xl border border-emerald/30 bg-obsidian/55 py-2.5 pl-3.5 pr-9 font-mono text-sm text-cream/90 outline-none"
                     />
+                    <Lock className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-emerald/75" />
                     {errors["leaderRollOrInstitute"] && (
                       <p className="mt-1 text-xs text-crimson">
                         {errors["leaderRollOrInstitute"]}
                       </p>
                     )}
                   </div>
-                  <div>
+                  <div className="relative">
                     <input
                       type="email"
                       aria-label="Team Leader Email"
-                      disabled={submitted}
+                      readOnly
                       value={leaderEmail}
-                      onChange={(e) => setLeaderEmail(e.target.value)}
                       placeholder="Email Address *"
-                      className="w-full rounded-xl border border-cream/15 bg-obsidian px-3.5 py-2.5 text-sm text-cream outline-none focus:border-flame disabled:opacity-60"
+                      className="w-full cursor-not-allowed rounded-xl border border-emerald/30 bg-obsidian/55 py-2.5 pl-3.5 pr-9 text-sm text-cream/90 outline-none"
                     />
+                    <Lock className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-emerald/75" />
                     {errors["leaderEmail"] && (
                       <p className="mt-1 text-xs text-crimson">{errors["leaderEmail"]}</p>
                     )}
@@ -580,6 +747,7 @@ export function HackabotRegister({
                 </button>
               )}
             </form>
+            )}
           </div>
 
           {/* RIGHT COLUMN (40%, Sticky on Desktop): REAL-TIME HOLOGRAPHIC TEAM PASS */}
