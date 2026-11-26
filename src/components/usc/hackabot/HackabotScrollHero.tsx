@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useRef } from "react";
 import { ClientOnly } from "@tanstack/react-router";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
-import { ArrowDownRight, Cpu, Globe2, Mouse, Sparkles } from "lucide-react";
+import { ArrowDownRight, Cpu, Globe2, Sparkles } from "lucide-react";
 import { useHackabotCountdown } from "@/lib/use-hackabot-countdown";
 
 const HeroStage3D = lazy(() => import("@/components/usc/HeroStage3D"));
@@ -151,9 +151,27 @@ export function HackabotScrollHero({
             </motion.div>
           </div>
 
-          {/* Bottom Center: Live Countdown Clock + Scroll Cue */}
-          <div className="flex flex-col items-center gap-2.5 sm:gap-3">
-            <div className="glass-dark hud-brackets flex flex-col items-center rounded-2xl px-4 py-2.5 sm:px-6 sm:py-3">
+          {/* Bottom Bar: Center REGISTER TEAM + Scroll Cue | Right Bottom Countdown Clock */}
+          <div className="grid w-full grid-cols-1 items-end gap-4 md:grid-cols-3">
+            <div className="hidden md:block" />
+
+            {/* Bottom Center: Larger Trapezium REGISTER TEAM Button */}
+            <div className="flex flex-col items-center justify-self-center pb-2">
+              <button
+                type="button"
+                onClick={onRegisterClick}
+                style={{
+                  clipPath: "polygon(7% 0%, 93% 0%, 100% 100%, 0% 100%)",
+                }}
+                className="gradient-flame shadow-flame-glow pointer-events-auto inline-flex cursor-pointer items-center gap-2.5 px-11 py-4 font-mono text-sm font-bold tracking-[0.18em] text-cream transition-transform hover:scale-[1.05]"
+              >
+                REGISTER TEAM
+                <ArrowDownRight className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Bottom Right: Live Countdown Clock */}
+            <div className="glass-dark hud-brackets flex flex-col items-center justify-self-center rounded-2xl px-4 py-2.5 sm:px-5 sm:py-3 md:justify-self-end">
               <span className="font-hud text-[9px] text-emerald sm:text-[10px]">
                 {phaseState ? phaseState.label : "SYNCING COUNTDOWN"}
               </span>
@@ -178,11 +196,6 @@ export function HackabotScrollHero({
                 ))}
               </div>
             </div>
-
-            <p className="inline-flex items-center gap-2 font-mono text-[9px] tracking-[0.18em] text-cream/55 sm:text-[10px]">
-              <Mouse className="h-3 w-3 animate-bounce text-flame" />
-              SCROLL WITH 2 FINGERS TO INITIALIZE BRIEFING
-            </p>
           </div>
         </motion.div>
 
