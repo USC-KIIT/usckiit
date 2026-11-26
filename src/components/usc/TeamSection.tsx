@@ -72,8 +72,8 @@ const STUDENT_POCS: readonly CoreMember[] = [
     accent: "emerald",
   },
   {
-    id: "kristi-buzarbaruah",
-    name: "Kristi Buzarbaruah",
+    id: "shristi-buzarbaruah",
+    name: "Shristi Buzarbaruah",
     role: "Student Point of Contact",
     tier: 4,
     image: "/Our Team/extracted/kristi-buzarbaruah.png",
@@ -331,7 +331,7 @@ export function TeamSection() {
         {/* Header */}
         <div className="text-center">
           <p className="font-hud text-xs text-flame">THE CORE HIERARCHY</p>
-          <h2 className="font-display-usc mt-2 text-4xl text-cream sm:text-6xl">OUR TEAM</h2>
+          <h2 className="font-display-usc mt-2 text-4xl text-cream sm:text-6xl">OUR CORE TEAM</h2>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-cream/65">
             The student leadership driving USC KIIT&apos;s vision, operations, and community
             initiatives across KIIT University.
