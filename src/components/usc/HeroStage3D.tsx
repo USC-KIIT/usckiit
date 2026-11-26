@@ -25,9 +25,9 @@ function checkWebGLSupport(): boolean {
 function StaticRobotFallback() {
   return (
     <div className="flex h-full w-full items-center justify-center" data-scene-ready="fallback">
-      <div className="relative flex h-64 w-64 items-center justify-center sm:h-80 sm:w-80">
+      <div className="relative flex h-52 w-52 items-center justify-center sm:h-80 sm:w-80">
         <div className="absolute inset-0 rounded-full bg-flame/25 blur-3xl" />
-        <svg viewBox="0 0 240 240" className="relative h-56 w-56 drop-shadow-2xl sm:h-68 sm:w-68" aria-label="USC KIIT UiPath Robot">
+        <svg viewBox="0 0 240 240" className="relative h-44 w-44 drop-shadow-2xl sm:h-68 sm:w-68" aria-label="USC KIIT UiPath Robot">
           <defs>
             <linearGradient id="botOrange" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="#FF6B00" />

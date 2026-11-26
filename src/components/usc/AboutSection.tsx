@@ -30,13 +30,13 @@ function AnimatedMetricTile({ metric }: { metric: CommunityMetric }) {
   return (
     <div
       ref={ref}
-      className="rounded-2xl border border-charcoal/12 bg-cream p-5 shadow-sm"
+      className="rounded-2xl border border-charcoal/12 bg-cream p-4 shadow-sm sm:p-5"
     >
-      <p className="font-display-usc text-gradient-flame text-4xl sm:text-5xl">
+      <p className="font-display-usc text-gradient-flame text-3xl sm:text-5xl">
         {display}
         {metric.suffix}
       </p>
-      <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-charcoal/75">
+      <p className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-charcoal/75 sm:text-[11px] sm:tracking-[0.14em]">
         {metric.label}
       </p>
     </div>
@@ -79,16 +79,16 @@ export function AboutSection() {
   };
 
   return (
-    <section id="about" className="editorial-surface relative px-6 py-24 sm:px-10 lg:py-32">
+    <section id="about" className="editorial-surface relative px-4 py-16 sm:px-10 sm:py-24 lg:py-32">
       <div className="mx-auto max-w-6xl">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-start">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-start lg:gap-12">
           {/* Left Column: Community Story */}
           <div className="lg:col-span-5">
             <p className="font-hud text-xs font-semibold text-flame">WHO WE ARE</p>
-            <h2 className="font-display-usc text-gradient-flame mt-2 text-5xl sm:text-6xl">
+            <h2 className="font-display-usc text-gradient-flame mt-2 text-4xl sm:text-6xl">
               ABOUT USC KIIT
             </h2>
-            <p className="mt-6 text-base leading-relaxed text-charcoal/85">
+            <p className="mt-5 text-base leading-relaxed text-charcoal/85 sm:mt-6">
               <strong>UiPath Student Community, KIIT University (Bhubaneswar)</strong> is an
               official student-led technical community operating under the{" "}
               <strong>Department of Training and Placement, KIIT</strong>.
@@ -99,32 +99,32 @@ export function AboutSection() {
               Agentic AI, full-stack software engineering, and high-craft creative storytelling.
             </p>
 
-            <blockquote className="mt-7 rounded-2xl border-l-4 border-flame bg-charcoal/[0.04] p-5">
+            <blockquote className="mt-6 rounded-2xl border-l-4 border-flame bg-charcoal/[0.04] p-4 sm:mt-7 sm:p-5">
               <p className="font-display-usc text-2xl tracking-wide text-charcoal sm:text-3xl">
                 &ldquo;Building the Future, One Domain at a Time.&rdquo;
               </p>
-              <footer className="mt-2 font-mono text-[10px] uppercase tracking-[0.18em] text-emerald">
+              <footer className="mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-emerald sm:tracking-[0.18em]">
                 DEPT. OF TRAINING &amp; PLACEMENT · KIIT UNIVERSITY
               </footer>
             </blockquote>
           </div>
 
           {/* Right Column: 2x2 Metrics Grid + Interactive Simulate a USC Bot Playground */}
-          <div className="space-y-6 lg:col-span-7">
-            <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-5 sm:space-y-6 lg:col-span-7">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
               {COMMUNITY_METRICS.map((metric) => (
                 <AnimatedMetricTile key={metric.label} metric={metric} />
               ))}
             </div>
 
-            <div className="rounded-3xl bg-obsidian p-6 text-cream shadow-2xl sm:p-7">
+            <div className="rounded-3xl bg-obsidian p-4 text-cream shadow-2xl sm:p-7">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <p className="font-hud inline-flex items-center gap-2 text-[10px] text-flame">
                     <Cpu className="h-3.5 w-3.5" />
                     WORKFLOW MINI-PLAYGROUND
                   </p>
-                  <h3 className="font-display-usc mt-1 text-3xl text-cream">
+                  <h3 className="font-display-usc mt-1 text-2xl text-cream sm:text-3xl">
                     SIMULATE A USC BOT
                   </h3>
                 </div>
@@ -134,7 +134,7 @@ export function AboutSection() {
                     type="button"
                     onClick={runSimulation}
                     disabled={running}
-                    className="gradient-flame shadow-flame-glow inline-flex cursor-pointer items-center gap-2 rounded-full px-5 py-2 font-mono text-[11px] font-semibold tracking-[0.16em] text-cream transition-transform hover:scale-[1.03] disabled:opacity-60"
+                    className="gradient-flame shadow-flame-glow inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 font-mono text-[10px] font-semibold tracking-[0.14em] text-cream transition-transform hover:scale-[1.03] disabled:opacity-60 sm:px-5 sm:text-[11px] sm:tracking-[0.16em]"
                   >
                     <Play className="h-3 w-3 fill-current" />
                     {running ? "RUNNING..." : "SIMULATE WORKFLOW"}
@@ -152,7 +152,7 @@ export function AboutSection() {
                 </div>
               </div>
 
-              <div className="mt-6 grid grid-cols-1 gap-2.5 sm:grid-cols-4">
+              <div className="mt-5 grid grid-cols-2 gap-2.5 sm:mt-6 sm:grid-cols-4">
                 {BOT_PIPELINE_NODES.map((node, idx) => {
                   const reached = activeNode >= idx;
                   const current = activeNode === idx;
@@ -160,7 +160,7 @@ export function AboutSection() {
                     <motion.div
                       key={node.id}
                       animate={{ scale: current && running ? 1.03 : 1 }}
-                      className={`hud-brackets rounded-xl border p-3.5 transition-colors duration-300 ${
+                      className={`hud-brackets rounded-xl border p-3 transition-colors duration-300 sm:p-3.5 ${
                         reached
                           ? "border-flame bg-carbon shadow-flame-glow"
                           : "border-cream/10 bg-carbon/50"
@@ -191,7 +191,7 @@ export function AboutSection() {
                   ORCHESTRATOR LOG
                 </div>
                 {logs.length === 0 ? (
-                  <p className="text-cream/45">
+                  <p className="break-words text-cream/45">
                     &gt; Click &quot;SIMULATE WORKFLOW&quot; to run a live USC KIIT bot pipeline.
                   </p>
                 ) : (
@@ -199,9 +199,9 @@ export function AboutSection() {
                     {logs.map((line, i) => (
                       <p
                         key={line}
-                        className={
+                        className={`break-words ${
                           i === BOT_PIPELINE_NODES.length - 1 ? "text-emerald" : "text-cream/80"
-                        }
+                        }`}
                       >
                         &gt; {line}
                       </p>

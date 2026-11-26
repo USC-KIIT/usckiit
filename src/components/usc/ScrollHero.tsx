@@ -67,14 +67,14 @@ export function ScrollHero({ onRegisterHackabot, onExploreInitiatives }: ScrollH
     <section
       id="home"
       ref={containerRef}
-      className="relative h-[450vh] w-full bg-obsidian"
+      className="relative h-[360vh] w-full bg-obsidian md:h-[450vh]"
       aria-label="USC KIIT 3D Hero Showcase"
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         {/* Volumetric Radial Glows */}
         <div
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-1/2 h-[72vh] w-[72vh] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,oklch(0.648_0.224_34/22%)_0%,oklch(0.548_0.215_256/14%)_42%,transparent_72%)] blur-2xl"
+          className="pointer-events-none absolute left-1/2 top-1/2 h-[58vh] w-[58vh] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,oklch(0.648_0.224_34/22%)_0%,oklch(0.548_0.215_256/14%)_42%,transparent_72%)] blur-2xl sm:h-[72vh] sm:w-[72vh]"
         />
         <div
           aria-hidden
@@ -86,7 +86,7 @@ export function ScrollHero({ onRegisterHackabot, onExploreInitiatives }: ScrollH
           style={{ opacity: act2Opacity, scale: act2BgScale }}
           className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-4 text-center"
         >
-          <h2 className="font-display-usc select-none text-[14vw] leading-[0.86] text-cream/90 sm:text-[12vw] lg:text-[10.5vw]">
+          <h2 className="font-display-usc select-none text-[13.5vw] leading-[0.86] text-cream/90 sm:text-[12vw] lg:text-[10.5vw]">
             INNOVATE
             <span className="block text-gradient-flame">• AUTOMATE</span>
           </h2>
@@ -95,30 +95,29 @@ export function ScrollHero({ onRegisterHackabot, onExploreInitiatives }: ScrollH
         {/* ACT 1 RIGHT-SIDE DEPTH TEXT — behind robot at z-10 */}
         <motion.div
           style={{ opacity: act1Opacity }}
-          className="pointer-events-none absolute inset-0 z-10 flex items-center justify-end pr-6 sm:pr-12 lg:pr-20"
+          className="pointer-events-none absolute inset-0 z-10 flex items-end justify-end pb-7 pr-4 sm:pb-10 sm:pr-10 md:items-center md:pb-0 md:pr-12 lg:pr-20"
         >
-          <div className="flex flex-col items-end gap-0 leading-none select-none">
+          <div className="flex select-none flex-col items-end gap-0 leading-none">
             {/* Thin eyebrow line */}
-            <span className="mb-3 inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.28em] text-flame/70 sm:text-[11px]">
-              <span className="h-px w-8 bg-flame/40" />
+            <span className="mb-2 inline-flex items-center gap-2 font-mono text-[9px] tracking-[0.24em] text-flame/80 sm:mb-3 sm:text-[11px] sm:tracking-[0.28em]">
+              <span className="h-px w-5 bg-flame/50 sm:w-8" />
               USC KIIT CORE VALUES
             </span>
 
             {/* "CONNECT" — large, cream, slightly transparent */}
-            <span
-              className="font-display-usc text-right text-[13vw] leading-[0.82] text-cream/15 sm:text-[10vw] lg:text-[9vw]"
-            >
+            <span className="font-display-usc text-right text-[13.5vw] leading-[0.82] text-cream/25 sm:text-[10.5vw] md:text-cream/15 lg:text-[9vw]">
               CONNECT
             </span>
 
             {/* Flame divider rule */}
-            <span className="my-2 ml-auto block h-[2px] w-[55%] bg-gradient-to-l from-flame/60 via-flame/20 to-transparent" />
+            <span className="my-1.5 ml-auto block h-[2px] w-[55%] bg-gradient-to-l from-flame/60 via-flame/20 to-transparent sm:my-2" />
 
             {/* "LEARN &" — medium, gradient */}
             <span
-              className="font-display-usc text-right text-[9vw] leading-[0.88] sm:text-[7.5vw] lg:text-[6.5vw]"
+              className="font-display-usc text-right text-[9.5vw] leading-[0.88] sm:text-[7.5vw] lg:text-[6.5vw]"
               style={{
-                background: "linear-gradient(135deg, oklch(0.85 0.03 84 / 0.55) 0%, oklch(0.648 0.224 34 / 0.45) 100%)",
+                background:
+                  "linear-gradient(135deg, oklch(0.85 0.03 84 / 0.65) 0%, oklch(0.648 0.224 34 / 0.55) 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
@@ -128,9 +127,10 @@ export function ScrollHero({ onRegisterHackabot, onExploreInitiatives }: ScrollH
 
             {/* "COLLABORATE" — slightly smaller, emerald accent */}
             <span
-              className="font-display-usc text-right text-[7vw] leading-[0.92] sm:text-[6vw] lg:text-[5.2vw]"
+              className="font-display-usc text-right text-[7.5vw] leading-[0.92] sm:text-[6vw] lg:text-[5.2vw]"
               style={{
-                background: "linear-gradient(135deg, oklch(0.76 0.17 162 / 0.55) 0%, oklch(0.85 0.03 84 / 0.35) 100%)",
+                background:
+                  "linear-gradient(135deg, oklch(0.76 0.17 162 / 0.65) 0%, oklch(0.85 0.03 84 / 0.45) 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
@@ -139,13 +139,18 @@ export function ScrollHero({ onRegisterHackabot, onExploreInitiatives }: ScrollH
             </span>
 
             {/* Subtle bottom dots */}
-            <span className="mt-4 flex gap-1.5">
+            <span className="mt-2.5 flex gap-1.5 sm:mt-4">
               {[0, 1, 2].map((i) => (
                 <span
                   key={i}
                   className="h-1 w-1 rounded-full"
                   style={{
-                    background: i === 0 ? "oklch(0.648 0.224 34 / 0.7)" : i === 1 ? "oklch(0.76 0.17 162 / 0.5)" : "oklch(0.85 0.03 84 / 0.3)",
+                    background:
+                      i === 0
+                        ? "oklch(0.648 0.224 34 / 0.7)"
+                        : i === 1
+                          ? "oklch(0.76 0.17 162 / 0.5)"
+                          : "oklch(0.85 0.03 84 / 0.3)",
                   }}
                 />
               ))}
@@ -176,16 +181,16 @@ export function ScrollHero({ onRegisterHackabot, onExploreInitiatives }: ScrollH
         {/* ACT 1 OVERLAYS (z-30) */}
         <motion.div
           style={{ opacity: act1Opacity }}
-          className="pointer-events-none absolute inset-0 z-30 mx-auto flex max-w-7xl flex-col justify-between px-6 pb-10 pt-32 sm:px-10 md:pt-36"
+          className="pointer-events-none absolute inset-0 z-30 mx-auto flex max-w-7xl flex-col justify-start px-4 pb-8 pt-24 sm:px-10 sm:pt-28 md:justify-between md:pb-10 md:pt-32"
         >
-          <div className="flex flex-1 flex-col justify-between gap-8 md:flex-row md:items-center">
+          <div className="flex flex-col justify-start gap-4 md:flex-1 md:flex-row md:items-center md:justify-between md:gap-8">
             {/* Left Headline Block */}
             <motion.div style={{ x: act1LeftX }} className="max-w-lg">
-              <h1 className="font-display-usc text-6xl text-cream sm:text-7xl lg:text-[5.75rem]">
+              <h1 className="font-display-usc text-[2.75rem] leading-[0.9] text-cream sm:text-7xl lg:text-[5.75rem]">
                 AUTOMATE
                 <span className="block text-gradient-future">THE FUTURE</span>
               </h1>
-              <p className="mt-4 max-w-sm text-sm text-cream/70 sm:text-base">
+              <p className="mt-2.5 max-w-[16.5rem] text-xs leading-relaxed text-cream/75 sm:mt-4 sm:max-w-sm sm:text-base">
                 Building the Future, One Domain at a Time — KIIT University&apos;s official UiPath
                 Student Community.
               </p>
@@ -196,7 +201,7 @@ export function ScrollHero({ onRegisterHackabot, onExploreInitiatives }: ScrollH
         {/* ACT 2 FLOATING DOMAIN TOTEM PILLS + DUAL CTAS (z-30) */}
         <motion.div
           style={{ opacity: act2Opacity }}
-          className="pointer-events-none absolute inset-0 z-30 flex flex-col justify-end pb-12 sm:pb-16"
+          className="pointer-events-none absolute inset-0 z-30 flex flex-col justify-end pb-8 sm:pb-14 md:pb-16"
         >
           {TOTEM_PILLS.map((pill) => {
             const Icon = pill.icon;
@@ -211,14 +216,29 @@ export function ScrollHero({ onRegisterHackabot, onExploreInitiatives }: ScrollH
             );
           })}
 
+          <div className="mb-3 flex flex-wrap justify-center gap-1.5 px-4 md:hidden">
+            {TOTEM_PILLS.map((pill) => {
+              const Icon = pill.icon;
+              return (
+                <div
+                  key={pill.label}
+                  className="glass-dark inline-flex items-center gap-1.5 rounded-full px-2.5 py-1"
+                >
+                  <Icon className="h-3 w-3 text-flame" />
+                  <span className="font-hud text-[9px] text-cream">{pill.label}</span>
+                </div>
+              );
+            })}
+          </div>
+
           <motion.div
             style={{ y: act2CtaY }}
-            className="pointer-events-auto mx-auto flex flex-wrap items-center justify-center gap-4 px-6"
+            className="pointer-events-auto mx-auto flex flex-wrap items-center justify-center gap-2.5 px-4 sm:gap-4 sm:px-6"
           >
             <button
               type="button"
               onClick={onRegisterHackabot}
-              className="gradient-flame shadow-flame-glow inline-flex cursor-pointer items-center gap-2 rounded-full px-7 py-3.5 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-cream transition-transform hover:scale-[1.03]"
+              className="gradient-flame shadow-flame-glow inline-flex cursor-pointer items-center gap-2 rounded-full px-5 py-3 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-cream transition-transform hover:scale-[1.03] sm:px-7 sm:py-3.5 sm:text-xs sm:tracking-[0.16em]"
             >
               HACK-A-BOT 3.0 — REGISTER
               <ArrowDownRight className="h-4 w-4" />
@@ -226,7 +246,7 @@ export function ScrollHero({ onRegisterHackabot, onExploreInitiatives }: ScrollH
             <button
               type="button"
               onClick={onExploreInitiatives}
-              className="glass-dark inline-flex cursor-pointer items-center gap-2 rounded-full px-7 py-3.5 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-cream transition-colors hover:border-flame/60 hover:text-flame"
+              className="glass-dark inline-flex cursor-pointer items-center gap-2 rounded-full px-5 py-3 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-cream transition-colors hover:border-flame/60 hover:text-flame sm:px-7 sm:py-3.5 sm:text-xs sm:tracking-[0.16em]"
             >
               EXPLORE OUR INITIATIVES
             </button>

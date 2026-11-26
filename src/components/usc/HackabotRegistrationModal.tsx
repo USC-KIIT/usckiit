@@ -156,12 +156,12 @@ export function HackabotRegistrationModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 16 }}
             transition={{ duration: 0.22 }}
-            className="glass-dark hud-brackets relative z-10 max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-2xl p-6 shadow-2xl sm:p-8"
+            className="glass-dark hud-brackets relative z-10 max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-2xl p-4 shadow-2xl sm:p-8"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="font-hud text-[11px] text-flame">USC KIIT FLAGSHIP COMPETITION</p>
-                <h2 id="hackabot-reg-title" className="font-display-usc mt-1 text-4xl text-cream">
+                <h2 id="hackabot-reg-title" className="font-display-usc mt-1 text-3xl text-cream sm:text-4xl">
                   HACK-A-BOT 3.0 REGISTRATION
                 </h2>
               </div>

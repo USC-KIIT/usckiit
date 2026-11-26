@@ -57,13 +57,13 @@ export function SystemDiagnostic({ onApplyDomain }: SystemDiagnosticProps) {
   return (
     <section
       id="diagnostic"
-      className="relative overflow-hidden bg-obsidian px-6 py-24 sm:px-10 lg:py-32"
+      className="relative overflow-hidden bg-obsidian px-4 py-16 sm:px-10 sm:py-24 lg:py-32"
     >
       <div className="mx-auto max-w-6xl">
-        <div className="mb-12 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div className="mb-8 flex flex-col gap-3 sm:mb-12 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="font-hud text-xs text-flame">FIND YOUR IDEAL USC KIIT DOMAIN</p>
-            <h2 className="font-display-usc mt-2 text-5xl text-cream sm:text-6xl">
+            <h2 className="font-display-usc mt-2 text-4xl text-cream sm:text-6xl">
               SYSTEM DIAGNOSTIC
             </h2>
           </div>
@@ -73,9 +73,9 @@ export function SystemDiagnostic({ onApplyDomain }: SystemDiagnosticProps) {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+        <div className="grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-12">
           {/* Left Sidebar Panel (30% -> 4 cols) */}
-          <aside className="glass-dark hud-brackets flex flex-col justify-between rounded-2xl p-6 lg:col-span-4">
+          <aside className="glass-dark hud-brackets flex flex-col justify-between rounded-2xl p-4 sm:p-6 lg:col-span-4">
             <div>
               <div className="flex items-center justify-between">
                 <span className="font-hud text-xs font-semibold text-flame">YOUR STACK</span>
@@ -84,7 +84,7 @@ export function SystemDiagnostic({ onApplyDomain }: SystemDiagnosticProps) {
                 </span>
               </div>
 
-              <div className="mt-5 flex min-h-[140px] flex-wrap content-start gap-2">
+              <div className="mt-4 flex min-h-[64px] flex-wrap content-start gap-2 sm:mt-5 sm:min-h-[140px]">
                 {liveBadges.length === 0 ? (
                   <p className="font-mono text-xs leading-relaxed text-cream/40">
                     Awaiting telemetry input. Select your first response to populate live stack
@@ -106,7 +106,7 @@ export function SystemDiagnostic({ onApplyDomain }: SystemDiagnosticProps) {
             </div>
 
             {/* Vertical Progress + Node Status */}
-            <div className="mt-8 border-t border-cream/10 pt-5">
+            <div className="mt-5 border-t border-cream/10 pt-4 sm:mt-8 sm:pt-5">
               <div className="mb-2 flex items-center justify-between font-mono text-[10px] tracking-[0.16em] text-cream/55">
                 <span>CALIBRATION PROGRESS</span>
                 <span>{Math.round(progressPct)}%</span>
@@ -118,7 +118,7 @@ export function SystemDiagnostic({ onApplyDomain }: SystemDiagnosticProps) {
                   transition={{ duration: 0.35 }}
                 />
               </div>
-              <div className="mt-4 flex items-center gap-2 font-mono text-[11px] tracking-[0.16em] text-emerald">
+              <div className="mt-3 flex items-center gap-2 font-mono text-[11px] tracking-[0.16em] text-emerald sm:mt-4">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-emerald" />
                 KIIT_NODE: ONLINE
               </div>
@@ -126,12 +126,12 @@ export function SystemDiagnostic({ onApplyDomain }: SystemDiagnosticProps) {
           </aside>
 
           {/* Right Interactive Panel (70% -> 8 cols) */}
-          <div className="glass-dark relative overflow-hidden rounded-2xl p-6 sm:p-8 lg:col-span-8">
+          <div className="glass-dark relative overflow-hidden rounded-2xl p-4 sm:p-8 lg:col-span-8">
             {/* Giant Faded Watermark Number */}
             {phase === "quiz" && (
               <span
                 aria-hidden
-                className="font-display-usc pointer-events-none absolute -right-3 -top-6 select-none text-[10rem] leading-none text-cream/[0.04] sm:text-[13rem]"
+                className="font-display-usc pointer-events-none absolute -right-2 -top-4 select-none text-[6.5rem] leading-none text-cream/[0.04] sm:-right-3 sm:-top-6 sm:text-[13rem]"
               >
                 {watermarkNumber}
               </span>
@@ -150,17 +150,17 @@ export function SystemDiagnostic({ onApplyDomain }: SystemDiagnosticProps) {
                   <p className="font-hud text-xs text-cobalt">
                     CALIBRATION {watermarkNumber} / 0{total}
                   </p>
-                  <h3 className="mt-3 max-w-2xl text-2xl font-semibold leading-snug text-cream sm:text-3xl">
+                  <h3 className="mt-2.5 max-w-2xl text-xl font-semibold leading-snug text-cream sm:mt-3 sm:text-3xl">
                     {currentQuestion.prompt}
                   </h3>
 
-                  <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div className="mt-6 grid grid-cols-1 gap-3 sm:mt-8 sm:grid-cols-2 sm:gap-4">
                     {currentQuestion.options.map((option) => (
                       <button
                         key={option.key}
                         type="button"
                         onClick={() => handleSelect(option.key)}
-                        className="hud-brackets group flex cursor-pointer flex-col justify-between rounded-xl border border-cream/10 bg-carbon/85 p-5 text-left transition-all duration-200 hover:border-flame/70 hover:bg-carbon"
+                        className="hud-brackets group flex cursor-pointer flex-col justify-between rounded-xl border border-cream/10 bg-carbon/85 p-4 text-left transition-all duration-200 hover:border-flame/70 hover:bg-carbon sm:p-5"
                       >
                         <div className="flex items-center justify-between">
                           <span className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-cream/15 bg-obsidian font-mono text-xs font-semibold text-flame transition-colors group-hover:border-flame group-hover:bg-flame group-hover:text-cream">
@@ -170,7 +170,9 @@ export function SystemDiagnostic({ onApplyDomain }: SystemDiagnosticProps) {
                             {option.stackBadge}
                           </span>
                         </div>
-                        <p className="mt-4 text-base font-semibold text-cream">{option.label}</p>
+                        <p className="mt-3 text-sm font-semibold text-cream sm:mt-4 sm:text-base">
+                          {option.label}
+                        </p>
                         <p className="mt-1.5 text-xs leading-relaxed text-cream/65">
                           {option.detail}
                         </p>
@@ -186,7 +188,7 @@ export function SystemDiagnostic({ onApplyDomain }: SystemDiagnosticProps) {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="flex min-h-[340px] flex-col items-center justify-center text-center"
+                  className="flex min-h-[280px] flex-col items-center justify-center text-center sm:min-h-[340px]"
                 >
                   <div className="flex h-14 w-14 items-center justify-center rounded-full border border-flame/40 bg-flame/15 text-flame">
                     <Terminal className="h-6 w-6 animate-pulse" />
@@ -217,10 +219,10 @@ export function SystemDiagnostic({ onApplyDomain }: SystemDiagnosticProps) {
                     </span>
                   </div>
 
-                  <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
-                    <div className="hud-brackets rounded-xl border border-flame/50 bg-carbon p-5">
+                  <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
+                    <div className="hud-brackets rounded-xl border border-flame/50 bg-carbon p-4 sm:p-5">
                       <p className="font-hud text-[10px] text-flame">PRIMARY DOMAIN MATCH</p>
-                      <h3 className="font-display-usc mt-2 text-4xl text-cream">
+                      <h3 className="font-display-usc mt-2 text-3xl text-cream sm:text-4xl">
                         {result.primary.title}
                       </h3>
                       <p className="mt-2 text-xs leading-relaxed text-cream/70">
@@ -232,9 +234,9 @@ export function SystemDiagnostic({ onApplyDomain }: SystemDiagnosticProps) {
                       </p>
                     </div>
 
-                    <div className="rounded-xl border border-cream/10 bg-obsidian/70 p-5">
+                    <div className="rounded-xl border border-cream/10 bg-obsidian/70 p-4 sm:p-5">
                       <p className="font-hud text-[10px] text-cobalt">SECONDARY MATCH</p>
-                      <h4 className="font-display-usc mt-2 text-3xl text-cream/90">
+                      <h4 className="font-display-usc mt-2 text-2xl text-cream/90 sm:text-3xl">
                         {result.secondary.title}
                       </h4>
                       <p className="mt-2 text-xs leading-relaxed text-cream/65">
@@ -251,7 +253,7 @@ export function SystemDiagnostic({ onApplyDomain }: SystemDiagnosticProps) {
                     <button
                       type="button"
                       onClick={() => onApplyDomain(result.primary.id)}
-                      className="gradient-flame shadow-flame-glow inline-flex cursor-pointer items-center gap-2 rounded-full px-6 py-3 font-mono text-xs font-semibold tracking-[0.16em] text-cream transition-transform hover:scale-[1.03]"
+                      className="gradient-flame shadow-flame-glow inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full px-6 py-3 font-mono text-xs font-semibold tracking-[0.16em] text-cream transition-transform hover:scale-[1.03] sm:w-auto"
                     >
                       APPLY FOR THIS DOMAIN
                       <ArrowRight className="h-4 w-4" />
@@ -259,7 +261,7 @@ export function SystemDiagnostic({ onApplyDomain }: SystemDiagnosticProps) {
                     <button
                       type="button"
                       onClick={handleRetake}
-                      className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-cream/15 bg-carbon px-5 py-3 font-mono text-xs tracking-[0.16em] text-cream/80 transition-colors hover:border-flame/50 hover:text-cream"
+                      className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-cream/15 bg-carbon px-5 py-3 font-mono text-xs tracking-[0.16em] text-cream/80 transition-colors hover:border-flame/50 hover:text-cream sm:w-auto"
                     >
                       <RotateCcw className="h-3.5 w-3.5" />
                       RETAKE DIAGNOSTIC

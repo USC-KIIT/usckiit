@@ -27,7 +27,7 @@ function InitiativeCard({ item }: { item: InitiativeItem }) {
     <div
       onMouseMove={handleMove}
       onMouseLeave={() => setSpot((prev) => ({ ...prev, active: false }))}
-      className={`hud-brackets group relative overflow-hidden rounded-2xl border border-cream/10 bg-carbon/85 p-6 transition-colors duration-200 hover:border-flame/60 sm:p-7 ${
+      className={`hud-brackets group relative overflow-hidden rounded-2xl border border-cream/10 bg-carbon/85 p-5 transition-colors duration-200 hover:border-flame/60 sm:p-7 ${
         item.spanWide ? "md:col-span-2" : ""
       }`}
     >
@@ -48,8 +48,8 @@ function InitiativeCard({ item }: { item: InitiativeItem }) {
             {item.tag}
           </span>
         </div>
-        <div className="mt-6">
-          <h3 className="font-display-usc text-3xl text-cream">{item.title}</h3>
+        <div className="mt-5 sm:mt-6">
+          <h3 className="font-display-usc text-2xl text-cream sm:text-3xl">{item.title}</h3>
           <p className="mt-2.5 text-sm leading-relaxed text-cream/70">{item.description}</p>
         </div>
       </div>
@@ -59,12 +59,12 @@ function InitiativeCard({ item }: { item: InitiativeItem }) {
 
 export function InitiativesSection() {
   return (
-    <section id="initiatives" className="relative bg-obsidian px-6 py-24 sm:px-10 lg:py-32">
+    <section id="initiatives" className="relative bg-obsidian px-4 py-16 sm:px-10 sm:py-24 lg:py-32">
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="font-hud text-xs text-flame">WHAT WE DRIVE</p>
-            <h2 className="font-display-usc mt-2 text-5xl text-cream sm:text-6xl">
+            <h2 className="font-display-usc mt-2 text-4xl text-cream sm:text-6xl">
               OUR INITIATIVES
             </h2>
           </div>
@@ -74,7 +74,7 @@ export function InitiativesSection() {
           </p>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:mt-12 sm:gap-5 md:grid-cols-3">
           {USC_INITIATIVES.map((item) => (
             <InitiativeCard key={item.id} item={item} />
           ))}
