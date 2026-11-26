@@ -8,7 +8,13 @@ export const isSupabaseConfigured = Boolean(
 );
 
 export const supabase = isSupabaseConfigured
-  ? createClient(supabaseUrl!, supabaseAnonKey!)
+  ? createClient(supabaseUrl!, supabaseAnonKey!, {
+      auth: {
+        detectSessionInUrl: true,
+        persistSession: true,
+        autoRefreshToken: true,
+      },
+    })
   : null;
 
 export function isKiitEmail(email?: string | null): boolean {
@@ -32,7 +38,7 @@ export async function signInWithKiitGoogle() {
   if (!supabase) {
     throw new Error("Supabase is not configured yet. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env.local.");
   }
-  const redirectTo = `${window.location.origin}/events/hackabot#register`;
+  const redirectTo = `${window.location.origin}/events/hackabot`;
   return supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
