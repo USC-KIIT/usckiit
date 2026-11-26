@@ -223,11 +223,20 @@ export function ApplicationModal({ open, initialDomain, onClose }: ApplicationMo
                       }
                       className="mt-1.5 w-full rounded-lg border border-cream/15 bg-obsidian px-3.5 py-2.5 text-sm text-cream outline-none focus:border-flame"
                     >
-                      {USC_DOMAINS.map((domain) => (
-                        <option key={domain.id} value={domain.id}>
-                          {domain.title}
-                        </option>
-                      ))}
+                      <optgroup label="Tech Wing">
+                        {USC_DOMAINS.filter((d) => d.wing === "tech").map((domain) => (
+                          <option key={domain.id} value={domain.id}>
+                            {domain.title}
+                          </option>
+                        ))}
+                      </optgroup>
+                      <optgroup label="Non-Tech Wing">
+                        {USC_DOMAINS.filter((d) => d.wing === "non-tech").map((domain) => (
+                          <option key={domain.id} value={domain.id}>
+                            {domain.title}
+                          </option>
+                        ))}
+                      </optgroup>
                     </select>
                   </div>
 
@@ -247,11 +256,20 @@ export function ApplicationModal({ open, initialDomain, onClose }: ApplicationMo
                       className="mt-1.5 w-full rounded-lg border border-cream/15 bg-obsidian px-3.5 py-2.5 text-sm text-cream outline-none focus:border-flame"
                     >
                       <option value="">None (Optional)</option>
-                      {USC_DOMAINS.map((domain) => (
-                        <option key={domain.id} value={domain.id}>
-                          {domain.title}
-                        </option>
-                      ))}
+                      <optgroup label="Tech Wing">
+                        {USC_DOMAINS.filter((d) => d.wing === "tech").map((domain) => (
+                          <option key={domain.id} value={domain.id}>
+                            {domain.title}
+                          </option>
+                        ))}
+                      </optgroup>
+                      <optgroup label="Non-Tech Wing">
+                        {USC_DOMAINS.filter((d) => d.wing === "non-tech").map((domain) => (
+                          <option key={domain.id} value={domain.id}>
+                            {domain.title}
+                          </option>
+                        ))}
+                      </optgroup>
                     </select>
                     {errors.secondaryDomain && (
                       <p className="mt-1 text-xs text-crimson">{errors.secondaryDomain}</p>

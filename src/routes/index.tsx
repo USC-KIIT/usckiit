@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { AboutSection } from "@/components/usc/AboutSection";
 import { ApplicationModal } from "@/components/usc/ApplicationModal";
+import { AvengerIntro } from "@/components/usc/AvengerIntro";
 import { DomainsShowcase } from "@/components/usc/DomainsShowcase";
 import { EventsSection } from "@/components/usc/EventsSection";
 import { EventSpotlightRibbon } from "@/components/usc/EventSpotlightRibbon";
@@ -37,6 +38,9 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const [introComplete, setIntroComplete] = useState(
+    () => sessionStorage.getItem("usc-intro-seen") === "1",
+  );
   const [recruitModalOpen, setRecruitModalOpen] = useState(false);
   const [preferredDomain, setPreferredDomain] = useState<DomainId | undefined>(undefined);
 
@@ -50,7 +54,16 @@ function Index() {
   };
 
   return (
-    <div className="relative min-h-screen bg-obsidian text-cream">
+    <>
+      {!introComplete && (
+        <AvengerIntro
+          onComplete={() => {
+            sessionStorage.setItem("usc-intro-seen", "1");
+            setIntroComplete(true);
+          }}
+        />
+      )}
+      <div className="relative min-h-screen bg-obsidian text-cream">
       <div className="film-grain-overlay" aria-hidden />
       <Navbar />
 
@@ -74,5 +87,6 @@ function Index() {
         onClose={() => setRecruitModalOpen(false)}
       />
     </div>
+    </>
   );
 }
