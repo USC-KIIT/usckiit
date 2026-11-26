@@ -149,13 +149,6 @@ export function AvengerIntro({ onComplete }: AvengerIntroProps) {
     };
   }, []);
 
-  const colClass =
-    panelCells.length === 1
-      ? "grid-cols-1"
-      : panelCells.length === 3
-        ? "grid-cols-3"
-        : "grid-cols-2";
-
   return (
     <AnimatePresence>
       {!exiting && (
@@ -187,18 +180,18 @@ export function AvengerIntro({ onComplete }: AvengerIntroProps) {
             style={{ opacity: flashActive ? 1 : 0, background: "#090A0F" }}
           />
 
-          {/* ── Multi-panel photo grid ── */}
-          <div className={`grid flex-1 gap-0.5 ${colClass}`} style={{ minHeight: 0 }}>
-            {panelCells.map((cell, i) => (
+          {/* ── Single full-screen photo ── */}
+          <div className="grid flex-1 grid-cols-1" style={{ minHeight: 0 }}>
+            {panelCells.slice(0, 1).map((cell, i) => (
               <div key={`${frameIdx}-${i}`} className="relative overflow-hidden">
                 <motion.img
-                  key={`img-${frameIdx}-${i}`}
+                  key={`img-${frameIdx}`}
                   src={cell.src}
                   alt=""
                   aria-hidden
                   className="h-full w-full object-cover"
-                  style={{ objectPosition: cell.objectPosition }}
-                  initial={{ scale: 1.08, filter: "brightness(0.4) saturate(0.5)" }}
+                  style={{ objectPosition: "center" }}
+                  initial={{ scale: 1.06, filter: "brightness(0.4) saturate(0.5)" }}
                   animate={{ scale: 1.0, filter: "brightness(0.72) saturate(1.1)" }}
                   transition={{ duration: 0.21, ease: "easeOut" }}
                 />
@@ -208,7 +201,7 @@ export function AvengerIntro({ onComplete }: AvengerIntroProps) {
                   className="absolute inset-0"
                   style={{ background: cell.flashColor }}
                 />
-                {/* Low-opacity obsidian mirror (the "black mirror" the user asked for) */}
+                {/* Low-opacity obsidian mirror */}
                 <div
                   aria-hidden
                   className="absolute inset-0"
@@ -216,33 +209,6 @@ export function AvengerIntro({ onComplete }: AvengerIntroProps) {
                 />
               </div>
             ))}
-          </div>
-
-          {/* ── Center wordmark overlay ── */}
-          <div className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center">
-            <motion.div
-              key={`wordmark-${frameIdx}`}
-              initial={{ opacity: 0, scale: 1.06 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.14, ease: "easeOut" }}
-              className="flex flex-col items-center gap-3 text-center"
-            >
-              <span className="font-mono text-[10px] tracking-[0.4em] text-flame/80">
-                USC KIIT • UIPATH STUDENT COMMUNITY
-              </span>
-              <h1
-                className="select-none font-display-usc text-[clamp(2.8rem,8vw,7rem)] leading-none tracking-tighter text-cream"
-                style={{
-                  textShadow:
-                    "0 0 60px rgba(250,70,22,0.45), 0 2px 20px rgba(0,0,0,0.9)",
-                }}
-              >
-                KIIT UNIVERSITY
-              </h1>
-              <span className="font-mono text-[10px] tracking-[0.35em] text-cream/50">
-                BHUBANESWAR • EST. 2023
-              </span>
-            </motion.div>
           </div>
 
           {/* ── Flame horizontal scan line ── */}
@@ -262,13 +228,29 @@ export function AvengerIntro({ onComplete }: AvengerIntroProps) {
             }}
           />
 
-          {/* ── Bottom HUD: progress bar + skip ── */}
-          <div className="relative z-40 flex flex-col items-center gap-3 px-6 pb-7 pt-4">
+          {/* ── Bottom HUD: wordmark + progress bar + skip ── */}
+          <div className="relative z-40 flex flex-col items-center gap-2 px-6 pb-7 pt-3">
+            {/* Compact static wordmark — no heartbeat */}
+            <div className="mb-1 flex flex-col items-center gap-0.5 text-center">
+              <span className="font-mono text-[9px] tracking-[0.35em] text-flame/70">
+                USC KIIT • UIPATH STUDENT COMMUNITY
+              </span>
+              <span
+                className="select-none font-display-usc text-[clamp(1.1rem,3vw,1.6rem)] leading-none tracking-tighter text-cream"
+                style={{ textShadow: "0 0 30px rgba(250,70,22,0.5), 0 2px 10px rgba(0,0,0,0.9)" }}
+              >
+                KIIT UNIVERSITY
+              </span>
+              <span className="font-mono text-[8px] tracking-[0.3em] text-cream/40">
+                BHUBANESWAR • EST. 2023
+              </span>
+            </div>
+
             {/* Timeline / progress bar */}
             <div className="w-full max-w-sm">
               <div className="mb-1.5 flex items-center justify-between">
                 <span className="font-mono text-[9px] tracking-[0.25em] text-cream/55">
-                  USC KIIT — HIGHLIGHTS
+                  LOADING
                 </span>
                 <span className="font-mono text-[9px] tracking-[0.2em] text-flame/80">
                   {Math.round(progress * 100)}%
