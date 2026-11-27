@@ -69,7 +69,7 @@ export function HackabotScrollHero({
       className="relative h-[360vh] w-full bg-obsidian"
       aria-label="HACK-A-BOT 3.0 3D Command Stage"
     >
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
+      <div className="sticky top-0 h-[100dvh] w-full overflow-hidden">
         {/* Volumetric Atmospheric Lighting + Subtle Grid */}
         <div
           aria-hidden
@@ -112,10 +112,10 @@ export function HackabotScrollHero({
           </ClientOnly>
         </div>
 
-        {/* ACT 1: MISSION INITIALIZATION OVERLAYS (z-30) */}
+        {/* ACT 1: MISSION INITIALIZATION OVERLAYS (z-40 so REGISTER TEAM is always clickable) */}
         <motion.div
           style={{ opacity: act1Opacity }}
-          className="pointer-events-none absolute inset-0 z-30 mx-auto flex max-w-7xl flex-col justify-between px-4 pb-5 pt-20 sm:px-10 sm:pb-7 sm:pt-24 lg:pt-26"
+          className="pointer-events-none absolute inset-0 z-40 mx-auto flex max-w-7xl flex-col justify-between px-4 pb-8 pt-20 sm:px-10 sm:pb-8 sm:pt-24 lg:pt-26"
         >
           {/* Top Monospace Eyebrow */}
           <div className="flex justify-center">
@@ -139,7 +139,7 @@ export function HackabotScrollHero({
 
             <motion.div
               style={{ x: act1RightX }}
-              className="glass-dark hud-brackets max-w-xs self-end rounded-2xl p-3.5 text-right sm:p-5 md:max-w-sm md:self-center"
+              className="glass-dark hud-brackets hidden max-w-xs self-end rounded-2xl p-3.5 text-right sm:p-5 md:block md:max-w-sm md:self-center"
             >
               <p className="font-hud text-[9px] text-cobalt sm:text-[10px]">MISSION BRIEFING</p>
               <p className="mt-1.5 text-sm font-semibold text-cream sm:text-lg">
@@ -151,19 +151,19 @@ export function HackabotScrollHero({
             </motion.div>
           </div>
 
-          {/* Bottom Bar: Center REGISTER TEAM + Scroll Cue | Right Bottom Countdown Clock */}
-          <div className="grid w-full grid-cols-1 items-end gap-4 md:grid-cols-3">
+          {/* Bottom Bar: Center REGISTER TEAM | Right Bottom Countdown Clock */}
+          <div className="grid w-full grid-cols-1 items-end gap-2.5 pb-1 md:grid-cols-3 md:gap-4 md:pb-0">
             <div className="hidden md:block" />
 
             {/* Bottom Center: Larger Trapezium REGISTER TEAM Button */}
-            <div className="flex flex-col items-center justify-self-center pb-2">
+            <div className="flex flex-col items-center justify-self-center md:pb-2">
               <button
                 type="button"
                 onClick={onRegisterClick}
                 style={{
                   clipPath: "polygon(7% 0%, 93% 0%, 100% 100%, 0% 100%)",
                 }}
-                className="gradient-flame shadow-flame-glow pointer-events-auto inline-flex cursor-pointer items-center gap-2.5 px-11 py-4 font-mono text-sm font-bold tracking-[0.18em] text-cream transition-transform hover:scale-[1.05]"
+                className="gradient-flame shadow-flame-glow pointer-events-auto inline-flex cursor-pointer items-center gap-2.5 px-9 py-3 font-mono text-xs font-bold tracking-[0.18em] text-cream transition-transform hover:scale-[1.05] sm:px-11 sm:py-4 sm:text-sm"
               >
                 REGISTER TEAM
                 <ArrowDownRight className="h-4 w-4" />
