@@ -71,7 +71,7 @@ export function ScrollHero({ onExploreInitiatives }: ScrollHeroProps) {
       className="relative h-[360vh] w-full bg-obsidian md:h-[450vh]"
       aria-label="USC KIIT 3D Hero Showcase"
     >
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
+      <div className="sticky top-0 h-[100dvh] w-full overflow-hidden">
         {/* Volumetric Radial Glows */}
         <div
           aria-hidden
@@ -100,26 +100,27 @@ export function ScrollHero({ onExploreInitiatives }: ScrollHeroProps) {
         {/* ACT 1 RIGHT-SIDE DEPTH TEXT — behind robot at z-10 */}
         <motion.div
           style={{ opacity: act1Opacity }}
-          className="pointer-events-none absolute inset-0 z-10 flex items-end justify-end pb-7 pr-4 sm:pb-10 sm:pr-10 md:items-center md:pb-0 md:pr-12 lg:pr-20"
+          className="pointer-events-none absolute inset-0 z-10 flex items-end justify-center pb-24 px-4 sm:pb-28 md:items-center md:justify-end md:pb-0 md:pr-12 lg:pr-20"
         >
-          <div className="flex select-none flex-col items-end gap-0 leading-none">
+          <div className="flex select-none flex-col items-center gap-0.5 leading-none md:items-end md:gap-0">
             {/* Thin eyebrow line */}
             <span className="mb-2 inline-flex items-center gap-2 font-mono text-[9px] tracking-[0.24em] text-flame/80 sm:mb-3 sm:text-[11px] sm:tracking-[0.28em]">
               <span className="h-px w-5 bg-flame/50 sm:w-8" />
               USC KIIT CORE VALUES
+              <span className="h-px w-5 bg-flame/50 md:hidden" />
             </span>
 
             {/* "CONNECT" — large, cream, slightly transparent */}
-            <span className="font-display-usc text-right text-[13.5vw] leading-[0.82] text-cream/25 sm:text-[10.5vw] md:text-cream/15 lg:text-[9vw]">
+            <span className="font-display-usc text-center text-[13.5vw] leading-[0.84] text-cream/25 sm:text-[10.5vw] md:text-right md:leading-[0.82] md:text-cream/15 lg:text-[9vw]">
               CONNECT
             </span>
 
             {/* Flame divider rule */}
-            <span className="my-1.5 ml-auto block h-[2px] w-[55%] bg-gradient-to-l from-flame/60 via-flame/20 to-transparent sm:my-2" />
+            <span className="my-1.5 mx-auto block h-[2px] w-[55%] bg-gradient-to-r from-transparent via-flame/60 to-transparent sm:my-2 md:ml-auto md:mr-0 md:bg-gradient-to-l md:from-flame/60 md:via-flame/20 md:to-transparent" />
 
             {/* "LEARN &" — medium, gradient */}
             <span
-              className="font-display-usc text-right text-[9.5vw] leading-[0.88] sm:text-[7.5vw] lg:text-[6.5vw]"
+              className="font-display-usc text-center text-[9.5vw] leading-[0.88] sm:text-[7.5vw] md:text-right lg:text-[6.5vw]"
               style={{
                 background:
                   "linear-gradient(135deg, oklch(0.85 0.03 84 / 0.65) 0%, oklch(0.648 0.224 34 / 0.55) 100%)",
@@ -132,7 +133,7 @@ export function ScrollHero({ onExploreInitiatives }: ScrollHeroProps) {
 
             {/* "COLLABORATE" — slightly smaller, emerald accent */}
             <span
-              className="font-display-usc text-right text-[7.5vw] leading-[0.92] sm:text-[6vw] lg:text-[5.2vw]"
+              className="font-display-usc text-center text-[7.5vw] leading-[0.92] sm:text-[6vw] md:text-right lg:text-[5.2vw]"
               style={{
                 background:
                   "linear-gradient(135deg, oklch(0.76 0.17 162 / 0.65) 0%, oklch(0.85 0.03 84 / 0.45) 100%)",
@@ -183,10 +184,10 @@ export function ScrollHero({ onExploreInitiatives }: ScrollHeroProps) {
           </ClientOnly>
         </div>
 
-        {/* ACT 1 OVERLAYS (z-30) */}
+        {/* ACT 1 OVERLAYS (z-40 so CONTACT US is always clickable above Act 2) */}
         <motion.div
           style={{ opacity: act1Opacity }}
-          className="pointer-events-none absolute inset-0 z-30 mx-auto flex max-w-7xl flex-col justify-start px-4 pb-8 pt-24 sm:px-10 sm:pt-28 md:justify-between md:pb-10 md:pt-32"
+          className="pointer-events-none absolute inset-0 z-40 mx-auto flex max-w-7xl flex-col justify-between px-4 pb-6 pt-28 sm:px-10 sm:pb-10 sm:pt-32 md:pt-32"
         >
           <div className="flex flex-col justify-start gap-4 md:flex-1 md:flex-row md:items-center md:justify-between md:gap-8">
             {/* Left Headline Block */}
