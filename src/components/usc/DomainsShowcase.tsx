@@ -377,11 +377,159 @@ function OrbitingWingStage({
         </button>
       </div>
 
-      {/* Mobile Clean Grid Fallback */}
-      <div className="grid grid-cols-1 gap-4 md:hidden">
-        {domains.map((domain) => (
-          <DomainCard key={domain.id} domain={domain} onOpen={onOpen} />
-        ))}
+      {/* Mobile 3D Coverflow / Auto-Moving Carousel */}
+      <MobileDomainCoverflow
+        domains={domains}
+        wingTitle={wingTitle}
+        isTech={isTech}
+        onOpen={onOpen}
+      />
+    </div>
+  );
+}
+
+function MobileDomainCoverflow({
+  domains,
+  wingTitle,
+  isTech,
+  onOpen,
+}: {
+  domains: readonly DomainInfo[];
+  wingTitle: string;
+  isTech: boolean;
+  onOpen: (domain: DomainInfo) => void;
+}) {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [autoPlay, setAutoPlay] = useState(true);
+
+  useEffect(() => {
+    setActiveIdx(0);
+  }, [wingTitle]);
+
+  useEffect(() => {
+    if (!autoPlay) return;
+    const timer = window.setInterval(() => {
+      setActiveIdx((prev) => (prev + 1) % domains.length);
+    }, 3600);
+    return () => window.clearInterval(timer);
+  }, [autoPlay, domains.length]);
+
+  const step = (dir: 1 | -1) => {
+    setAutoPlay(false);
+    setActiveIdx((prev) => (prev + dir + domains.length) % domains.length);
+  };
+
+  return (
+    <div className="md:hidden">
+      {/* Compact Wing Core Badge */}
+      <div className="mb-4 flex justify-center">
+        <div
+          className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 font-mono text-[10px] font-semibold tracking-[0.18em] ${
+            isTech
+              ? "border-flame/40 bg-flame/10 text-flame"
+              : "border-cobalt/40 bg-cobalt/10 text-cobalt"
+          }`}
+        >
+          <span
+            className={`h-2 w-2 animate-pulse rounded-full ${isTech ? "bg-flame" : "bg-cobalt"}`}
+          />
+          {wingTitle} • 0{activeIdx + 1} / 0{domains.length}
+        </div>
+      </div>
+
+      {/* 3D Coverflow Stage */}
+      <div
+        className="relative mx-auto h-[325px] w-full overflow-hidden"
+        style={{ perspective: "1000px" }}
+      >
+        {domains.map((domain, idx) => {
+          const total = domains.length;
+          let offset = idx - activeIdx;
+          if (offset > total / 2) offset -= total;
+          if (offset < -total / 2) offset += total;
+
+          const isCenter = offset === 0;
+          const isAdjacent = Math.abs(offset) === 1;
+          if (Math.abs(offset) > 1) return null;
+
+          return (
+            <motion.div
+              key={domain.id}
+              initial={false}
+              animate={{
+                x: offset * 245,
+                scale: isCenter ? 1 : 0.84,
+                rotateY: offset * -18,
+                opacity: isCenter ? 1 : isAdjacent ? 0.42 : 0,
+                zIndex: isCenter ? 20 : 10,
+              }}
+              transition={{ type: "spring", stiffness: 280, damping: 28 }}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.2}
+              onDragEnd={(_e, info) => {
+                if (info.offset.x < -45) step(1);
+                else if (info.offset.x > 45) step(-1);
+              }}
+              onClick={() => {
+                if (!isCenter) step(offset > 0 ? 1 : -1);
+              }}
+              style={{
+                position: "absolute",
+                left: "50%",
+                top: 0,
+                width: "min(82vw, 310px)",
+                marginLeft: "calc(min(82vw, 310px) / -2)",
+                transformStyle: "preserve-3d",
+              }}
+              className="h-[310px]"
+            >
+              <DomainCard domain={domain} onOpen={onOpen} compact />
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Controls + Dots */}
+      <div className="mt-3 flex items-center justify-center gap-3">
+        <button
+          type="button"
+          onClick={() => step(-1)}
+          aria-label="Previous domain"
+          className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-cream/15 bg-carbon text-cream/75"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </button>
+
+        <div className="flex items-center gap-1.5">
+          {domains.map((d, idx) => (
+            <button
+              key={d.id}
+              type="button"
+              aria-label={`Go to ${d.title}`}
+              onClick={() => {
+                setAutoPlay(false);
+                setActiveIdx(idx);
+              }}
+              className={`h-1.5 rounded-full transition-all ${
+                idx === activeIdx
+                  ? isTech
+                    ? "w-5 bg-flame"
+                    : "w-5 bg-cobalt"
+                  : "w-1.5 bg-cream/25"
+              }`}
+            />
+          ))}
+        </div>
+
+        <button
+          type="button"
+          onClick={() => step(1)}
+          aria-label="Next domain"
+          className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-cream/15 bg-carbon text-cream/75"
+        >
+          <ChevronRight className="h-4 w-4" />
+        </button>
       </div>
     </div>
   );
@@ -429,7 +577,7 @@ export function DomainsShowcase({ onApplyDomain }: DomainsShowcaseProps) {
 
         {/* Magnetic Wing Switcher (Tech Wing vs Non-Tech Wing only) */}
         <div className="mt-8 flex flex-col items-center">
-          <div className="glass-dark inline-flex flex-wrap items-center justify-center gap-1 rounded-full border border-cream/10 p-1.5">
+          <div className="glass-dark inline-flex flex-nowrap items-center justify-center gap-1 rounded-full border border-cream/10 p-1">
             {WING_TABS.map((tab) => {
               const active = activeWing === tab.id;
               return (
@@ -437,7 +585,7 @@ export function DomainsShowcase({ onApplyDomain }: DomainsShowcaseProps) {
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveWing(tab.id)}
-                  className={`relative cursor-pointer rounded-full px-5 py-2.5 font-mono text-[10px] font-semibold tracking-[0.14em] transition-colors sm:px-6 sm:text-[11px] ${
+                  className={`relative cursor-pointer whitespace-nowrap rounded-full px-3.5 py-2 font-mono text-[10px] font-semibold tracking-[0.1em] transition-colors sm:px-6 sm:py-2.5 sm:text-[11px] sm:tracking-[0.14em] ${
                     active ? "text-cream" : "text-cream/60 hover:text-cream"
                   }`}
                 >
@@ -459,7 +607,7 @@ export function DomainsShowcase({ onApplyDomain }: DomainsShowcaseProps) {
           </div>
 
           {/* Animated Wing Subtitle */}
-          <div className="mt-4 h-5 overflow-hidden">
+          <div className="mt-3 min-h-[20px] px-2 text-center">
             <AnimatePresence mode="wait">
               <motion.p
                 key={activeTabMeta.id}
@@ -467,7 +615,7 @@ export function DomainsShowcase({ onApplyDomain }: DomainsShowcaseProps) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -6 }}
                 transition={{ duration: 0.22 }}
-                className="font-mono text-[10px] tracking-[0.2em] text-cream/55 sm:text-[11px]"
+                className="font-mono text-[9px] leading-relaxed tracking-[0.16em] text-cream/55 sm:text-[11px] sm:tracking-[0.2em]"
               >
                 {activeTabMeta.subtitle}
               </motion.p>

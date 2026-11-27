@@ -159,101 +159,93 @@ function BranchingGlowConnector({
 }) {
   const gradId = `grad-${topColor.replace("#", "")}-${bottomColor.replace("#", "")}`;
   return (
-    <>
-      {/* Desktop 3-way glowing SVG tree branch */}
-      <div aria-hidden className="relative mx-auto hidden h-20 w-full max-w-4xl md:block">
-        <svg
-          viewBox="0 0 900 80"
-          preserveAspectRatio="none"
-          className="h-full w-full overflow-visible"
-        >
-          <defs>
-            <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={topColor} />
-              <stop offset="100%" stopColor={bottomColor} />
-            </linearGradient>
-            <filter id="string-glow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="3" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
+    <div aria-hidden className="relative mx-auto h-11 w-full max-w-4xl sm:h-16 md:h-20">
+      <svg
+        viewBox="0 0 900 80"
+        preserveAspectRatio="none"
+        className="h-full w-full overflow-visible"
+      >
+        <defs>
+          <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={topColor} />
+            <stop offset="100%" stopColor={bottomColor} />
+          </linearGradient>
+          <filter id="string-glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
 
-          {/* Center stem down to horizontal bus */}
-          <line
-            x1="450"
-            y1="0"
-            x2="450"
-            y2="38"
-            stroke={topColor}
-            strokeWidth="2.2"
-            filter="url(#string-glow)"
-          />
-          {/* Horizontal bus across 3 columns */}
-          <line
-            x1="150"
-            y1="38"
-            x2="750"
-            y2="38"
-            stroke={`url(#${gradId})`}
-            strokeWidth="2.2"
-            filter="url(#string-glow)"
-          />
-          {/* Left drop */}
-          <line
-            x1="150"
-            y1="38"
-            x2="150"
-            y2="80"
-            stroke={bottomColor}
-            strokeWidth="2.2"
-            filter="url(#string-glow)"
-          />
-          {/* Center drop */}
-          <line
-            x1="450"
-            y1="38"
-            x2="450"
-            y2="80"
-            stroke={bottomColor}
-            strokeWidth="2.2"
-            filter="url(#string-glow)"
-          />
-          {/* Right drop */}
-          <line
-            x1="750"
-            y1="38"
-            x2="750"
-            y2="80"
-            stroke={bottomColor}
-            strokeWidth="2.2"
-            filter="url(#string-glow)"
-          />
-
-          {/* Glowing junction dots */}
-          <circle cx="450" cy="0" r="4" fill={topColor} filter="url(#string-glow)" />
-          <circle cx="450" cy="38" r="4" fill={topColor} filter="url(#string-glow)" />
-          <circle cx="150" cy="80" r="4" fill={bottomColor} filter="url(#string-glow)" />
-          <circle cx="450" cy="80" r="4" fill={bottomColor} filter="url(#string-glow)" />
-          <circle cx="750" cy="80" r="4" fill={bottomColor} filter="url(#string-glow)" />
-        </svg>
-
-        {/* Animated traveling pulse on center stem */}
-        <motion.div
-          className="pointer-events-none absolute left-1/2 top-0 h-3 w-1 -translate-x-1/2 rounded-full bg-cream"
-          style={{ boxShadow: `0 0 12px 2px ${topColor}` }}
-          animate={{ top: ["0%", "44%"], opacity: [0, 1, 0] }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+        {/* Center stem down to horizontal bus */}
+        <line
+          x1="450"
+          y1="0"
+          x2="450"
+          y2="38"
+          stroke={topColor}
+          strokeWidth="2.2"
+          filter="url(#string-glow)"
         />
-      </div>
+        {/* Horizontal bus across 3 columns */}
+        <line
+          x1="150"
+          y1="38"
+          x2="750"
+          y2="38"
+          stroke={`url(#${gradId})`}
+          strokeWidth="2.2"
+          filter="url(#string-glow)"
+        />
+        {/* Left drop */}
+        <line
+          x1="150"
+          y1="38"
+          x2="150"
+          y2="80"
+          stroke={bottomColor}
+          strokeWidth="2.2"
+          filter="url(#string-glow)"
+        />
+        {/* Center drop */}
+        <line
+          x1="450"
+          y1="38"
+          x2="450"
+          y2="80"
+          stroke={bottomColor}
+          strokeWidth="2.2"
+          filter="url(#string-glow)"
+        />
+        {/* Right drop */}
+        <line
+          x1="750"
+          y1="38"
+          x2="750"
+          y2="80"
+          stroke={bottomColor}
+          strokeWidth="2.2"
+          filter="url(#string-glow)"
+        />
 
-      {/* Mobile simple vertical glowing string */}
-      <div className="md:hidden">
-        <VerticalGlowString height={44} fromColor={topColor} toColor={bottomColor} />
-      </div>
-    </>
+        {/* Glowing junction dots */}
+        <circle cx="450" cy="0" r="4" fill={topColor} filter="url(#string-glow)" />
+        <circle cx="450" cy="38" r="4" fill={topColor} filter="url(#string-glow)" />
+        <circle cx="150" cy="80" r="4" fill={bottomColor} filter="url(#string-glow)" />
+        <circle cx="450" cy="80" r="4" fill={bottomColor} filter="url(#string-glow)" />
+        <circle cx="750" cy="80" r="4" fill={bottomColor} filter="url(#string-glow)" />
+      </svg>
+
+      {/* Animated traveling pulse on center stem */}
+      <motion.div
+        className="pointer-events-none absolute left-1/2 top-0 h-3 w-1 -translate-x-1/2 rounded-full bg-cream"
+        style={{ boxShadow: `0 0 12px 2px ${topColor}` }}
+        animate={{ top: ["0%", "44%"], opacity: [0, 1, 0] }}
+        transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+      />
+    </div>
   );
 }
 
@@ -275,31 +267,31 @@ function TeamTreeNode({
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.45, delay, ease: [0.22, 1, 0.36, 1] }}
       whileHover={{ y: -6 }}
-      className={`glass-dark hud-brackets group relative mx-auto w-full overflow-hidden rounded-2xl border p-4 transition-all duration-300 sm:p-5 ${
-        featured ? "max-w-[290px]" : "max-w-[270px]"
+      className={`glass-dark hud-brackets group relative mx-auto w-full overflow-hidden rounded-xl border p-2 transition-all duration-300 sm:rounded-2xl sm:p-4 md:p-5 ${
+        featured ? "max-w-[168px] sm:max-w-[290px]" : "max-w-[270px]"
       } ${styles.border} ${styles.ring}`}
     >
       {/* Role badge */}
-      <div className="mb-3 flex items-center justify-between gap-2">
+      <div className="mb-1.5 flex items-center justify-center sm:mb-3 sm:justify-start">
         <span
-          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-[0.16em] ${styles.badge}`}
+          className={`inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 font-mono text-[6.5px] font-semibold uppercase tracking-[0.08em] sm:gap-1.5 sm:px-2.5 sm:text-[9px] sm:tracking-[0.16em] ${styles.badge}`}
         >
-          <span className={`h-1.5 w-1.5 rounded-full ${styles.dot}`} />
-          {member.role}
+          <span className={`hidden h-1.5 w-1.5 rounded-full sm:inline-block ${styles.dot}`} />
+          <span className="truncate">{member.role}</span>
         </span>
       </div>
 
       {/* Extracted dark-theme portrait stage */}
-      <div className="relative flex aspect-[4/3.6] w-full items-end justify-center overflow-hidden rounded-xl border border-cream/10 bg-obsidian">
+      <div className="relative flex aspect-[4/4.1] w-full items-end justify-center overflow-hidden rounded-lg border border-cream/10 bg-obsidian sm:aspect-[4/3.6] sm:rounded-xl">
         {/* Ambient radial glow behind person */}
         <div
           aria-hidden
-          className={`pointer-events-none absolute left-1/2 top-1/2 h-36 w-36 -translate-x-1/2 -translate-y-1/2 rounded-full blur-2xl transition-opacity duration-300 group-hover:opacity-100 ${styles.glow} opacity-70`}
+          className={`pointer-events-none absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full blur-xl transition-opacity duration-300 group-hover:opacity-100 sm:h-36 sm:w-36 sm:blur-2xl ${styles.glow} opacity-70`}
         />
         {/* Subtle dark cyber grid */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,oklch(0.973_0.013_84/4%)_1px,transparent_1px),linear-gradient(to_bottom,oklch(0.973_0.013_84/4%)_1px,transparent_1px)] bg-[size:22px_22px]"
+          className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,oklch(0.973_0.013_84/4%)_1px,transparent_1px),linear-gradient(to_bottom,oklch(0.973_0.013_84/4%)_1px,transparent_1px)] bg-[size:16px_16px] sm:bg-[size:22px_22px]"
         />
         <img
           src={member.image}
@@ -310,13 +302,13 @@ function TeamTreeNode({
         {/* Bottom dark melt gradient */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-10 bg-gradient-to-t from-obsidian via-obsidian/60 to-transparent"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-6 bg-gradient-to-t from-obsidian via-obsidian/60 to-transparent sm:h-10"
         />
       </div>
 
       {/* Name */}
-      <div className="mt-3.5 text-center">
-        <h3 className="font-display-usc text-2xl tracking-wide text-cream sm:text-[1.65rem]">
+      <div className="mt-2 text-center sm:mt-3.5">
+        <h3 className="font-display-usc text-xs leading-tight tracking-wide text-cream sm:text-2xl md:text-[1.65rem]">
           {member.name}
         </h3>
       </div>
@@ -353,7 +345,7 @@ export function TeamSection() {
           <BranchingGlowConnector topColor="#FA4616" bottomColor="#0067DF" />
 
           {/* Tier 3: Associate Coordinators */}
-          <div className="grid w-full max-w-4xl grid-cols-1 gap-5 md:grid-cols-3 md:gap-6">
+          <div className="grid w-full max-w-4xl grid-cols-3 gap-2 sm:gap-4 md:gap-6">
             {ASSOCIATE_COORDINATORS.map((member, idx) => (
               <TeamTreeNode key={member.id} member={member} delay={0.12 + idx * 0.06} />
             ))}
@@ -363,7 +355,7 @@ export function TeamSection() {
           <BranchingGlowConnector topColor="#0067DF" bottomColor="#3D9960" />
 
           {/* Tier 4: Student Points of Contact */}
-          <div className="grid w-full max-w-4xl grid-cols-1 gap-5 md:grid-cols-3 md:gap-6">
+          <div className="grid w-full max-w-4xl grid-cols-3 gap-2 sm:gap-4 md:gap-6">
             {STUDENT_POCS.map((member, idx) => (
               <TeamTreeNode key={member.id} member={member} delay={0.18 + idx * 0.06} />
             ))}
