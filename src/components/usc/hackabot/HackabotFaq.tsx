@@ -96,11 +96,11 @@ export function HackabotFaq() {
           </div>
         </div>
 
-        {/* Official Event Coordinators (4-Column Glassmorphic Contact Cards) */}
+        {/* Event POC's (4-Column Glassmorphic Contact Cards) */}
         <div id="contact" className="mt-16 border-t border-cream/10 pt-12 sm:mt-20 sm:pt-16">
           <p className="font-hud text-xs text-flame">MISSION SUPPORT</p>
           <h2 className="font-display-usc mt-2 text-3xl text-cream sm:text-5xl">
-            OFFICIAL EVENT COORDINATORS
+            EVENT POC&apos;S
           </h2>
 
           <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -110,10 +110,7 @@ export function HackabotFaq() {
                 className="glass-dark hud-brackets flex flex-col justify-between rounded-2xl p-5"
               >
                 <div>
-                  <span className="font-mono text-[9px] tracking-[0.16em] text-cobalt">
-                    USC KIIT COORDINATOR
-                  </span>
-                  <p className="mt-1.5 text-base font-semibold text-cream">{contact.name}</p>
+                  <p className="text-base font-semibold text-cream">{contact.name}</p>
                   <p className="mt-1 font-mono text-xs tracking-wider text-cream/70">
                     +91 {contact.phone}
                   </p>

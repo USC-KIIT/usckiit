@@ -13,15 +13,6 @@ export function EventSpotlightRibbon() {
       <div className="glass-dark hud-brackets mx-auto flex max-w-6xl flex-col gap-5 rounded-2xl p-4 shadow-2xl sm:gap-6 sm:p-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
         {/* Left: Event Info */}
         <div className="space-y-2">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald/40 bg-emerald/15 px-3 py-0.5 font-mono text-[10px] font-semibold tracking-[0.16em] text-emerald">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald" />
-              NEXT FLAGSHIP EVENT
-            </span>
-            <span className="rounded-full border border-flame/35 bg-flame/10 px-2.5 py-0.5 font-mono text-[10px] tracking-[0.14em] text-flame">
-              FREE FOR ALL
-            </span>
-          </div>
           <h2 className="font-display-usc text-2xl text-cream sm:text-4xl">
             HACK-A-BOT 3.0{" "}
             <span className="block font-sans text-sm font-normal tracking-normal text-cream/70 sm:inline sm:text-base">
