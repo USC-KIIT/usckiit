@@ -1,12 +1,6 @@
 import { useState, type PointerEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  Calendar,
-  ChevronDown,
-  MapPin,
-  Mic2,
-  Sparkles,
-} from "lucide-react";
+import { Calendar, ChevronDown, MapPin, Mic2, Sparkles } from "lucide-react";
 import { FLAGSHIP_EVENTS, type FlagshipEvent } from "@/lib/usc-data";
 
 export function EventsSection() {

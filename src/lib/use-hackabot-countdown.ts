@@ -30,9 +30,7 @@ export function useHackabotCountdown(): LiveHackabotClock {
 
   const phaseState = nowMs !== null ? getHackabotPhase(nowMs) : null;
   const countdown =
-    nowMs !== null && phaseState
-      ? splitCountdown(phaseState.targetMs - nowMs)
-      : UNSYNCED_PARTS;
+    nowMs !== null && phaseState ? splitCountdown(phaseState.targetMs - nowMs) : UNSYNCED_PARTS;
 
   return {
     phaseState,

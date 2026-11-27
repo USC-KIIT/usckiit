@@ -41,10 +41,10 @@ Deno.serve(async (req) => {
 
     const body = (await req.json()) as PassEmailPayload;
     if (!body.leaderEmail || !body.teamName || !body.passId) {
-      return new Response(
-        JSON.stringify({ error: "Missing required pass fields." }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-      );
+      return new Response(JSON.stringify({ error: "Missing required pass fields." }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     const transporter = nodemailer.createTransport({

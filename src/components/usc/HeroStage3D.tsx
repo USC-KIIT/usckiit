@@ -15,8 +15,8 @@ function checkWebGLSupport(): boolean {
     const canvas = document.createElement("canvas");
     return Boolean(
       canvas.getContext("webgl2") ||
-        canvas.getContext("webgl") ||
-        canvas.getContext("experimental-webgl"),
+      canvas.getContext("webgl") ||
+      canvas.getContext("experimental-webgl"),
     );
   } catch {
     return false;
@@ -28,7 +28,11 @@ function StaticRobotFallback() {
     <div className="flex h-full w-full items-center justify-center" data-scene-ready="fallback">
       <div className="relative flex h-52 w-52 items-center justify-center sm:h-80 sm:w-80">
         <div className="absolute inset-0 rounded-full bg-flame/25 blur-3xl" />
-        <svg viewBox="0 0 240 240" className="relative h-44 w-44 drop-shadow-2xl sm:h-68 sm:w-68" aria-label="USC KIIT UiPath Robot">
+        <svg
+          viewBox="0 0 240 240"
+          className="relative h-44 w-44 drop-shadow-2xl sm:h-68 sm:w-68"
+          aria-label="USC KIIT UiPath Robot"
+        >
           <defs>
             <linearGradient id="botOrange" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="#FF6B00" />
@@ -49,7 +53,14 @@ function StaticRobotFallback() {
           <circle cx="146" cy="119" r="6" fill="#090A0F" />
           <path d="M84 58 L70 36" stroke="#0067DF" strokeWidth="6" strokeLinecap="round" />
           <ellipse cx="66" cy="33" rx="18" ry="8" transform="rotate(-24 66 33)" fill="#FA4616" />
-          <text x="86" y="166" fill="#FAF6EE" fontSize="20" fontWeight="700" fontFamily="Space Grotesk, sans-serif">
+          <text
+            x="86"
+            y="166"
+            fill="#FAF6EE"
+            fontSize="20"
+            fontWeight="700"
+            fontFamily="Space Grotesk, sans-serif"
+          >
             Ui
           </text>
           <circle cx="146" cy="158" r="3" fill="#3D9960" />
@@ -81,10 +92,7 @@ export default function HeroStage3D({
   }
 
   return (
-    <div
-      className="h-full w-full"
-      data-scene-ready={sceneDrawn ? "true" : undefined}
-    >
+    <div className="h-full w-full" data-scene-ready={sceneDrawn ? "true" : undefined}>
       <Canvas
         dpr={[1, 1.75]}
         camera={{ position: [0, 0.15, 4.65], fov: 40, near: 0.1, far: 40 }}

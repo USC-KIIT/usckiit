@@ -147,7 +147,8 @@ export const UN_SDGS: readonly SdgGoal[] = [
 export const HACKABOT_HIGHLIGHTS = [
   {
     title: "Interactive Workshops",
-    detail: "Live hands-on sessions on UiPath Agentic AI, automation architecture, and rapid prototyping.",
+    detail:
+      "Live hands-on sessions on UiPath Agentic AI, automation architecture, and rapid prototyping.",
   },
   {
     title: "Hands-On Challenges",
@@ -155,7 +156,8 @@ export const HACKABOT_HIGHLIGHTS = [
   },
   {
     title: "Exciting Guest Engagements",
-    detail: "Direct mentorship, fireside chats, and live reviews from industry leaders and UiPath MVPs.",
+    detail:
+      "Direct mentorship, fireside chats, and live reviews from industry leaders and UiPath MVPs.",
   },
 ] as const;
 

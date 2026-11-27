@@ -142,8 +142,7 @@ export const HACKABOT_VENUES = [
   {
     name: "Campus 6 Auditorium",
     role: "Ceremonies, Workshops & Demos",
-    mapsUrl:
-      "https://www.google.com/maps/search/?api=1&query=KIIT+Campus+6+Auditorium+Bhubaneswar",
+    mapsUrl: "https://www.google.com/maps/search/?api=1&query=KIIT+Campus+6+Auditorium+Bhubaneswar",
   },
   {
     name: "Campus 10 Central Library",
