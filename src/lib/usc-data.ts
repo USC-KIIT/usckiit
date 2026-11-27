@@ -142,22 +142,26 @@ export const RECRUITMENT_ROADMAP: readonly RoadmapStep[] = [
   {
     step: "01",
     title: "Register Online",
-    description: "Submit your KIIT details, primary domain, and portfolio or GitHub link in under two minutes.",
+    description:
+      "Submit your KIIT details, primary domain, and portfolio or GitHub link in under two minutes.",
   },
   {
     step: "02",
     title: "Technical / Non-Technical Interview",
-    description: "Walk our domain leads through your skills, past work, and how you approach real-world problems.",
+    description:
+      "Walk our domain leads through your skills, past work, and how you approach real-world problems.",
   },
   {
     step: "03",
     title: "HR Interview (If Necessary)",
-    description: "A quick culture-fit and commitment conversation with the core leadership team when required.",
+    description:
+      "A quick culture-fit and commitment conversation with the core leadership team when required.",
   },
   {
     step: "04",
     title: "Welcome to USC KIIT",
-    description: "Get onboarded to your domain squad, claim your UiPath toolkit, and ship from week one.",
+    description:
+      "Get onboarded to your domain squad, claim your UiPath toolkit, and ship from week one.",
   },
 ];
 

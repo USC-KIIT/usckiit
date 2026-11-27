@@ -20,7 +20,8 @@ export const Route = createFileRoute("/contactus")({
       { title: "Contact Us — USC KIIT" },
       {
         name: "description",
-        content: "Have a query for USC KIIT? Reach out to the UiPath Student Community at KIIT University.",
+        content:
+          "Have a query for USC KIIT? Reach out to the UiPath Student Community at KIIT University.",
       },
     ],
   }),

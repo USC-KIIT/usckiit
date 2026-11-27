@@ -74,28 +74,28 @@ function Index() {
         />
       )}
       <div className="relative min-h-screen bg-obsidian text-cream">
-      <div className="film-grain-overlay" aria-hidden />
-      <Navbar />
+        <div className="film-grain-overlay" aria-hidden />
+        <Navbar />
 
-      <main>
-        <ScrollHero onExploreInitiatives={() => scrollToSection("initiatives")} />
-        <EventSpotlightRibbon />
-        <InitiativesSection />
-        <AboutSection />
-        <DomainsShowcase onApplyDomain={(domainId) => openApplyModal(domainId)} />
-        <TeamSection />
-        <EventsSection />
-        <RecruitmentSection onOpenApply={() => openApplyModal()} />
-      </main>
+        <main>
+          <ScrollHero onExploreInitiatives={() => scrollToSection("initiatives")} />
+          <EventSpotlightRibbon />
+          <InitiativesSection />
+          <AboutSection />
+          <DomainsShowcase onApplyDomain={(domainId) => openApplyModal(domainId)} />
+          <TeamSection />
+          <EventsSection />
+          <RecruitmentSection onOpenApply={() => openApplyModal()} />
+        </main>
 
-      <Footer />
+        <Footer />
 
-      <ApplicationModal
-        open={recruitModalOpen}
-        {...(preferredDomain ? { initialDomain: preferredDomain } : {})}
-        onClose={() => setRecruitModalOpen(false)}
-      />
-    </div>
+        <ApplicationModal
+          open={recruitModalOpen}
+          {...(preferredDomain ? { initialDomain: preferredDomain } : {})}
+          onClose={() => setRecruitModalOpen(false)}
+        />
+      </div>
     </>
   );
 }

@@ -11,6 +11,7 @@ import {
 import { type ReactNode } from "react";
 import { Toaster } from "sonner";
 import { ScrollToTop } from "@/components/usc/ScrollToTop";
+import { Analytics } from "@vercel/analytics/react";
 
 import appCss from "../styles.css?url";
 
@@ -82,13 +83,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "USC KIIT — UiPath Student Community, KIIT University" },
       {
         name: "description",
-        content: "Building the Future, One Domain at a Time. Official UiPath Student Community at KIIT University, Bhubaneswar.",
+        content:
+          "Building the Future, One Domain at a Time. Official UiPath Student Community at KIIT University, Bhubaneswar.",
       },
       { name: "author", content: "USC KIIT" },
       { property: "og:title", content: "USC KIIT — Building the Future, One Domain at a Time" },
       {
         property: "og:description",
-        content: "Explore eight specialized domains, run the System Diagnostic, and join KIIT University's automation community.",
+        content:
+          "Explore eight specialized domains, run the System Diagnostic, and join KIIT University's automation community.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -137,6 +140,7 @@ function RootComponent() {
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <Toaster theme="dark" position="bottom-right" />
+      <Analytics />
     </QueryClientProvider>
   );
 }

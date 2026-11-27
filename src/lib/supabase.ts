@@ -36,7 +36,9 @@ export function getGoogleFullName(user: User): string {
 
 export async function signInWithKiitGoogle() {
   if (!supabase) {
-    throw new Error("Supabase is not configured yet. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env.local.");
+    throw new Error(
+      "Supabase is not configured yet. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env.local.",
+    );
   }
   sessionStorage.setItem("hackabot-oauth-return", "1");
   const redirectTo = `${window.location.origin}/events/hackabot`;

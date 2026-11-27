@@ -23,10 +23,7 @@ function AnimatedMetricTile({ metric }: { metric: CommunityMetric }) {
   }, [inView, metric.value]);
 
   return (
-    <div
-      ref={ref}
-      className="rounded-2xl border border-charcoal/12 bg-cream p-4 shadow-sm sm:p-5"
-    >
+    <div ref={ref} className="rounded-2xl border border-charcoal/12 bg-cream p-4 shadow-sm sm:p-5">
       <p className="font-display-usc text-gradient-flame text-3xl sm:text-5xl">
         {display}
         {metric.suffix}
@@ -40,7 +37,10 @@ function AnimatedMetricTile({ metric }: { metric: CommunityMetric }) {
 
 export function AboutSection() {
   return (
-    <section id="about" className="editorial-surface relative px-4 py-16 sm:px-10 sm:py-24 lg:py-32">
+    <section
+      id="about"
+      className="editorial-surface relative px-4 py-16 sm:px-10 sm:py-24 lg:py-32"
+    >
       <div className="mx-auto max-w-6xl">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-start lg:gap-12">
           {/* Left Column: Community Story */}
